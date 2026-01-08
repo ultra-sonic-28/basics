@@ -1,0 +1,1 @@
+10 FOR A=0 TO 10: PRINT A

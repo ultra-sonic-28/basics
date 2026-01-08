@@ -68,3 +68,12 @@ desktop.ini
 *.log
 tmp/
 temp/
+
+# =====================================
+# Project files and directories
+# for testing, building and tooling
+# =====================================
+
+.asserts/
+coverage.*
+examples/*.bin
