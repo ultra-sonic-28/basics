@@ -11,6 +11,7 @@ import (
 	"basics/internal/constants"
 	"basics/internal/interpreter"
 	"basics/internal/lexer"
+	"basics/internal/machines"
 	"basics/internal/parser"
 )
 
@@ -21,11 +22,13 @@ func main() {
 	var compileBin bool
 	var dumpTokens bool
 	var dumpAST bool
+	var tty bool
 	var basicTypeStr string
 
 	flag.BoolVar(&compileBin, "compile", false, "Generate binary (.bin)")
 	flag.BoolVar(&dumpTokens, "dump-tokens", false, "Dump tokens")
 	flag.BoolVar(&dumpAST, "dump-ast", false, "Dump AST")
+	flag.BoolVar(&tty, "tty", false, "Enable TTY output and ensure that your program does not use any graphical instructions.")
 	flag.StringVar(&basicTypeStr, "basic", "APPLE", "BASIC type: APPLE, C64, AMS")
 	flag.Parse()
 
@@ -37,6 +40,11 @@ func main() {
 
 	filename := flag.Arg(0)
 	ext := strings.ToLower(filepath.Ext(filename))
+
+	basicType := constants.BASIC_APPLE
+	if tty {
+		basicType = constants.BASIC_TTY
+	}
 
 	// =========================================================
 	// Fichier binaire → exécution directe
@@ -63,7 +71,12 @@ func main() {
 
 		// Exécution
 		fmt.Println("\n=== PROGRAM RESULTS ===")
-		interp := interpreter.New()
+		rt, err := machines.NewRuntime(basicType)
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+		interp := interpreter.New(rt)
 		interp.Run(prog)
 		return
 	}
@@ -140,7 +153,12 @@ func main() {
 	// Interpreter
 	// =========================
 	fmt.Println("\n=== PROGRAM RESULTS ===")
-	interp := interpreter.New()
+	rt, err := machines.NewRuntime(basicType)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	interp := interpreter.New(rt)
 	interp.Run(prog)
 }
 

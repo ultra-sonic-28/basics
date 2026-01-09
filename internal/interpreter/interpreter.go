@@ -6,6 +6,7 @@ import (
 
 	"basics/internal/errors"
 	"basics/internal/parser"
+	"basics/internal/runtime"
 )
 
 // ForFrame garde les infos d'une boucle FOR active
@@ -46,13 +47,13 @@ func (fs *ForStack) Top() *ForFrame {
 
 // Interpreter exécute un programme BASIC
 type Interpreter struct {
-	env   *Env
+	rt    *runtime.Runtime
 	forSt *ForStack
 }
 
-func New() *Interpreter {
+func New(rt *runtime.Runtime) *Interpreter {
 	return &Interpreter{
-		env:   NewEnv(),
+		rt:    rt,
 		forSt: NewForStack(),
 	}
 }
@@ -71,17 +72,17 @@ func (i *Interpreter) Run(prog *parser.Program) {
 			switch s := stmt.(type) {
 
 			case *parser.LetStmt:
-				val, err := EvalExpr(s.Value, i.env)
+				val, err := EvalExpr(s.Value, i.rt)
 				if err != nil {
 					fmt.Println(err)
 					return
 				}
-				i.env.Set(s.Name, val)
+				i.rt.Env.Set(s.Name, val)
 
 			case *parser.PrintStmt:
 				cursor := 0 // position "colonne" simulée pour la virgule
 				for iExpr, expr := range s.Exprs {
-					val, err := EvalExpr(expr, i.env)
+					val, err := EvalExpr(expr, i.rt)
 					if err != nil {
 						fmt.Println(err)
 						return
@@ -90,9 +91,9 @@ func (i *Interpreter) Run(prog *parser.Program) {
 					// afficher la valeur
 					str := ""
 					switch val.Type {
-					case NUMBER:
+					case runtime.NUMBER:
 						str = formatNumber(val.Num)
-					case STRING:
+					case runtime.STRING:
 						str = val.Str
 					}
 
@@ -110,18 +111,18 @@ func (i *Interpreter) Run(prog *parser.Program) {
 						}
 					}
 
-					fmt.Print(str)
+					i.rt.ExecPrint(str)
 					cursor += len(str)
 				}
-				fmt.Println()
+				i.rt.ExecPrint("\n")
 
 			case *parser.ForStmt:
-				startVal, err := EvalExpr(s.Start, i.env)
+				startVal, err := EvalExpr(s.Start, i.rt)
 				if err != nil {
 					fmt.Println(err)
 					return
 				}
-				endVal, err := EvalExpr(s.End, i.env)
+				endVal, err := EvalExpr(s.End, i.rt)
 				if err != nil {
 					fmt.Println(err)
 					return
@@ -129,7 +130,7 @@ func (i *Interpreter) Run(prog *parser.Program) {
 
 				step := 1.0
 				if s.Step != nil {
-					stepVal, err := EvalExpr(s.Step, i.env)
+					stepVal, err := EvalExpr(s.Step, i.rt)
 					if err != nil {
 						fmt.Println(err)
 						return
@@ -144,7 +145,7 @@ func (i *Interpreter) Run(prog *parser.Program) {
 					}
 				}
 
-				i.env.Set(s.Var, Value{Type: NUMBER, Num: startVal.Num})
+				i.rt.Env.Set(s.Var, runtime.Value{Type: runtime.NUMBER, Num: startVal.Num})
 				i.forSt.Push(ForFrame{
 					Var:       s.Var,
 					End:       endVal.Num,
@@ -160,13 +161,13 @@ func (i *Interpreter) Run(prog *parser.Program) {
 					return
 				}
 
-				v, _ := i.env.Get(frame.Var)
+				v, _ := i.rt.Env.Get(frame.Var)
 				v.Num += frame.Step
 
 				// Condition selon le signe du step
 				done := (frame.Step > 0 && v.Num > frame.End) || (frame.Step < 0 && v.Num < frame.End)
 				if !done {
-					i.env.Set(frame.Var, v)
+					i.rt.Env.Set(frame.Var, v)
 					pc = frame.LineIndex
 				} else {
 					i.forSt.Pop()

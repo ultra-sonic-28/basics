@@ -3,29 +3,29 @@ package interpreter
 import (
 	"basics/internal/errors"
 	"basics/internal/parser"
-	"fmt"
+	"basics/internal/runtime"
 )
 
-func EvalExpr(expr parser.Expression, env *Env) (Value, *errors.Error) {
+func EvalExpr(expr parser.Expression, rt *runtime.Runtime) (runtime.Value, *errors.Error) {
 
 	node, ok := expr.(parser.Node)
 	if !ok {
-		return Value{}, errors.NewSemantic(0, "INTERNAL AST ERROR")
+		return runtime.Value{}, errors.NewSemantic(0, "INTERNAL AST ERROR")
 	}
 	line, col, tok := node.Pos()
 
 	switch e := expr.(type) {
 
 	case *parser.NumberLiteral:
-		return Value{Type: NUMBER, Num: e.Value}, nil
+		return runtime.Value{Type: runtime.NUMBER, Num: e.Value}, nil
 
 	case *parser.StringLiteral:
-		return Value{Type: STRING, Str: e.Value}, nil
+		return runtime.Value{Type: runtime.STRING, Str: e.Value}, nil
 
 	case *parser.Identifier:
-		val, ok := env.Get(e.Name)
+		val, ok := rt.Env.Get(e.Name)
 		if !ok {
-			return Value{}, errors.NewSemantic(
+			return runtime.Value{}, errors.NewSemantic(
 				line,
 				"UNDEFINED VARIABLE "+e.Name,
 			)
@@ -33,12 +33,12 @@ func EvalExpr(expr parser.Expression, env *Env) (Value, *errors.Error) {
 		return val, nil
 
 	case *parser.PrefixExpr:
-		right, err := EvalExpr(e.Right, env)
+		right, err := EvalExpr(e.Right, rt)
 		if err != nil {
-			return Value{}, err
+			return runtime.Value{}, err
 		}
-		if right.Type != NUMBER {
-			return Value{}, errors.NewSyntax(
+		if right.Type != runtime.NUMBER {
+			return runtime.Value{}, errors.NewSyntax(
 				line, col, tok,
 				"PREFIX OPERAND MUST BE NUMBER",
 			)
@@ -46,35 +46,35 @@ func EvalExpr(expr parser.Expression, env *Env) (Value, *errors.Error) {
 
 		switch e.Op {
 		case "-":
-			return Value{Type: NUMBER, Num: -right.Num}, nil
+			return runtime.Value{Type: runtime.NUMBER, Num: -right.Num}, nil
 		case "+":
 			return right, nil
 		default:
-			return Value{}, errors.NewSyntax(
+			return runtime.Value{}, errors.NewSyntax(
 				line, col, e.Op,
 				"UNKNOWN PREFIX OPERATOR",
 			)
 		}
 
 	case *parser.InfixExpr:
-		left, err := EvalExpr(e.Left, env)
+		left, err := EvalExpr(e.Left, rt)
 		if err != nil {
-			return Value{}, err
+			return runtime.Value{}, err
 		}
-		right, err := EvalExpr(e.Right, env)
+		right, err := EvalExpr(e.Right, rt)
 		if err != nil {
-			return Value{}, err
+			return runtime.Value{}, err
 		}
 
-		if e.Op == "+" && (left.Type == STRING || right.Type == STRING) {
-			return Value{
-				Type: STRING,
+		if e.Op == "+" && (left.Type == runtime.STRING || right.Type == runtime.STRING) {
+			return runtime.Value{
+				Type: runtime.STRING,
 				Str:  left.String() + right.String(),
 			}, nil
 		}
 
-		if left.Type != NUMBER || right.Type != NUMBER {
-			return Value{}, errors.NewSyntax(
+		if left.Type != runtime.NUMBER || right.Type != runtime.NUMBER {
+			return runtime.Value{}, errors.NewSyntax(
 				line, col, e.Op,
 				"OPERANDS MUST BE NUMBERS",
 			)
@@ -82,36 +82,29 @@ func EvalExpr(expr parser.Expression, env *Env) (Value, *errors.Error) {
 
 		switch e.Op {
 		case "+":
-			return Value{Type: NUMBER, Num: left.Num + right.Num}, nil
+			return runtime.Value{Type: runtime.NUMBER, Num: left.Num + right.Num}, nil
 		case "-":
-			return Value{Type: NUMBER, Num: left.Num - right.Num}, nil
+			return runtime.Value{Type: runtime.NUMBER, Num: left.Num - right.Num}, nil
 		case "*":
-			return Value{Type: NUMBER, Num: left.Num * right.Num}, nil
+			return runtime.Value{Type: runtime.NUMBER, Num: left.Num * right.Num}, nil
 		case "/":
 			if right.Num == 0 {
-				return Value{}, errors.NewSemantic(
+				return runtime.Value{}, errors.NewSemantic(
 					line,
 					"DIVISION BY ZERO",
 				)
 			}
-			return Value{Type: NUMBER, Num: left.Num / right.Num}, nil
+			return runtime.Value{Type: runtime.NUMBER, Num: left.Num / right.Num}, nil
 		default:
-			return Value{}, errors.NewSyntax(
+			return runtime.Value{}, errors.NewSyntax(
 				line, col, e.Op,
 				"UNKNOWN INFIX OPERATOR",
 			)
 		}
 	}
 
-	return Value{}, errors.NewSyntax(
+	return runtime.Value{}, errors.NewSyntax(
 		line, col, tok,
 		"UNKNOWN EXPRESSION",
 	)
-}
-
-func (v Value) String() string {
-	if v.Type == STRING {
-		return v.Str
-	}
-	return fmt.Sprintf("%f", v.Num)
 }
