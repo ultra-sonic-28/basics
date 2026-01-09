@@ -12,9 +12,10 @@ func TestBasicConstants(t *testing.T) {
 		constVal byte
 		expected byte
 	}{
-		{"BASIC_APPLE", BASIC_APPLE, 0},
-		{"BASIC_C64", BASIC_C64, 1},
-		{"BASIC_AMS", BASIC_AMS, 2},
+		{"BASIC_TTY", BASIC_TTY, 0},
+		{"BASIC_APPLE", BASIC_APPLE, 1},
+		{"BASIC_C64", BASIC_C64, 2},
+		{"BASIC_AMS", BASIC_AMS, 3},
 	}
 
 	for i, tt := range tests {
@@ -28,6 +29,7 @@ func TestBasicVersionMap(t *testing.T) {
 		constVal byte
 		expected byte
 	}{
+		{BASIC_TTY, 10},
 		{BASIC_APPLE, 10},
 		{BASIC_C64, 10},
 		{BASIC_AMS, 10},
@@ -50,6 +52,7 @@ func TestBasicNameMap(t *testing.T) {
 		constVal byte
 		expected string
 	}{
+		{BASIC_TTY, "TTY"},
 		{BASIC_APPLE, "APPLE"},
 		{BASIC_C64, "C64"},
 		{BASIC_AMS, "AMS6128"},
