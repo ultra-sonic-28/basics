@@ -161,6 +161,11 @@ func (p *Parser) parseStatement(lineNum int) Statement {
 			return &VTabStmt{
 				Expr: expr,
 			}
+
+		case "END":
+			p.next()
+			return &EndStmt{}
+
 		default:
 			p.syntaxError("UNKNOWN KEYWORD")
 			p.next()

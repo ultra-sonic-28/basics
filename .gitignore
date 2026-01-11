@@ -77,3 +77,4 @@ temp/
 .asserts/
 coverage.*
 examples/*.bin
+TODO.md

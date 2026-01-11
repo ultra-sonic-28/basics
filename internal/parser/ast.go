@@ -69,6 +69,11 @@ type VTabStmt struct {
 
 func (*VTabStmt) stmtNode() {}
 
+type EndStmt struct {
+}
+
+func (*EndStmt) stmtNode() {}
+
 // =========================
 // Expressions
 // =========================

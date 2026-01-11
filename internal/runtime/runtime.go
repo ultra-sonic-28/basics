@@ -5,8 +5,9 @@ import (
 )
 
 type Runtime struct {
-	Video video.Device
-	Env   *Environment
+	Video  video.Device
+	Env    *Environment
+	halted bool
 }
 
 func New(video video.Device) *Runtime {
@@ -14,6 +15,14 @@ func New(video video.Device) *Runtime {
 		Video: video,
 		Env:   NewEnvironment(),
 	}
+}
+
+func (r *Runtime) Halt() {
+	r.halted = true
+}
+
+func (r *Runtime) IsHalted() bool {
+	return r.halted
 }
 
 func (rt *Runtime) ExecPrint(value string) {

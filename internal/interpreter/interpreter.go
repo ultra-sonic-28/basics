@@ -70,6 +70,9 @@ func (i *Interpreter) Run(prog *parser.Program) {
 			stmt := line.Stmts[stmtIdx]
 
 			switch s := stmt.(type) {
+			case *parser.EndStmt:
+				i.rt.Halt()
+				return
 
 			case *parser.LetStmt:
 				val, err := EvalExpr(s.Value, i.rt)
