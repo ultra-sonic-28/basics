@@ -136,6 +136,31 @@ func (p *Parser) parseStatement(lineNum int) Statement {
 			p.next()
 			return nil
 
+		case "HTAB":
+			p.next() // consommer HTAB
+
+			expr := p.parseExpression(LOWEST)
+			if expr == nil {
+				p.syntaxError("EXPECTED EXPRESSION AFTER HTAB")
+				return nil
+			}
+
+			return &HTabStmt{
+				Expr: expr,
+			}
+
+		case "VTAB":
+			p.next() // consommer VTAB
+
+			expr := p.parseExpression(LOWEST)
+			if expr == nil {
+				p.syntaxError("EXPECTED EXPRESSION AFTER VTAB")
+				return nil
+			}
+
+			return &VTabStmt{
+				Expr: expr,
+			}
 		default:
 			p.syntaxError("UNKNOWN KEYWORD")
 			p.next()

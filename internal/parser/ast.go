@@ -20,6 +20,7 @@ type Statement interface {
 	stmtNode()
 }
 
+// PRINT
 type PrintStmt struct {
 	Exprs      []Expression
 	Separators []rune // ';' ou ',' pour chaque expression sauf la première
@@ -27,6 +28,7 @@ type PrintStmt struct {
 
 func (*PrintStmt) stmtNode() {}
 
+// LET
 type LetStmt struct {
 	Name  string
 	Value Expression
@@ -34,6 +36,7 @@ type LetStmt struct {
 
 func (*LetStmt) stmtNode() {}
 
+// FOR ... TO ... STEP ... NEXT
 type ForStmt struct {
 	Var     string
 	Start   Expression
@@ -52,6 +55,20 @@ type NextStmt struct {
 
 func (*NextStmt) stmtNode() {}
 
+// HTAB
+type HTabStmt struct {
+	Expr Expression
+}
+
+func (*HTabStmt) stmtNode() {}
+
+// VTAB
+type VTabStmt struct {
+	Expr Expression
+}
+
+func (*VTabStmt) stmtNode() {}
+
 // =========================
 // Expressions
 // =========================
@@ -59,6 +76,7 @@ type Expression interface {
 	exprNode()
 }
 
+// IDENTIFIER
 type Identifier struct {
 	Name   string
 	Line   int
@@ -72,6 +90,7 @@ func (i *Identifier) Pos() (int, int, string) {
 	return i.Line, i.Column, i.Token
 }
 
+// NUMBER
 type NumberLiteral struct {
 	Value  float64
 	Line   int
@@ -85,6 +104,7 @@ func (n *NumberLiteral) Pos() (int, int, string) {
 	return n.Line, n.Column, n.Token
 }
 
+// PREFIX
 type PrefixExpr struct {
 	Op     string
 	Right  Expression
@@ -99,6 +119,7 @@ func (pe *PrefixExpr) Pos() (int, int, string) {
 	return pe.Line, pe.Column, pe.Token
 }
 
+// INFIX
 type InfixExpr struct {
 	Left   Expression
 	Op     string
@@ -114,6 +135,7 @@ func (ie *InfixExpr) Pos() (int, int, string) {
 	return ie.Line, ie.Column, ie.Token
 }
 
+// STRING
 type StringLiteral struct {
 	Value  string
 	Line   int

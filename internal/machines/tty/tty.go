@@ -25,6 +25,10 @@ func (t *TTYDevice) PrintChar(r rune) {
 
 func (t *TTYDevice) Plot(x, y int) {}
 
+func (v *TTYDevice) SetCursorX(x int) {}
+
+func (v *TTYDevice) SetCursorY(y int) {}
+
 func (t *TTYDevice) Clear() {
 	t.buffer = nil
 	fmt.Print("\033[2J\033[H")

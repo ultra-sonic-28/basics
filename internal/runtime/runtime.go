@@ -25,3 +25,11 @@ func (rt *Runtime) ExecPlot(x, y int) {
 	rt.Video.Plot(x, y)
 	rt.Video.Render()
 }
+
+func (rt *Runtime) ExecHTab(x int) {
+	rt.Video.SetCursorX(x - 1) // BASIC = 1-based
+}
+
+func (rt *Runtime) ExecVTab(y int) {
+	rt.Video.SetCursorY(y - 1)
+}

@@ -173,6 +173,21 @@ func (i *Interpreter) Run(prog *parser.Program) {
 					i.forSt.Pop()
 				}
 
+			case *parser.HTabStmt:
+				val, err := EvalExpr(s.Expr, i.rt)
+				if err != nil {
+					fmt.Println(err)
+					return
+				}
+				i.rt.ExecHTab(int(val.Num))
+
+			case *parser.VTabStmt:
+				val, err := EvalExpr(s.Expr, i.rt)
+				if err != nil {
+					fmt.Println(err)
+					return
+				}
+				i.rt.ExecVTab(int(val.Num))
 			}
 		}
 	}

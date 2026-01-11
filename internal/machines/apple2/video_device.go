@@ -67,6 +67,26 @@ func (v *VideoDevice) Plot(x, y int) {
 	v.vram.Write(addr, value)
 }
 
+func (v *VideoDevice) SetCursorX(x int) {
+	if x < 0 {
+		x = 0
+	}
+	if x >= 40 {
+		x = 39
+	}
+	v.cursorX = x
+}
+
+func (v *VideoDevice) SetCursorY(y int) {
+	if y < 0 {
+		y = 0
+	}
+	if y >= 24 {
+		y = 23
+	}
+	v.cursorY = y
+}
+
 func (v *VideoDevice) Clear() {
 	v.vram.Clear()
 	v.cursorX = 0

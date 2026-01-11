@@ -13,5 +13,8 @@ type Device interface {
 	//Width() int
 	//Height() int
 
+	SetCursorX(x int)
+	SetCursorY(y int)
+
 	Render()
 }
