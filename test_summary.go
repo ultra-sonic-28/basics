@@ -165,7 +165,7 @@ func main() {
 	sort.Strings(packages)
 
 	// --- Résumé par package ---
-	fmt.Println("\n\n================ Résumé par Package ================")
+	fmt.Println("\n\n================ Tests par Package ================")
 	for _, pkg := range packages {
 		s := packageSummaries[pkg]
 		bar := buildInteractiveBar(s.Passed, s.Failed, s.Skipped)
