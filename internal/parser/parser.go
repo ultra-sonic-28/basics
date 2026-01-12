@@ -96,6 +96,14 @@ func (p *Parser) parseLine() *Line {
 
 	p.next() // LINENUM
 
+	// ✅ ligne vide autorisée (LINENUM seul)
+	if p.curr.Type == token.EOL || p.curr.Type == token.EOF {
+		if p.curr.Type == token.EOL {
+			p.next()
+		}
+		return line
+	}
+
 	for {
 		stmt := p.parseStatement(num)
 		line.Stmts = append(line.Stmts, stmt)
