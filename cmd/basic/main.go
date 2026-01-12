@@ -11,11 +11,21 @@ import (
 	"basics/internal/constants"
 	"basics/internal/interpreter"
 	"basics/internal/lexer"
+	"basics/internal/logger"
 	"basics/internal/machines"
 	"basics/internal/parser"
 )
 
 func main() {
+	closeLogger, err := logger.InitLogger("rpg.log", "rpg_companion", logger.LevelInfo)
+	if err != nil {
+		panic(err)
+	}
+	defer closeLogger()
+
+	logger.Info("Logging initialized")
+	logger.Info("Application starting...")
+
 	// -------------------------
 	// Options CLI
 	// -------------------------
