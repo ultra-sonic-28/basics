@@ -184,7 +184,7 @@ func (p *Parser) parseStatement(lineNum int) Statement {
 	if p.curr.Type == token.IDENT {
 		// IDENT doit être suivi de '='
 		if p.peek.Literal != "=" {
-			p.syntaxError("UNKNOWN STATEMENT")
+			p.syntaxError("EXPECTED '='")
 			p.next()
 			return nil
 		}
