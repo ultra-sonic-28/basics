@@ -48,6 +48,9 @@ func dumpStatement(s Statement, indent string) {
 			fmt.Printf("%sNEXT %s\n", indent, stmt.Var)
 		}
 
+	case *EndStmt:
+		fmt.Printf("%sEND\n", indent)
+
 	case nil:
 		// REM ou instruction vide → rien à afficher
 
