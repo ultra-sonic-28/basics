@@ -144,6 +144,11 @@ func (p *Parser) parseStatement(lineNum int) Statement {
 			p.next()
 			return nil
 
+		case "GOTO":
+			p.next()
+			target := p.parseExpression(LOWEST)
+			return &GotoStmt{Expr: target}
+
 		case "HTAB":
 			p.next() // consommer HTAB
 

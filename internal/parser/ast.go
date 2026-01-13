@@ -75,6 +75,15 @@ type EndStmt struct {
 func (*EndStmt) stmtNode() {}
 
 // =========================
+// Flow control
+// =========================
+type GotoStmt struct {
+	Expr Expression
+}
+
+func (*GotoStmt) stmtNode() {}
+
+// =========================
 // Expressions
 // =========================
 type Expression interface {
