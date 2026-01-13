@@ -59,6 +59,10 @@ func dumpStatement(s Statement, indent string) {
 		fmt.Printf("%sVTAB\n", indent)
 		dumpExpr(stmt.Expr, indent+"  ")
 
+	case *GotoStmt:
+		fmt.Printf("%sGOTO\n", indent)
+		dumpExpr(stmt.Expr, indent+"  ")
+
 	case nil:
 		// REM ou instruction vide → rien à afficher
 
