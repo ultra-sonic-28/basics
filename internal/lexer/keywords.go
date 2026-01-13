@@ -3,7 +3,7 @@ package lexer
 var Keywords = map[string]bool{
 	// Contrôle
 	"FOR": true, "TO": true, "STEP": true, "NEXT": true,
-	"IF": true, "THEN": true,
+	"IF": true, "THEN": true, "ELSE": true,
 	"GOTO": true, "GOSUB": true, "RETURN": true,
 	"END": true, "STOP": true,
 

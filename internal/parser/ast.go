@@ -83,6 +83,14 @@ type GotoStmt struct {
 
 func (*GotoStmt) stmtNode() {}
 
+type IfStmt struct {
+	Cond Expression
+	Then []Statement
+	Else []Statement // nil si absent
+}
+
+func (*IfStmt) stmtNode() {}
+
 // =========================
 // Expressions
 // =========================

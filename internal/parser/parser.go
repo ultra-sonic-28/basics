@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"basics/internal/errors"
+	"basics/internal/logger"
 	"basics/internal/token"
 )
 
@@ -18,6 +19,7 @@ type Parser struct {
 }
 
 func New(tokens []token.Token) *Parser {
+	logger.Info("Instanciate new parser")
 	p := &Parser{tokens: tokens}
 	p.curr = tokens[0]
 	if len(tokens) > 1 {
@@ -67,6 +69,10 @@ func (p *Parser) ParseProgram() (*Program, []*errors.Error) {
 		}
 		seen[line.Number] = true
 
+		logger.Debug(fmt.Sprintf("Parsed line: %d", line.Number))
+		for _, stmt := range line.Stmts {
+			logStmt(stmt, "  ")
+		}
 		prog.Lines = append(prog.Lines, line)
 	}
 
@@ -122,6 +128,11 @@ func (p *Parser) parseLine() *Line {
 }
 
 func (p *Parser) parseStatement(lineNum int) Statement {
+	// ELSE n'est jamais un statement valide
+	if p.curr.Type == token.KEYWORD && p.curr.Literal == "ELSE" {
+		return nil
+	}
+
 	if p.curr.Type == token.KEYWORD {
 		switch p.curr.Literal {
 
@@ -133,6 +144,9 @@ func (p *Parser) parseStatement(lineNum int) Statement {
 
 		case "NEXT":
 			return p.parseNext(lineNum)
+
+		case "IF":
+			return p.parseIf(lineNum)
 
 		case "LET":
 			// LET est optionnel, on le consomme systématiquement
@@ -308,7 +322,7 @@ func (p *Parser) parseNext(lineNum int) Statement {
 	p.next() // NEXT
 
 	if len(p.forStack) == 0 {
-		p.syntaxError("NEXT WITHOUT FOR")
+		p.syntaxError(fmt.Sprintf("NEXT WITHOUT FOR in line %d", lineNum))
 		return nil
 	}
 
@@ -332,6 +346,72 @@ func (p *Parser) parseNext(lineNum int) Statement {
 		Var:        name,
 		ForLineNum: top.LineNum, // ligne BASIC du FOR correspondant
 	}
+}
+
+func (p *Parser) parseIf(lineNum int) Statement {
+	p.next() // consommer IF
+
+	// condition
+	cond := p.parseExpression(LOWEST)
+	if cond == nil {
+		p.syntaxError("EXPECTED CONDITION AFTER IF")
+		return nil
+	}
+
+	if !p.expectKeyword("THEN") {
+		return nil
+	}
+
+	thenBlock := p.parseIfBlock(lineNum)
+
+	// ✅ CONSOMMER ':' AVANT ELSE SI PRÉSENT
+	if p.curr.Type == token.COLON {
+		p.next()
+	}
+
+	var elseBlock []Statement
+	if p.curr.Type == token.KEYWORD && p.curr.Literal == "ELSE" {
+		p.next() // consommer ELSE
+		elseBlock = p.parseIfBlock(lineNum)
+	}
+
+	return &IfStmt{
+		Cond: cond,
+		Then: thenBlock,
+		Else: elseBlock,
+	}
+}
+
+func (p *Parser) parseIfBlock(lineNum int) []Statement {
+	var stmts []Statement
+
+	// Cas spécial : THEN 40  → GOTO implicite
+	if p.curr.Type == token.NUMBER {
+		expr := p.parseExpression(LOWEST)
+		stmts = append(stmts, &GotoStmt{Expr: expr})
+		return stmts
+	}
+
+	for {
+		stmt := p.parseStatement(lineNum)
+		if stmt != nil {
+			stmts = append(stmts, stmt)
+		}
+
+		if p.curr.Type == token.EOL ||
+			(p.curr.Type == token.KEYWORD && p.curr.Literal == "ELSE") {
+			break
+		}
+
+		if p.curr.Type == token.COLON {
+			p.next()
+			continue
+		}
+
+		break
+	}
+
+	return stmts
 }
 
 func (p *Parser) parseExpression(precedence int) Expression {
@@ -383,6 +463,14 @@ func (p *Parser) parseExpression(precedence int) Expression {
 			Token:  p.curr.Literal,
 		}
 		p.next()
+
+	case token.LPAREN:
+		p.next() // consommer '('
+		left = p.parseExpression(LOWEST)
+
+		if !p.expect(token.RPAREN) {
+			return nil
+		}
 
 	default:
 		p.syntaxError("INVALID EXPRESSION")

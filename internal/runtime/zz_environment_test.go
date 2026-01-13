@@ -32,6 +32,22 @@ func TestEnv_SetGet(t *testing.T) {
 			wantExists: true,
 		},
 		{
+			name:       "Get after set boolean to true",
+			setName:    "MSG",
+			setValue:   Value{Type: BOOLEAN, Flag: true},
+			getName:    "MSG",
+			wantValue:  Value{Type: BOOLEAN, Flag: true},
+			wantExists: true,
+		},
+		{
+			name:       "Get after set boolean to false",
+			setName:    "MSG",
+			setValue:   Value{Type: BOOLEAN, Flag: false},
+			getName:    "MSG",
+			wantValue:  Value{Type: BOOLEAN, Flag: false},
+			wantExists: true,
+		},
+		{
 			name:       "Get unset variable returns default number 0",
 			setName:    "",
 			setValue:   Value{},

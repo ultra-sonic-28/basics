@@ -111,6 +111,60 @@ func TestDumpStatement(t *testing.T) {
 			stmt:     &NextStmt{Var: "J"},
 			expected: "NEXT J\n",
 		},
+		{
+			name: "IfStmt without ELSE",
+			stmt: &IfStmt{
+				Cond: &InfixExpr{
+					Left:  &Identifier{Name: "A", Token: "A"},
+					Op:    "<",
+					Right: &NumberLiteral{Value: 10, Token: "10"},
+				},
+				Then: []Statement{
+					&GotoStmt{
+						Expr: &NumberLiteral{Value: 20, Token: "20"},
+					},
+				},
+			},
+			expected: "" +
+				"IF\n" +
+				"  Infix <\n" +
+				"    Ident A\n" +
+				"    Number 10\n" +
+				"THEN\n" +
+				"  GOTO\n" +
+				"    Number 20\n",
+		},
+		{
+			name: "IfStmt with ELSE",
+			stmt: &IfStmt{
+				Cond: &Identifier{Name: "X", Token: "X"},
+				Then: []Statement{
+					&PrintStmt{
+						Exprs: []Expression{
+							&StringLiteral{Value: "YES", Token: "\"YES\""},
+						},
+					},
+				},
+				Else: []Statement{
+					&PrintStmt{
+						Exprs: []Expression{
+							&StringLiteral{Value: "NO", Token: "\"NO\""},
+						},
+					},
+				},
+			},
+			expected: "" +
+				"IF\n" +
+				"  Ident X\n" +
+				"THEN\n" +
+				"  PRINT\n" +
+				"    EXPR 0:\n" +
+				"      String \"YES\"\n" +
+				"ELSE\n" +
+				"  PRINT\n" +
+				"    EXPR 0:\n" +
+				"      String \"NO\"\n",
+		},
 	}
 
 	for _, tt := range tests {

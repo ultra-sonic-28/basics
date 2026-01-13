@@ -95,6 +95,18 @@ func EvalExpr(expr parser.Expression, rt *runtime.Runtime) (runtime.Value, *erro
 				)
 			}
 			return runtime.Value{Type: runtime.NUMBER, Num: left.Num / right.Num}, nil
+		case "<":
+			return runtime.Value{Type: runtime.BOOLEAN, Flag: left.Num < right.Num}, nil
+		case ">":
+			return runtime.Value{Type: runtime.BOOLEAN, Flag: left.Num > right.Num}, nil
+		case "<=":
+			return runtime.Value{Type: runtime.BOOLEAN, Flag: left.Num <= right.Num}, nil
+		case ">=":
+			return runtime.Value{Type: runtime.BOOLEAN, Flag: left.Num >= right.Num}, nil
+		case "<>":
+			return runtime.Value{Type: runtime.BOOLEAN, Flag: left.Num != right.Num}, nil
+		case "=":
+			return runtime.Value{Type: runtime.BOOLEAN, Flag: left.Num == right.Num}, nil
 		default:
 			return runtime.Value{}, errors.NewSyntax(
 				line, col, e.Op,

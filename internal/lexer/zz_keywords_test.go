@@ -10,7 +10,7 @@ func TestKeywords_ContainsExpectedKeywords(t *testing.T) {
 	expected := []string{
 		// Contrôle
 		"FOR", "TO", "STEP", "NEXT",
-		"IF", "THEN",
+		"IF", "THEN", "ELSE",
 		"GOTO", "GOSUB", "RETURN",
 		"END", "STOP",
 
@@ -57,7 +57,6 @@ func TestKeywords_DoesNotContainInvalidKeywords(t *testing.T) {
 		"for",      // lowercase
 		"Print",    // mixed case
 		"WHILE",    // non supporté
-		"ELSE",     // non supporté
 		"FUNCTION", // non supporté
 		"",         // vide
 		"123",      // numérique
@@ -81,8 +80,13 @@ func TestKeywords_AllValuesAreTrue(t *testing.T) {
 
 func TestKeywords_ContainAllExpected(t *testing.T) {
 	expected := []string{
+		"REM",
+		"END",
+		"LET",
 		"FOR", "TO", "STEP", "NEXT",
-		"IF", "THEN",
+		"IF", "THEN", "ELSE",
+		"GOTO",
+		"HTAB", "VTAB",
 		"PRINT", "INPUT",
 		"SLEEP",
 	}

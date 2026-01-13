@@ -1,6 +1,9 @@
 package parser
 
-import "fmt"
+import (
+	"basics/internal/logger"
+	"fmt"
+)
 
 // DumpProgram affiche tout le programme BASIC
 func DumpProgram(p *Program) {
@@ -63,6 +66,21 @@ func dumpStatement(s Statement, indent string) {
 		fmt.Printf("%sGOTO\n", indent)
 		dumpExpr(stmt.Expr, indent+"  ")
 
+	case *IfStmt:
+		fmt.Printf("%sIF\n", indent)
+		dumpExpr(stmt.Cond, indent+"  ")
+		fmt.Printf("%sTHEN\n", indent)
+		for _, stmt := range stmt.Then {
+			dumpStatement(stmt, indent+"  ")
+		}
+
+		if stmt.Else != nil {
+			fmt.Printf("%sELSE\n", indent)
+			for _, stmt := range stmt.Else {
+				dumpStatement(stmt, indent+"  ")
+			}
+		}
+
 	case nil:
 		// REM ou instruction vide → rien à afficher
 
@@ -91,5 +109,86 @@ func dumpExpr(e Expression, indent string) {
 		fmt.Printf("%sInfix %s\n", indent, n.Op)
 		dumpExpr(n.Left, indent+"  ")
 		dumpExpr(n.Right, indent+"  ")
+	}
+}
+
+func logStmt(stmt Statement, indent string) {
+	switch s := stmt.(type) {
+
+	case *LetStmt:
+		logger.Debug(indent + "LET " + s.Name)
+		logExpr(s.Value, indent+"  ")
+
+	case *PrintStmt:
+		logger.Debug(indent + "PRINT")
+		for i, e := range s.Exprs {
+			logger.Debug(fmt.Sprintf("%s  EXPR %d:", indent, i))
+			logExpr(e, indent+"    ")
+		}
+
+	case *GotoStmt:
+		logger.Debug(indent + "GOTO")
+		logExpr(s.Expr, indent+"  ")
+
+	case *IfStmt:
+		logger.Debug(indent + "IF")
+		logger.Debug(indent + "  COND:")
+		logExpr(s.Cond, indent+"    ")
+
+		if len(s.Then) > 0 {
+			logger.Debug(indent + "  THEN")
+			for _, st := range s.Then {
+				logStmt(st, indent+"    ")
+			}
+		}
+
+		if len(s.Else) > 0 {
+			logger.Debug(indent + "  ELSE")
+			for _, st := range s.Else {
+				logStmt(st, indent+"    ")
+			}
+		}
+
+	case *EndStmt:
+		logger.Debug(indent + "END")
+
+	case *ForStmt:
+		logger.Debug(indent + "FOR " + s.Var)
+		logger.Debug(indent + "  START:")
+		logExpr(s.Start, indent+"    ")
+		logger.Debug(indent + "  END:")
+		logExpr(s.End, indent+"    ")
+		if s.Step != nil {
+			logger.Debug(indent + "  STEP:")
+			logExpr(s.Step, indent+"    ")
+		}
+
+	case *NextStmt:
+		logger.Debug(indent + "NEXT " + s.Var)
+
+	default:
+		logger.Debug(indent + "UNKNOWN STMT")
+	}
+}
+
+func logExpr(expr Expression, indent string) {
+	switch e := expr.(type) {
+
+	case *NumberLiteral:
+		logger.Debug(fmt.Sprintf("%sNumber %g", indent, e.Value))
+
+	case *StringLiteral:
+		logger.Debug(fmt.Sprintf("%sString %q", indent, e.Value))
+
+	case *Identifier:
+		logger.Debug(fmt.Sprintf("%sIdent %s", indent, e.Name))
+
+	case *InfixExpr:
+		logger.Debug(fmt.Sprintf("%sInfix %s", indent, e.Op))
+		logExpr(e.Left, indent+"  ")
+		logExpr(e.Right, indent+"  ")
+
+	default:
+		logger.Debug(indent + "UNKNOWN EXPR")
 	}
 }

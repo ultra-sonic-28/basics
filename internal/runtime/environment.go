@@ -7,12 +7,14 @@ type ValueType int
 const (
 	NUMBER ValueType = iota
 	STRING
+	BOOLEAN
 )
 
 type Value struct {
 	Type ValueType
 	Num  float64
 	Str  string
+	Flag bool
 }
 
 type Environment struct {

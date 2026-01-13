@@ -3,6 +3,7 @@ package lexer
 import (
 	"unicode"
 
+	"basics/internal/logger"
 	"basics/internal/token"
 )
 
@@ -19,6 +20,7 @@ type Lexer struct {
 }
 
 func New(input string) *Lexer {
+	logger.Info("Instanciate new lexer")
 	l := &Lexer{
 		input:            []rune(input),
 		line:             1,
@@ -80,6 +82,34 @@ func (l *Lexer) NextToken() token.Token {
 		tok = l.simpleToken(token.CARET, "^")
 	case '=':
 		tok = l.simpleToken(token.EQUAL, "=")
+	case '<':
+		if l.peekChar() == '=' {
+			ch := l.ch
+			l.readChar()
+			tok.Type = token.LTE
+			tok.Literal = string(ch) + string(l.ch)
+			l.readChar()
+			return tok
+		}
+		if l.peekChar() == '>' {
+			ch := l.ch
+			l.readChar()
+			tok.Type = token.NEQ
+			tok.Literal = string(ch) + string(l.ch)
+			l.readChar()
+			return tok
+		}
+		tok = l.simpleToken(token.LT, "<")
+	case '>':
+		if l.peekChar() == '=' {
+			ch := l.ch
+			l.readChar()
+			tok.Type = token.GTE
+			tok.Literal = string(ch) + string(l.ch)
+			l.readChar()
+			return tok
+		}
+		tok = l.simpleToken(token.GT, ">")
 	case '(':
 		tok = l.simpleToken(token.LPAREN, "(")
 	case ')':
@@ -192,4 +222,11 @@ func isLetter(ch rune) bool {
 
 func isDigit(ch rune) bool {
 	return ch >= '0' && ch <= '9'
+}
+
+func (l *Lexer) peekChar() rune {
+	if l.readPosition >= len(l.input) {
+		return 0
+	}
+	return l.input[l.readPosition]
 }

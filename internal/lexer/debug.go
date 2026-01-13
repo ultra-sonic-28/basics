@@ -7,22 +7,29 @@ import (
 
 func DumpTokens(tokens []token.Token) {
 	for _, t := range tokens {
-		if t.HasLiteral() {
-			fmt.Printf(
-				"[%d:%d] %-8s \"%s\"\n",
-				t.Line,
-				t.Column,
-				t.TypeName(),
-				t.Literal,
-			)
-		} else {
-			fmt.Printf(
-				"[%d:%d] %-8s\n",
-				t.Line,
-				t.Column,
-				t.TypeName(),
-			)
-		}
-
+		fmt.Println(DumpTokenToLogFile(t))
 	}
+}
+
+func DumpTokenToLogFile(token token.Token) string {
+	var str string = ""
+
+	if token.HasLiteral() {
+		str = fmt.Sprintf(
+			"[%d:%d] %-8s \"%s\"",
+			token.Line,
+			token.Column,
+			token.TypeName(),
+			token.Literal,
+		)
+	} else {
+		str = fmt.Sprintf(
+			"[%d:%d] %-8s",
+			token.Line,
+			token.Column,
+			token.TypeName(),
+		)
+	}
+
+	return str
 }

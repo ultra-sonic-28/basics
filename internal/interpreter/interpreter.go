@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"basics/internal/errors"
+	"basics/internal/logger"
 	"basics/internal/parser"
 	"basics/internal/runtime"
 )
@@ -106,11 +107,14 @@ func (i *Interpreter) buildInstructions(prog *parser.Program) {
 
 func (i *Interpreter) Run(prog *parser.Program) {
 	i.buildInstructions(prog)
+	logger.Debug(fmt.Sprintf("Program contains %d instructions", len(i.insts)))
 
 	pc := 0
 	for pc < len(i.insts) {
 		inst := i.insts[pc]
 		nextPC := pc + 1
+
+		logger.Debug(fmt.Sprintf("Executing %d", inst.LineNum))
 
 		switch s := inst.Stmt.(type) {
 
@@ -186,7 +190,7 @@ func (i *Interpreter) Run(prog *parser.Program) {
 			i.rt.ExecVTab(int(val.Num))
 
 		// -----------------------
-		// FOR
+		// FOR (Applesoft semantics)
 		// -----------------------
 		case *parser.ForStmt:
 			startVal, err := EvalExpr(s.Start, i.rt)
@@ -194,6 +198,7 @@ func (i *Interpreter) Run(prog *parser.Program) {
 				fmt.Println(err)
 				return
 			}
+
 			endVal, err := EvalExpr(s.End, i.rt)
 			if err != nil {
 				fmt.Println(err)
@@ -217,14 +222,18 @@ func (i *Interpreter) Run(prog *parser.Program) {
 				}
 			}
 
+			end := float64(int(endVal.Num + 0.5))
+
+			// 🔹 Initialisation TOUJOURS faite
 			i.rt.Env.Set(s.Var, runtime.Value{
 				Type: runtime.NUMBER,
 				Num:  startVal.Num,
 			})
 
+			// 🔹 Empiler SANS TEST
 			i.forStack.Push(ForFrame{
 				Var:     s.Var,
-				End:     endVal.Num,
+				End:     end,
 				Step:    step,
 				PCStart: pc,
 			})
@@ -275,17 +284,119 @@ func (i *Interpreter) Run(prog *parser.Program) {
 			}
 
 			nextPC = targetPC
+
+		// -----------------------
+		// IF
+		// -----------------------
+		case *parser.IfStmt:
+			cond, err := EvalExpr(s.Cond, i.rt)
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+
+			exec := false
+
+			switch cond.Type {
+			case runtime.BOOLEAN:
+				exec = cond.Flag
+			case runtime.NUMBER:
+				exec = cond.Num != 0
+			}
+
+			if exec {
+				for _, stmt := range s.Then {
+					nextPC = i.execInline(inst.LineNum, stmt, pc)
+				}
+			} else if s.Else != nil {
+				for _, stmt := range s.Else {
+					nextPC = i.execInline(inst.LineNum, stmt, pc)
+				}
+			}
 		}
 
 		pc = nextPC
 	}
 }
 
-//
+// =======================
+// Inline execution helper
+// =======================
+
+func (i *Interpreter) execInline(line int, stmt parser.Statement, pc int) int {
+	switch s := stmt.(type) {
+
+	case *parser.GotoStmt:
+		val, err := EvalExpr(s.Expr, i.rt)
+		if err != nil {
+			fmt.Println(err)
+			return pc + 1
+		}
+		target, ok := i.lineIndex[int(val.Num)]
+		if !ok {
+			fmt.Printf("?UNDEFINED LINE %d\n", int(val.Num))
+			return pc + 1
+		}
+		return target
+
+	case *parser.LetStmt:
+		val, err := EvalExpr(s.Value, i.rt)
+		if err != nil {
+			fmt.Println(err)
+			return pc + 1
+		}
+		i.rt.Env.Set(s.Name, val)
+		return pc + 1
+
+	case *parser.PrintStmt:
+		//i.rt.ExecPrint(s.Exprs[0].(*parser.StringLiteral).Value)
+		//i.rt.ExecPrint("\n")
+		for iExpr, expr := range s.Exprs {
+			val, err := EvalExpr(expr, i.rt)
+			if err != nil {
+				fmt.Println(err)
+				return pc
+			}
+
+			var out string
+			switch val.Type {
+			case runtime.STRING:
+				out = val.Str
+			case runtime.NUMBER:
+				out = formatNumber(val.Num)
+			case runtime.BOOLEAN:
+				if val.Flag {
+					out = "1"
+				} else {
+					out = "0"
+				}
+			default:
+				out = ""
+			}
+
+			// séparateurs ; et ,
+			if iExpr > 0 {
+				sep := s.Separators[iExpr-1]
+				switch sep {
+				case ',':
+					out = " " + out
+				case ';':
+					// rien
+				}
+			}
+
+			i.rt.ExecPrint(out)
+		}
+		i.rt.ExecPrint("\n")
+
+	}
+
+	return pc + 1
+}
+
 // =======================
 // Utils
 // =======================
-//
 
 func formatNumber(f float64) string {
 	if f == float64(int64(f)) {

@@ -16,6 +16,8 @@ var precedences = map[string]int{
 	"<>": EQUALS,
 	"<":  LESSGREATER,
 	">":  LESSGREATER,
+	"<=": LESSGREATER,
+	">=": LESSGREATER,
 	"+":  SUM,
 	"-":  SUM,
 	"*":  PRODUCT,

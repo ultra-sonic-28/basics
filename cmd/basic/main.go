@@ -17,7 +17,7 @@ import (
 )
 
 func main() {
-	closeLogger, err := logger.InitLogger("rpg.log", "rpg_companion", logger.LevelInfo)
+	closeLogger, err := logger.InitLogger("basics.log", "basics", logger.LevelInfo)
 	if err != nil {
 		panic(err)
 	}
