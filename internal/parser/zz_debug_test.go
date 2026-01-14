@@ -139,6 +139,98 @@ func TestDumpStatement(t *testing.T) {
 				"    Number 2\n",
 		},
 		{
+			name: "HTabStmt",
+			stmt: &HTabStmt{
+				Expr: &NumberLiteral{Value: 10, Line: 1, Column: 1, Token: "10"},
+			},
+			expected: "HTAB\n  Number 10\n",
+		},
+		{
+			name: "HTabStmt with expression",
+			stmt: &HTabStmt{
+				Expr: &InfixExpr{
+					Left:  &Identifier{Name: "A", Token: "A"},
+					Op:    "*",
+					Right: &NumberLiteral{Value: 2, Token: "2"},
+				},
+			},
+			expected: "" +
+				"HTAB\n" +
+				"  Infix *\n" +
+				"    Ident A\n" +
+				"    Number 2\n",
+		},
+		{
+			name: "HTabStmt with parenthesized expression",
+			stmt: &HTabStmt{
+				Expr: &InfixExpr{
+					Left: &InfixExpr{
+						Left:  &Identifier{Name: "A", Token: "A"},
+						Op:    "+",
+						Right: &Identifier{Name: "B", Token: "B"},
+					},
+					Op: "*",
+					Right: &NumberLiteral{
+						Value: 2,
+						Token: "2",
+					},
+				},
+			},
+			expected: "" +
+				"HTAB\n" +
+				"  Infix *\n" +
+				"    Infix +\n" +
+				"      Ident A\n" +
+				"      Ident B\n" +
+				"    Number 2\n",
+		},
+		{
+			name: "VTabStmt",
+			stmt: &VTabStmt{
+				Expr: &Identifier{Name: "A", Line: 2, Column: 3, Token: "A"},
+			},
+			expected: "VTAB\n  Ident A\n",
+		},
+		{
+			name: "VTabStmt with expression",
+			stmt: &VTabStmt{
+				Expr: &InfixExpr{
+					Left:  &Identifier{Name: "V", Token: "V"},
+					Op:    "+",
+					Right: &NumberLiteral{Value: 5, Token: "5"},
+				},
+			},
+			expected: "" +
+				"VTAB\n" +
+				"  Infix +\n" +
+				"    Ident V\n" +
+				"    Number 5\n",
+		},
+		{
+			name: "VTabStmt with parenthesized expression",
+			stmt: &VTabStmt{
+				Expr: &InfixExpr{
+					Left: &InfixExpr{
+						Left:  &Identifier{Name: "A", Token: "A"},
+						Op:    "+",
+						Right: &Identifier{Name: "B", Token: "B"},
+					},
+					Op: "*",
+					Right: &NumberLiteral{
+						Value: 2,
+						Token: "2",
+					},
+				},
+			},
+			expected: "" +
+				"VTAB\n" +
+				"  Infix *\n" +
+				"    Infix +\n" +
+				"      Ident A\n" +
+				"      Ident B\n" +
+				"    Number 2\n",
+		},
+		{
 			name: "IfStmt without ELSE",
 			stmt: &IfStmt{
 				Cond: &InfixExpr{
