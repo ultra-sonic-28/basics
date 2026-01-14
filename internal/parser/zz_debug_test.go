@@ -112,6 +112,28 @@ func TestDumpStatement(t *testing.T) {
 			expected: "NEXT J\n",
 		},
 		{
+			name: "GotoStmt",
+			stmt: &GotoStmt{
+				Expr: &NumberLiteral{Value: 40, Line: 3, Column: 1, Token: "40"},
+			},
+			expected: "GOTO\n  Number 40\n",
+		},
+		{
+			name: "GotoStmt with expression",
+			stmt: &GotoStmt{
+				Expr: &InfixExpr{
+					Left:  &Identifier{Name: "JUMP", Token: "JUMP"},
+					Op:    "*",
+					Right: &NumberLiteral{Value: 2, Token: "2"},
+				},
+			},
+			expected: "" +
+				"GOTO\n" +
+				"  Infix *\n" +
+				"    Ident JUMP\n" +
+				"    Number 2\n",
+		},
+		{
 			name: "IfStmt without ELSE",
 			stmt: &IfStmt{
 				Cond: &InfixExpr{
