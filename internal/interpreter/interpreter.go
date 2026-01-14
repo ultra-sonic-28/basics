@@ -55,6 +55,32 @@ func (fs *ForStack) Top() *ForFrame {
 	return &fs.stack[len(fs.stack)-1]
 }
 
+// For GOSUB ... RETURN
+type GosubFrame struct {
+	ReturnPC int
+}
+
+type GosubStack struct {
+	stack []GosubFrame
+}
+
+func NewGosubStack() *GosubStack {
+	return &GosubStack{}
+}
+
+func (s *GosubStack) Push(pc int) {
+	s.stack = append(s.stack, GosubFrame{ReturnPC: pc})
+}
+
+func (s *GosubStack) Pop() (int, bool) {
+	if len(s.stack) == 0 {
+		return 0, false
+	}
+	top := s.stack[len(s.stack)-1]
+	s.stack = s.stack[:len(s.stack)-1]
+	return top.ReturnPC, true
+}
+
 //
 // =======================
 // Interpreter
@@ -62,16 +88,18 @@ func (fs *ForStack) Top() *ForFrame {
 //
 
 type Interpreter struct {
-	rt        *runtime.Runtime
-	forStack  *ForStack
-	insts     []Instruction
-	lineIndex map[int]int // line number → PC
+	rt         *runtime.Runtime
+	forStack   *ForStack
+	gosubStack *GosubStack
+	insts      []Instruction
+	lineIndex  map[int]int // line number → PC
 }
 
 func New(rt *runtime.Runtime) *Interpreter {
 	return &Interpreter{
-		rt:       rt,
-		forStack: NewForStack(),
+		rt:         rt,
+		forStack:   NewForStack(),
+		gosubStack: NewGosubStack(),
 	}
 }
 
@@ -286,6 +314,44 @@ func (i *Interpreter) Run(prog *parser.Program) {
 			nextPC = targetPC
 
 		// -----------------------
+		// GOSUB
+		// -----------------------
+		case *parser.GosubStmt:
+			val, err := EvalExpr(s.Expr, i.rt)
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+
+			if val.Type != runtime.NUMBER {
+				fmt.Println("?GOSUB TYPE MISMATCH")
+				return
+			}
+
+			line := int(val.Num)
+			targetPC, ok := i.lineIndex[line]
+			if !ok {
+				fmt.Printf("?UNDEFINED LINE %d\n", line)
+				return
+			}
+
+			// ⚠️ empiler l’instruction SUIVANTE
+			i.gosubStack.Push(pc + 1)
+
+			nextPC = targetPC
+
+		// -----------------------
+		// RETURN
+		// -----------------------
+		case *parser.ReturnStmt:
+			retPC, ok := i.gosubStack.Pop()
+			if !ok {
+				fmt.Println("?RETURN WITHOUT GOSUB")
+				return
+			}
+			nextPC = retPC
+
+		// -----------------------
 		// IF
 		// -----------------------
 		case *parser.IfStmt:
@@ -338,6 +404,31 @@ func (i *Interpreter) execInline(line int, stmt parser.Statement, pc int) int {
 			return pc + 1
 		}
 		return target
+
+	case *parser.GosubStmt:
+		val, err := EvalExpr(s.Expr, i.rt)
+		if err != nil {
+			fmt.Println(err)
+			return pc + 1
+		}
+
+		line := int(val.Num)
+		targetPC, ok := i.lineIndex[line]
+		if !ok {
+			fmt.Printf("?UNDEFINED LINE %d\n", line)
+			return pc + 1
+		}
+
+		i.gosubStack.Push(pc + 1)
+		return targetPC
+
+	case *parser.ReturnStmt:
+		retPC, ok := i.gosubStack.Pop()
+		if !ok {
+			fmt.Println("?RETURN WITHOUT GOSUB")
+			return pc + 1
+		}
+		return retPC
 
 	case *parser.LetStmt:
 		val, err := EvalExpr(s.Value, i.rt)

@@ -83,6 +83,16 @@ type GotoStmt struct {
 
 func (*GotoStmt) stmtNode() {}
 
+type GosubStmt struct {
+	Expr Expression // ligne cible (expression)
+}
+
+func (*GosubStmt) stmtNode() {}
+
+type ReturnStmt struct{}
+
+func (*ReturnStmt) stmtNode() {}
+
 type IfStmt struct {
 	Cond Expression
 	Then []Statement

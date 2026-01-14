@@ -163,6 +163,57 @@ func TestDumpStatement(t *testing.T) {
 				"    Number 2\n",
 		},
 		{
+			name: "GosubStmt",
+			stmt: &GosubStmt{
+				Expr: &NumberLiteral{Value: 40, Line: 3, Column: 1, Token: "40"},
+			},
+			expected: "GOSUB\n  Number 40\n",
+		},
+		{
+			name: "GosubStmt with expression",
+			stmt: &GosubStmt{
+				Expr: &InfixExpr{
+					Left:  &Identifier{Name: "JUMP", Token: "JUMP"},
+					Op:    "*",
+					Right: &NumberLiteral{Value: 2, Token: "2"},
+				},
+			},
+			expected: "" +
+				"GOSUB\n" +
+				"  Infix *\n" +
+				"    Ident JUMP\n" +
+				"    Number 2\n",
+		},
+		{
+			name: "GosubStmt with parenthesized expression",
+			stmt: &GosubStmt{
+				Expr: &InfixExpr{
+					Left: &InfixExpr{
+						Left:  &Identifier{Name: "A", Token: "A"},
+						Op:    "+",
+						Right: &Identifier{Name: "B", Token: "B"},
+					},
+					Op: "*",
+					Right: &NumberLiteral{
+						Value: 2,
+						Token: "2",
+					},
+				},
+			},
+			expected: "" +
+				"GOSUB\n" +
+				"  Infix *\n" +
+				"    Infix +\n" +
+				"      Ident A\n" +
+				"      Ident B\n" +
+				"    Number 2\n",
+		},
+		{
+			name:     "ReturnStmt",
+			stmt:     &ReturnStmt{},
+			expected: "RETURN\n",
+		},
+		{
 			name: "HTabStmt",
 			stmt: &HTabStmt{
 				Expr: &NumberLiteral{Value: 10, Line: 1, Column: 1, Token: "10"},

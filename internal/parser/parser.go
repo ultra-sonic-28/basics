@@ -163,6 +163,12 @@ func (p *Parser) parseStatement(lineNum int) Statement {
 			target := p.parseExpression(LOWEST)
 			return &GotoStmt{Expr: target}
 
+		case "GOSUB":
+			return p.parseGosub(lineNum)
+
+		case "RETURN":
+			return p.parseReturn(lineNum)
+
 		case "HTAB":
 			p.next() // consommer HTAB
 
@@ -215,6 +221,23 @@ func (p *Parser) parseStatement(lineNum int) Statement {
 	p.syntaxError("SYNTAX ERROR")
 	p.next()
 	return nil
+}
+
+func (p *Parser) parseGosub(lineNum int) Statement {
+	p.next() // consommer GOSUB
+
+	expr := p.parseExpression(LOWEST)
+	if expr == nil {
+		p.syntaxError("EXPECTED LINE NUMBER AFTER GOSUB")
+		return nil
+	}
+
+	return &GosubStmt{Expr: expr}
+}
+
+func (p *Parser) parseReturn(lineNum int) Statement {
+	p.next() // consommer RETURN
+	return &ReturnStmt{}
 }
 
 func (p *Parser) parsePrint() Statement {

@@ -1,0 +1,3 @@
+10 PRINT "Hello " : GOSUB 100 : PRINT "!!!"
+30 END
+100 PRINT "World" : RETURN

@@ -66,6 +66,13 @@ func dumpStatement(s Statement, indent string) {
 		fmt.Printf("%sGOTO\n", indent)
 		dumpExpr(stmt.Expr, indent+"  ")
 
+	case *GosubStmt:
+		fmt.Printf("%sGOSUB\n", indent)
+		dumpExpr(stmt.Expr, indent+"  ")
+
+	case *ReturnStmt:
+		fmt.Printf("%sRETURN\n", indent)
+
 	case *IfStmt:
 		fmt.Printf("%sIF\n", indent)
 		dumpExpr(stmt.Cond, indent+"  ")
