@@ -4,6 +4,7 @@ import (
 	"basics/internal/errors"
 	"basics/internal/parser"
 	"basics/internal/runtime"
+	"math"
 )
 
 func EvalExpr(expr parser.Expression, rt *runtime.Runtime) (runtime.Value, *errors.Error) {
@@ -87,6 +88,8 @@ func EvalExpr(expr parser.Expression, rt *runtime.Runtime) (runtime.Value, *erro
 			return runtime.Value{Type: runtime.NUMBER, Num: left.Num - right.Num}, nil
 		case "*":
 			return runtime.Value{Type: runtime.NUMBER, Num: left.Num * right.Num}, nil
+		case "^":
+			return runtime.Value{Type: runtime.NUMBER, Num: math.Pow(left.Num, right.Num)}, nil
 		case "/":
 			if right.Num == 0 {
 				return runtime.Value{}, errors.NewSemantic(
