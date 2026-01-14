@@ -80,6 +80,11 @@ func TestDumpStatement(t *testing.T) {
 			expected: "LET X\n  Number 10\n",
 		},
 		{
+			name:     "EndStmt",
+			stmt:     &EndStmt{},
+			expected: "END\n",
+		},
+		{
 			name: "ForStmt without Step",
 			stmt: &ForStmt{
 				Var:     "I",
