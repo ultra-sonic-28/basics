@@ -51,6 +51,9 @@ func dumpStatement(s Statement, indent string) {
 			fmt.Printf("%sNEXT %s\n", indent, stmt.Var)
 		}
 
+	case *HomeStmt:
+		fmt.Printf("%sHOME\n", indent)
+
 	case *EndStmt:
 		fmt.Printf("%sEND\n", indent)
 
@@ -121,6 +124,9 @@ func dumpExpr(e Expression, indent string) {
 
 func logStmt(stmt Statement, indent string) {
 	switch s := stmt.(type) {
+
+	case *HomeStmt:
+		logger.Debug(indent + "HOME")
 
 	case *LetStmt:
 		logger.Debug(indent + "LET " + s.Name)

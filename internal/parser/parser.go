@@ -136,6 +136,14 @@ func (p *Parser) parseStatement(lineNum int) Statement {
 	if p.curr.Type == token.KEYWORD {
 		switch p.curr.Literal {
 
+		case "HOME":
+			stmt := &HomeStmt{
+				Line:   p.curr.Line,
+				Column: p.curr.Column,
+			}
+			p.next()
+			return stmt
+
 		case "PRINT":
 			return p.parsePrint()
 

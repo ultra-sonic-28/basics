@@ -70,6 +70,11 @@ func TestDumpStatement(t *testing.T) {
 		expected string
 	}{
 		{
+			name:     "HomeStmt",
+			stmt:     &HomeStmt{},
+			expected: "HOME\n",
+		},
+		{
 			name:     "PrintStmt",
 			stmt:     &PrintStmt{Exprs: []Expression{&NumberLiteral{Value: 42, Line: 1, Column: 1, Token: "42"}}},
 			expected: "PRINT\n  EXPR 0:\n    Number 42\n",

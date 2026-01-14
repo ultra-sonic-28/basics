@@ -32,6 +32,7 @@ The project is currently primarily focused on APPLE II computers, with an archit
 * `IF ... THEN ... ELSE ...`
 * `GOTO`
 * `GOSUB ... RETURN`
+* `HOME`
 * `HTAB`
 * `VTAB`  
 * `END`

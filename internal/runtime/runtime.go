@@ -42,3 +42,9 @@ func (rt *Runtime) ExecHTab(x int) {
 func (rt *Runtime) ExecVTab(y int) {
 	rt.Video.SetCursorY(y - 1)
 }
+
+func (rt *Runtime) ExecHome() {
+	rt.Video.Clear()
+	rt.Video.SetCursorX(1)
+	rt.Video.SetCursorY(1)
+}

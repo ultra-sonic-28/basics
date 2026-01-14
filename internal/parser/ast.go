@@ -74,6 +74,21 @@ type EndStmt struct {
 
 func (*EndStmt) stmtNode() {}
 
+// =======================
+// HOME
+// =======================
+
+type HomeStmt struct {
+	Line   int
+	Column int
+}
+
+func (*HomeStmt) stmtNode() {}
+
+func (s *HomeStmt) Pos() (int, int, string) {
+	return s.Line, s.Column, "HOME"
+}
+
 // =========================
 // Flow control
 // =========================

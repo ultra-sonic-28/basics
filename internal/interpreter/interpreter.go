@@ -142,9 +142,15 @@ func (i *Interpreter) Run(prog *parser.Program) {
 		inst := i.insts[pc]
 		nextPC := pc + 1
 
-		logger.Debug(fmt.Sprintf("Executing %d", inst.LineNum))
+		logger.Debug(fmt.Sprintf("Executing line: %d, instruction: %d", inst.LineNum, pc))
 
 		switch s := inst.Stmt.(type) {
+
+		// -----------------------
+		// HOME
+		// -----------------------
+		case *parser.HomeStmt:
+			i.rt.ExecHome()
 
 		// -----------------------
 		// END
@@ -391,6 +397,10 @@ func (i *Interpreter) Run(prog *parser.Program) {
 
 func (i *Interpreter) execInline(line int, stmt parser.Statement, pc int) int {
 	switch s := stmt.(type) {
+
+	case *parser.HomeStmt:
+		i.rt.ExecHome()
+		return pc + 1
 
 	case *parser.GotoStmt:
 		val, err := EvalExpr(s.Expr, i.rt)
