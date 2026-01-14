@@ -139,6 +139,30 @@ func TestDumpStatement(t *testing.T) {
 				"    Number 2\n",
 		},
 		{
+			name: "GotoStmt with parenthesized expression",
+			stmt: &GotoStmt{
+				Expr: &InfixExpr{
+					Left: &InfixExpr{
+						Left:  &Identifier{Name: "A", Token: "A"},
+						Op:    "+",
+						Right: &Identifier{Name: "B", Token: "B"},
+					},
+					Op: "*",
+					Right: &NumberLiteral{
+						Value: 2,
+						Token: "2",
+					},
+				},
+			},
+			expected: "" +
+				"GOTO\n" +
+				"  Infix *\n" +
+				"    Infix +\n" +
+				"      Ident A\n" +
+				"      Ident B\n" +
+				"    Number 2\n",
+		},
+		{
 			name: "HTabStmt",
 			stmt: &HTabStmt{
 				Expr: &NumberLiteral{Value: 10, Line: 1, Column: 1, Token: "10"},
