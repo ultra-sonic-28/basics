@@ -31,6 +31,7 @@ The project is currently primarily focused on APPLE II computers, with an archit
 * `FOR ... TO ... STEP ... NEXT`
 * `IF ... THEN ... ELSE ...`
 * `GOTO`
+* `GOSUB ... RETURN`
 * `HTAB`
 * `VTAB`  
 * `END`
@@ -55,6 +56,13 @@ The project is currently primarily focused on APPLE II computers, with an archit
 20 GOTO (A*3)+10
 30 PRINT "Hello"
 40 END
+```
+
+* GOSUB support use of identifier and complex expressions. You can write:
+```
+10 PRINT "Hello ":A=50:GOSUB A*2:PRINT "!!!"
+30 END
+100 PRINT "World":RETURN
 ```
 
 * HTAB and VTAB support user of identifier and complex expressions. You can write:
