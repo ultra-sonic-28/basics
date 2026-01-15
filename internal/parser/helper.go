@@ -11,7 +11,7 @@ func StmtName(s Statement) string {
 	case *IfStmt:
 		return "IF"
 	case *IfJumpStmt:
-		return "IF"
+		return "IFMULTI"
 	case *GotoStmt:
 		return "GOTO"
 	case *GosubStmt:
@@ -24,6 +24,10 @@ func StmtName(s Statement) string {
 		return "NEXT"
 	case *EndStmt:
 		return "END"
+	case *HTabStmt:
+		return "HTAB"
+	case *VTabStmt:
+		return "VTAB"
 	default:
 		return "UNKNOWN"
 	}
