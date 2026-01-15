@@ -143,6 +143,13 @@ func logStmt(stmt Statement, indent string) {
 		logger.Debug(indent + "GOTO")
 		logExpr(s.Expr, indent+"  ")
 
+	case *GosubStmt:
+		logger.Debug(indent + "GOSUB")
+		logExpr(s.Expr, indent+"  ")
+
+	case *ReturnStmt:
+		logger.Debug(indent + "RETURN")
+
 	case *IfStmt:
 		logger.Debug(indent + "IF")
 		logger.Debug(indent + "  COND:")

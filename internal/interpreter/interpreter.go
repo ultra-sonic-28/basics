@@ -114,15 +114,85 @@ func (i *Interpreter) buildInstructions(prog *parser.Program) {
 	i.lineIndex = make(map[int]int)
 
 	for _, line := range prog.Lines {
+
+		// index de la première instruction de la ligne
 		if _, exists := i.lineIndex[line.Number]; !exists {
 			i.lineIndex[line.Number] = len(i.insts)
 		}
 
 		for _, stmt := range line.Stmts {
-			i.insts = append(i.insts, Instruction{
-				LineNum: line.Number,
-				Stmt:    stmt,
-			})
+
+			switch s := stmt.(type) {
+
+			// =====================================================
+			// IF : aplatissement en flot linéaire (style Applesoft)
+			// =====================================================
+			case *parser.IfStmt:
+
+				// 1️⃣ réserver une instruction IF (patchée ensuite)
+				ifPC := len(i.insts)
+
+				i.insts = append(i.insts, Instruction{
+					LineNum: line.Number,
+					Stmt:    nil, // sera remplacé
+				})
+
+				// 2️⃣ THEN block (instructions normales)
+				for _, thenStmt := range s.Then {
+					i.insts = append(i.insts, Instruction{
+						LineNum: line.Number,
+						Stmt:    thenStmt,
+					})
+				}
+
+				// 3️⃣ ELSE block (optionnel)
+				var elseTarget int
+				if len(s.Else) > 0 {
+
+					// saut après THEN
+					gotoAfterThenPC := len(i.insts)
+
+					i.insts = append(i.insts, Instruction{
+						LineNum: line.Number,
+						Stmt: &parser.GotoStmt{
+							Expr: &parser.NumberLiteral{
+								Value: float64(-1), // patch plus tard
+							},
+						},
+					})
+
+					elseTarget = len(i.insts)
+
+					for _, elseStmt := range s.Else {
+						i.insts = append(i.insts, Instruction{
+							LineNum: line.Number,
+							Stmt:    elseStmt,
+						})
+					}
+
+					// patch du GOTO de fin de THEN
+					i.insts[gotoAfterThenPC].Stmt.(*parser.GotoStmt).Expr =
+						&parser.NumberLiteral{Value: float64(len(i.insts))}
+
+				} else {
+					elseTarget = len(i.insts)
+				}
+
+				// 4️⃣ patch de l’instruction IF
+				i.insts[ifPC].Stmt = &parser.IfJumpStmt{
+					Cond:   s.Cond,
+					Target: elseTarget,
+				}
+
+			// ==========================
+			// Autres instructions
+			// ==========================
+			default:
+				i.insts = append(i.insts, Instruction{
+					LineNum: line.Number,
+					Stmt:    stmt,
+				})
+			}
 		}
 	}
 }
@@ -135,14 +205,21 @@ func (i *Interpreter) buildInstructions(prog *parser.Program) {
 
 func (i *Interpreter) Run(prog *parser.Program) {
 	i.buildInstructions(prog)
-	logger.Debug(fmt.Sprintf("Program contains %d instructions", len(i.insts)))
+	logger.Debug(fmt.Sprintf("Program contains %d lines and %d instructions", len(prog.Lines), len(i.insts)))
+
+	//os.Exit(0)
 
 	pc := 0
 	for pc < len(i.insts) {
 		inst := i.insts[pc]
 		nextPC := pc + 1
 
-		logger.Debug(fmt.Sprintf("Executing line: %d, instruction: %d", inst.LineNum, pc))
+		logger.Debug(fmt.Sprintf(
+			"Executing line: %d, pc: %d [%s]",
+			inst.LineNum,
+			pc,
+			parser.StmtName(inst.Stmt),
+		))
 
 		switch s := inst.Stmt.(type) {
 
@@ -377,14 +454,47 @@ func (i *Interpreter) Run(prog *parser.Program) {
 			}
 
 			if exec {
+				// 🔴 exécution inline TERMINALE
+				pc2 := pc + 1 // PC logique après le IF
+
 				for _, stmt := range s.Then {
-					nextPC = i.execInline(inst.LineNum, stmt, pc)
+					pc2 = i.execInline(inst.LineNum, stmt, pc2-1)
 				}
+
+				nextPC = pc2
 			} else if s.Else != nil {
+				pc2 := pc + 1
 				for _, stmt := range s.Else {
-					nextPC = i.execInline(inst.LineNum, stmt, pc)
+					pc2 = i.execInline(inst.LineNum, stmt, pc2-1)
 				}
+				nextPC = pc2
+			} else {
+				// condition fausse → instruction suivante
+				nextPC = pc + 1
 			}
+
+		// -----------------------
+		// IF (compiled jump)
+		// -----------------------
+		case *parser.IfJumpStmt:
+			cond, err := EvalExpr(s.Cond, i.rt)
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+
+			exec := false
+			switch cond.Type {
+			case runtime.BOOLEAN:
+				exec = cond.Flag
+			case runtime.NUMBER:
+				exec = cond.Num != 0
+			}
+
+			if !exec {
+				nextPC = s.Target
+			}
+
 		}
 
 		pc = nextPC

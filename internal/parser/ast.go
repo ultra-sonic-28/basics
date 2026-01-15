@@ -116,6 +116,13 @@ type IfStmt struct {
 
 func (*IfStmt) stmtNode() {}
 
+type IfJumpStmt struct {
+	Cond   Expression
+	Target int // PC cible si FAUX
+}
+
+func (*IfJumpStmt) stmtNode() {}
+
 // =========================
 // Expressions
 // =========================

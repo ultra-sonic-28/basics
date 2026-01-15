@@ -416,7 +416,7 @@ func (p *Parser) parseIf(lineNum int) Statement {
 func (p *Parser) parseIfBlock(lineNum int) []Statement {
 	var stmts []Statement
 
-	// Cas spécial : THEN 40  → GOTO implicite
+	// Cas spécial : THEN 40 → GOTO implicite
 	if p.curr.Type == token.NUMBER {
 		expr := p.parseExpression(LOWEST)
 		stmts = append(stmts, &GotoStmt{Expr: expr})
@@ -424,21 +424,26 @@ func (p *Parser) parseIfBlock(lineNum int) []Statement {
 	}
 
 	for {
+		// STOP CONDITIONS
+		if p.curr.Type == token.EOL {
+			break
+		}
+		if p.curr.Type == token.KEYWORD && p.curr.Literal == "ELSE" {
+			break
+		}
+
 		stmt := p.parseStatement(lineNum)
 		if stmt != nil {
 			stmts = append(stmts, stmt)
 		}
 
-		if p.curr.Type == token.EOL ||
-			(p.curr.Type == token.KEYWORD && p.curr.Literal == "ELSE") {
-			break
-		}
-
+		// Si on a un ":" → continuer dans le THEN
 		if p.curr.Type == token.COLON {
 			p.next()
 			continue
 		}
 
+		// Sinon, on sort
 		break
 	}
 
