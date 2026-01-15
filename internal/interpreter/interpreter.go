@@ -207,8 +207,6 @@ func (i *Interpreter) Run(prog *parser.Program) {
 	i.buildInstructions(prog)
 	logger.Debug(fmt.Sprintf("Program contains %d lines and %d instructions", len(prog.Lines), len(i.insts)))
 
-	//os.Exit(0)
-
 	pc := 0
 	for pc < len(i.insts) {
 		inst := i.insts[pc]
@@ -454,7 +452,7 @@ func (i *Interpreter) Run(prog *parser.Program) {
 			}
 
 			if exec {
-				// 🔴 exécution inline TERMINALE
+				// exécution inline TERMINALE
 				pc2 := pc + 1 // PC logique après le IF
 
 				for _, stmt := range s.Then {

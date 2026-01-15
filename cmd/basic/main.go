@@ -79,6 +79,8 @@ func main() {
 			os.Exit(1)
 		}
 
+		logger.Info(fmt.Sprintf("Loaded binary file: %s", filename))
+
 		// Exécution
 		fmt.Println("\n=== PROGRAM RESULTS ===")
 		rt, err := machines.NewRuntime(basicType)
@@ -99,6 +101,8 @@ func main() {
 		fmt.Printf("⚠️ Error reading file %s: %v\n", filename, err)
 		os.Exit(1)
 	}
+
+	logger.Info(fmt.Sprintf("Loaded source file: %s", filename))
 
 	source := string(data)
 
