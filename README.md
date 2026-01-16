@@ -25,8 +25,17 @@ The project is currently primarily focused on APPLE II computers, with an archit
 
 ### APPLE II
 #### Supported instructions set
+##### Editing and format related
 * `REM`
     * This serves to allow text of any sort to be inserted in a program. A1l characters, including statement separators and blanks may be included. Their usual meanings are ignored. A REM is terminated only by return.
+* `HOME`
+    * Moves cursor to upper left screen position within the scrolling window and clears all text within the window.
+* `HTAB`
+    * Moves the cursor to the position that is `aexpr` positions from the left edge of the current screen line.
+* `VTAB`
+    * Moves the cursor to the line that is `aexpr` lines down on the screen. The top line is line l; the bottom line is line 24. This statement may involve moving the cursor either up or down, but never to the right or left.
+
+##### Input / Output
 * `PRINT`
     * Print a string, a float, an integer, variable or an expression.
     * Multiple arguments may be separated by commas (`,`) and/or semicolons (`;`).
@@ -35,6 +44,8 @@ The project is currently primarily focused on APPLE II computers, with an archit
     * Tab fields are 14 positions wide
 * `LET`
     * Assign a value to a variable, creating it if necessary. Optionnal.
+
+##### Flow Control
 * `FOR ... TO ... STEP ... NEXT`
     * Looping constructs.
 * `IF ... THEN ... ELSE ...`
@@ -43,12 +54,8 @@ The project is currently primarily focused on APPLE II computers, with an archit
     * Jump to the given line.
 * `GOSUB ... RETURN`
     * Used to call the subroutines at the specified line.
-* `HOME`
-    * Moves cursor to upper left screen position within the scrolling window and clears all text within the window.
-* `HTAB`
-    * Moves the cursor to the position that is `aexpr` positions from the left edge of the current screen line.
-* `VTAB`
-    * Moves the cursor to the line that is `aexpr` lines down on the screen. The top line is line l; the bottom line is line 24. This statement may involve moving the cursor either up or down, but never to the right or left.
+
+##### System and Utilities
 * `END`
     * Exit the program.
 
@@ -65,7 +72,19 @@ The project is currently primarily focused on APPLE II computers, with an archit
 * `/`
 * `^`
 
-#### Extended instructions set
+#### Differences with Applesoft BASIC
+##### Variable names
+1. In Applesoft BASIC, a variable name may be up to 238 characters long, but APPLESOFT uses only the first two characters to distinguish one name from another. Thus, the names `GOOD4NOUGHT` and `GOLDRUSH` refer to the same variable.
+
+    > With BASICS, all characters are significant. Thus, the names `GOOD4NOUGHT` and `GOLDRUSH` refer to two different variables.
+
+    > Remember that, with BASICS, variable names can be in uppercase, lowercase or mixed case.
+
+2. Certain words used in APPLESOFT BASIC commands are "reserved" for their specific purpose. You cannot use these words as variable names or as part of any variable name. For instance, `FEND` would be illegal because `END` is a reserved word.
+
+    > With BASICS `END` is illegal as a variable name, as `FEND` is totally legal.
+
+##### Extended instructions set
 * GOTO support use of identifier and complex expressions. You can write:
 ```
 10 A=10
