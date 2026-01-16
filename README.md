@@ -24,6 +24,22 @@ The project is currently primarily focused on APPLE II computers, with an archit
 ## Supported computers
 
 ### APPLE II
+### Real, Integer and String variables
+There are three different types of variables used in APPLESOFT BASIC.
+* Real
+* Integer
+* String
+
+The table below summarizes the three types of variables used in APPLESOFT
+
+| Description | Symbol to append to variable name | Example |
+|:---:|:---:|:---:|
+| String | `$` | `A$`<br/>`ALPHA$` |
+| Integer | `%` | `A%`<br/>`COUNT1%` |
+| Real | none | `A` |
+
+An integer or string variable must be followed by a `%` or `$` at each use of that variable. For example, `X`, `X%` and `X$` are different variables.
+
 #### Supported instructions set
 ##### Editing and format related
 * `REM`

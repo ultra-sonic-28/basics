@@ -6,6 +6,7 @@ type ValueType int
 
 const (
 	NUMBER ValueType = iota
+	INTEGER
 	STRING
 	BOOLEAN
 )
@@ -13,6 +14,7 @@ const (
 type Value struct {
 	Type ValueType
 	Num  float64
+	Int  int
 	Str  string
 	Flag bool
 }
@@ -43,5 +45,10 @@ func (v Value) String() string {
 	if v.Type == STRING {
 		return v.Str
 	}
+
+	if v.Type == INTEGER {
+		return fmt.Sprintf("%d", v.Int)
+	}
+
 	return fmt.Sprintf("%f", v.Num)
 }

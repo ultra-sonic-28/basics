@@ -234,16 +234,47 @@ func (i *Interpreter) Run(prog *parser.Program) {
 			i.rt.Halt()
 			return
 
-		// -----------------------
-		// LET
-		// -----------------------
+			// -----------------------
+			// LET
+			// -----------------------
 		case *parser.LetStmt:
 			val, err := EvalExpr(s.Value, i.rt)
 			if err != nil {
 				fmt.Println(err)
 				return
 			}
-			i.rt.Env.Set(s.Name, val)
+
+			switch VarType(s.Name) {
+			case "int":
+				if val.Type == runtime.STRING || val.Num != float64(int(val.Num)) {
+					err := errors.NewSemantic(inst.LineNum, "TYPE MISMATCH: INTEGER EXPECTED")
+					fmt.Println(err)
+					return
+				}
+				i.rt.Env.Set(s.Name, runtime.Value{
+					Type: runtime.INTEGER,
+					Int:  int(val.Num),
+				})
+
+			case "string":
+				if val.Type != runtime.STRING {
+					err := errors.NewSemantic(inst.LineNum, "TYPE MISMATCH: STRING EXPECTED")
+					fmt.Println(err)
+					return
+				}
+				i.rt.Env.Set(s.Name, val)
+
+			case "float":
+				if val.Type == runtime.STRING {
+					err := errors.NewSemantic(inst.LineNum, "TYPE MISMATCH: FLOAT EXPECTED")
+					fmt.Println(err)
+					return
+				}
+				i.rt.Env.Set(s.Name, runtime.Value{
+					Type: runtime.NUMBER,
+					Num:  val.Num,
+				})
+			}
 
 		// -----------------------
 		// PRINT
@@ -260,6 +291,8 @@ func (i *Interpreter) Run(prog *parser.Program) {
 
 				str := ""
 				switch val.Type {
+				case runtime.INTEGER:
+					str = formatNumber(float64(val.Int))
 				case runtime.NUMBER:
 					str = formatNumber(val.Num)
 				case runtime.STRING:
@@ -612,4 +645,14 @@ func formatNumber(f float64) string {
 		return fmt.Sprintf("%d", int64(f))
 	}
 	return fmt.Sprintf("%g", f)
+}
+
+func VarType(name string) string {
+	if strings.HasSuffix(name, "%") {
+		return "int"
+	}
+	if strings.HasSuffix(name, "$") {
+		return "string"
+	}
+	return "float"
 }

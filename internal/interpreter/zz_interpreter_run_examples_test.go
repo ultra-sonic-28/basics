@@ -514,7 +514,7 @@ All done!
 			name:   "Print-03",
 			file:   "print-03-example.bas",
 			errors: 0,
-			expected: `⚠️ DIVISION BY ZERO IN 1 ()
+			expected: `⚠️ DIVISION BY ZERO IN 1 (/)
 `,
 		},
 		{
@@ -567,6 +567,73 @@ All done!
 8 x 8 = 64
 9 x 9 = 81
 10 x 10 = 100
+`,
+		},
+		{
+			name:   "Vars-01",
+			file:   "vars-01-example.bas",
+			errors: 0,
+			expected: `A=1.5
+A%=1
+A$=A String
+`,
+		},
+		{
+			name:   "Vars-02",
+			file:   "vars-02-example.bas",
+			errors: 0,
+			expected: `A=3
+A%=2
+A$=A String Another one
+`,
+		},
+		{
+			name:   "Vars-03",
+			file:   "vars-03-example.bas",
+			errors: 0,
+			expected: `⚠️ TYPE MISMATCH: STRING EXPECTED IN 20 ()
+`,
+		},
+		{
+			name:   "Vars-04",
+			file:   "vars-04-example.bas",
+			errors: 0,
+			expected: `⚠️ TYPE MISMATCH: STRING EXPECTED IN 20 ()
+`,
+		},
+		{
+			name:   "Vars-05",
+			file:   "vars-05-example.bas",
+			errors: 0,
+			expected: `⚠️ TYPE MISMATCH: INTEGER EXPECTED IN 20 ()
+`,
+		},
+		{
+			name:   "Vars-06",
+			file:   "vars-06-example.bas",
+			errors: 0,
+			expected: `⚠️ TYPE MISMATCH: FLOAT EXPECTED IN 20 ()
+`,
+		},
+		{
+			name:   "Vars-07",
+			file:   "vars-07-example.bas",
+			errors: 0,
+			expected: `⚠️ TYPE MISMATCH IN 4 (*)
+`,
+		},
+		{
+			name:   "Vars-08",
+			file:   "vars-08-example.bas",
+			errors: 0,
+			expected: `⚠️ TYPE MISMATCH IN 4 (/)
+`,
+		},
+		{
+			name:   "Vars-09",
+			file:   "vars-09-example.bas",
+			errors: 0,
+			expected: `⚠️ TYPE MISMATCH IN 4 (^)
 `,
 		},
 	}
