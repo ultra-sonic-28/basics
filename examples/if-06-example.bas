@@ -1,4 +1,3 @@
-5 HOME
 8 PRINT "Let's count..."
 10 LET count = 0
 20 PRINT "Count: ", count

@@ -1,4 +1,4 @@
-10 PRINT "Hello "
+10 PRINT "Hello"
 20 GOSUB 100
 30 PRINT "!!!"
 40 END

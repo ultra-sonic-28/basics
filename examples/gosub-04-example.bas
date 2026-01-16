@@ -1,3 +1,3 @@
-10 PRINT "Hello ":A=50:GOSUB A*2:PRINT "!!!"
+10 PRINT "Hello":A=50:GOSUB A*2:PRINT "!!!"
 30 END
 100 PRINT "World":RETURN

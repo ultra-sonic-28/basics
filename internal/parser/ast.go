@@ -69,6 +69,7 @@ type VTabStmt struct {
 
 func (*VTabStmt) stmtNode() {}
 
+// END
 type EndStmt struct {
 }
 

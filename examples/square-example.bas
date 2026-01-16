@@ -3,4 +3,4 @@
 20 FOR I=1 TO 10
 30 PRINT I;" x ";I;" = ";I*I
 40 NEXT I
-50 REM END
+50 END
