@@ -26,16 +26,31 @@ The project is currently primarily focused on APPLE II computers, with an archit
 ### APPLE II
 #### Supported instructions set
 * `REM`
+    * This serves to allow text of any sort to be inserted in a program. A1l characters, including statement separators and blanks may be included. Their usual meanings are ignored. A REM is terminated only by return.
 * `PRINT`
+    * Print a string, a float, an integer, variable or an expression.
+    * Multiple arguments may be separated by commas (`,`) and/or semicolons (`;`).
+    * If an item on the list is followed by a semicolon, then the first character of the next item to be printed will appear immediatly after the current item.
+    * If an item on the list is followed by a comma, then the first character of the next item to be printed will appear in the first position of the next available tab field.
+    * Tab fields are 14 positions wide
 * `LET`
+    * Assign a value to a variable, creating it if necessary. Optionnal.
 * `FOR ... TO ... STEP ... NEXT`
+    * Looping constructs.
 * `IF ... THEN ... ELSE ...`
+    * Conditional execution. `THEN` and/or `ELSE` branchs can have multiple instructions.
 * `GOTO`
+    * Jump to the given line.
 * `GOSUB ... RETURN`
+    * Used to call the subroutines at the specified line.
 * `HOME`
+    * Moves cursor to upper left screen position within the scrolling window and clears all text within the window.
 * `HTAB`
-* `VTAB`  
+    * Moves the cursor to the position that is `aexpr` positions from the left edge of the current screen line.
+* `VTAB`
+    * Moves the cursor to the line that is `aexpr` lines down on the screen. The top line is line l; the bottom line is line 24. This statement may involve moving the cursor either up or down, but never to the right or left.
 * `END`
+    * Exit the program.
 
 #### Supported operators
 * `=`
