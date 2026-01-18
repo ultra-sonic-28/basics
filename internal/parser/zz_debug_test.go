@@ -52,7 +52,7 @@ func TestDumpExpr(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			output := testutils.CaptureStdout(t, func() {
-				dumpExpr(tt.expr, "")
+				dumpExpr(tt.expr, "", StdoutEmitter)
 			})
 			msg := fmt.Sprintf("tests[%s] - dumpExpr output mismatch.", tt.name)
 			testutils.Equal(t, msg, output, tt.expected)
@@ -109,7 +109,7 @@ func TestDumpStatement(t *testing.T) {
 				LineNum: 200,
 				Step:    &NumberLiteral{Value: 2, Line: 4, Column: 2, Token: "2"},
 			},
-			expected: "FOR J (Line 200)\n  STEP:\n    Number 2\n  FROM:\n    Number 0\n  TO:\n    Number 5\n",
+			expected: "FOR J (Line 200)\n  FROM:\n    Number 0\n  TO:\n    Number 5\n  STEP:\n    Number 2\n",
 		},
 		{
 			name:     "NextStmt with ForLineNum",
@@ -369,7 +369,7 @@ func TestDumpStatement(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			output := testutils.CaptureStdout(t, func() {
-				dumpStatement(tt.stmt, "")
+				dumpStatement(tt.stmt, "", StdoutEmitter)
 			})
 			msg := fmt.Sprintf("tests[%s] - dumpStatement output mismatch.", tt.name)
 			testutils.Equal(t, msg, output, tt.expected)
@@ -408,7 +408,7 @@ func TestDumpProgram(t *testing.T) {
 	expected := "Line 10\n  LET X\n    Number 5\n  PRINT\n    EXPR 0:\n      Ident X\nLine 20\n  FOR I (Line 20)\n    FROM:\n      Number 1\n    TO:\n      Number 3\n  NEXT I (FOR Line 20)\n"
 
 	output := testutils.CaptureStdout(t, func() {
-		DumpProgram(p)
+		DumpProgram(p, StdoutEmitter)
 	})
 
 	testutils.Equal(t, "DumpProgram output mismatch", output, expected)

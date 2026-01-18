@@ -132,7 +132,7 @@ func main() {
 
 	if dumpAST {
 		fmt.Println("\n=== AST ===")
-		parser.DumpProgram(prog)
+		parser.DumpProgram(prog, parser.StdoutEmitter)
 	}
 
 	// =========================

@@ -71,7 +71,7 @@ func (p *Parser) ParseProgram() (*Program, []*errors.Error) {
 
 		logger.Debug(fmt.Sprintf("Parsed line: %d", line.Number))
 		for _, stmt := range line.Stmts {
-			logStmt(stmt, "  ")
+			dumpStatement(stmt, "  ", LoggerEmitter)
 		}
 		prog.Lines = append(prog.Lines, line)
 	}
