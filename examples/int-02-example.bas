@@ -1,0 +1,2 @@
+10 REM INT Function
+20 PRINT INT("1.75")

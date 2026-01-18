@@ -203,3 +203,22 @@ func (*StringLiteral) exprNode() {}
 func (s *StringLiteral) Pos() (int, int, string) {
 	return s.Line, s.Column, s.Token
 }
+
+// =========================
+// Maths functions
+// =========================
+// =========================
+// INT(expr)
+// =========================
+type IntExpr struct {
+	Expr   Expression
+	Line   int
+	Column int
+	Token  string
+}
+
+func (*IntExpr) exprNode() {}
+
+func (i *IntExpr) Pos() (int, int, string) {
+	return i.Line, i.Column, i.Token
+}

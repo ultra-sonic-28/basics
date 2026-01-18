@@ -456,6 +456,36 @@ func (p *Parser) parseExpression(precedence int) Expression {
 	// --- prefix ---
 	switch p.curr.Type {
 
+	case token.KEYWORD:
+		if p.curr.Literal == "INT" {
+			tok := p.curr
+			p.next() // consommer INT
+
+			if !p.expect(token.LPAREN) {
+				return nil
+			}
+
+			expr := p.parseExpression(LOWEST)
+			if expr == nil {
+				return nil
+			}
+
+			if !p.expect(token.RPAREN) {
+				return nil
+			}
+
+			left = &IntExpr{
+				Expr:   expr,
+				Line:   tok.Line,
+				Column: tok.Column,
+				Token:  tok.Literal,
+			}
+			break
+		}
+
+		p.syntaxError("UNEXPECTED KEYWORD")
+		return nil
+
 	case token.NUMBER:
 		val, err := strconv.ParseFloat(p.curr.Literal, 64)
 		if err != nil {

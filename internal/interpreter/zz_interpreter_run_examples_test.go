@@ -440,6 +440,34 @@ All done!
 `,
 		},
 		{
+			name:   "Int-01",
+			file:   "int-01-example.bas",
+			errors: 0,
+			expected: `1
+1
+-2
+-2
+2
+10
+5
+14
+`,
+		},
+		{
+			name:   "Int-02",
+			file:   "int-02-example.bas",
+			errors: 0,
+			expected: `⚠️ TYPE MISMATCH IN 2 (INT)
+`,
+		},
+		{
+			name:   "Int-03",
+			file:   "int-03-example.bas",
+			errors: 0,
+			expected: `⚠️ TYPE MISMATCH IN 3 (INT)
+`,
+		},
+		{
 			name:     "LinenumWithoutInst-01",
 			file:     "linenum-without-inst-01-example.bas",
 			errors:   0,
@@ -475,8 +503,8 @@ All done!
 `,
 		},
 		{
-			name:   "Primes",
-			file:   "primes.bas",
+			name:   "Primes-01",
+			file:   "primes-01-example.bas",
 			errors: 0,
 			expected: `NOMBRES PREMIERS JUSQU'A 50
 3
@@ -494,6 +522,27 @@ All done!
 43
 47
 All done!
+`,
+		},
+		{
+			name:   "Primes-02",
+			file:   "primes-02-example.bas",
+			errors: 0,
+			expected: `NOMBRES PREMIERS JUSQU'A 50
+3
+5
+7
+11
+13
+17
+19
+23
+29
+31
+37
+41
+43
+47
 `,
 		},
 		{

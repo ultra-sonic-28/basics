@@ -119,6 +119,10 @@ func dumpExpr(e Expression, indent string) {
 		fmt.Printf("%sInfix %s\n", indent, n.Op)
 		dumpExpr(n.Left, indent+"  ")
 		dumpExpr(n.Right, indent+"  ")
+
+	case *IntExpr:
+		fmt.Printf("%sINT\n", indent)
+		dumpExpr(n.Expr, indent+"  ")
 	}
 }
 
@@ -207,6 +211,10 @@ func logExpr(expr Expression, indent string) {
 		logger.Debug(fmt.Sprintf("%sInfix %s", indent, e.Op))
 		logExpr(e.Left, indent+"  ")
 		logExpr(e.Right, indent+"  ")
+
+	case *IntExpr:
+		logger.Debug(fmt.Sprintf("%sINT", indent))
+		logExpr(e.Expr, indent+"  ")
 
 	default:
 		logger.Debug(indent + "UNKNOWN EXPR")

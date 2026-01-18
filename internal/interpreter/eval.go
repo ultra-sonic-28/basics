@@ -247,23 +247,65 @@ func EvalExpr(expr parser.Expression, rt *runtime.Runtime) (runtime.Value, *erro
 			return runtime.Value{Type: runtime.NUMBER, Num: lf / rf}, nil
 
 		case "<":
-			return runtime.Value{Type: runtime.BOOLEAN, Flag: left.Num < right.Num}, nil
+			return runtime.Value{Type: runtime.BOOLEAN, Flag: lf < rf}, nil
 		case ">":
-			return runtime.Value{Type: runtime.BOOLEAN, Flag: left.Num > right.Num}, nil
+			return runtime.Value{Type: runtime.BOOLEAN, Flag: lf > rf}, nil
 		case "<=":
-			return runtime.Value{Type: runtime.BOOLEAN, Flag: left.Num <= right.Num}, nil
+			return runtime.Value{Type: runtime.BOOLEAN, Flag: lf <= rf}, nil
 		case ">=":
-			return runtime.Value{Type: runtime.BOOLEAN, Flag: left.Num >= right.Num}, nil
+			return runtime.Value{Type: runtime.BOOLEAN, Flag: lf >= rf}, nil
 		case "<>":
-			return runtime.Value{Type: runtime.BOOLEAN, Flag: left.Num != right.Num}, nil
+			return runtime.Value{Type: runtime.BOOLEAN, Flag: lf != rf}, nil
 		case "=":
-			return runtime.Value{Type: runtime.BOOLEAN, Flag: left.Num == right.Num}, nil
+			return runtime.Value{Type: runtime.BOOLEAN, Flag: lf == rf}, nil
 		default:
 			return runtime.Value{}, errors.NewSyntax(
 				line, col, e.Op,
 				"UNKNOWN INFIX OPERATOR",
 			)
 		}
+
+	case *parser.IntExpr:
+		val, err := EvalExpr(e.Expr, rt)
+		if err != nil {
+			return runtime.Value{}, err
+		}
+
+		switch val.Type {
+
+		case runtime.STRING:
+			return runtime.Value{}, errors.NewSyntax(
+				line, col, tok,
+				"TYPE MISMATCH",
+			)
+
+		case runtime.INTEGER:
+			// INT(entier) → entier inchangé
+			return val, nil
+
+		case runtime.NUMBER:
+			if val.Num >= 0 {
+				// Si positif alors partie entière
+				// INT (1,75) -> 1
+				return runtime.Value{
+					Type: runtime.INTEGER,
+					Int:  int(val.Num), // cast Go = floor pour positifs
+				}, nil
+			} else {
+				// Si négatif alors partie entière - 1
+				// INT (-1,75) -> -2
+				return runtime.Value{
+					Type: runtime.INTEGER,
+					Int:  int(val.Num) - 1,
+				}, nil
+			}
+		}
+
+		return runtime.Value{}, errors.NewSyntax(
+			line, col, tok,
+			"INVALID INT OPERAND",
+		)
+
 	}
 
 	// =========================

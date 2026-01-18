@@ -211,13 +211,7 @@ func (i *Interpreter) Run(prog *parser.Program) {
 	for pc < len(i.insts) {
 		inst := i.insts[pc]
 		nextPC := pc + 1
-
-		logger.Debug(fmt.Sprintf(
-			"Executing line: %d, pc: %d [%s]",
-			inst.LineNum,
-			pc,
-			parser.StmtName(inst.Stmt),
-		))
+		sExpr := ""
 
 		switch s := inst.Stmt.(type) {
 
@@ -234,9 +228,9 @@ func (i *Interpreter) Run(prog *parser.Program) {
 			i.rt.Halt()
 			return
 
-			// -----------------------
-			// LET
-			// -----------------------
+		// -----------------------
+		// LET
+		// -----------------------
 		case *parser.LetStmt:
 			val, err := EvalExpr(s.Value, i.rt)
 			if err != nil {
@@ -244,7 +238,8 @@ func (i *Interpreter) Run(prog *parser.Program) {
 				return
 			}
 
-			switch VarType(s.Name) {
+			vType := VarType(s.Name)
+			switch vType {
 			case "int":
 				if val.Type == runtime.STRING || val.Num != float64(int(val.Num)) {
 					err := errors.NewSemantic(inst.LineNum, "TYPE MISMATCH: INTEGER EXPECTED")
@@ -321,6 +316,8 @@ func (i *Interpreter) Run(prog *parser.Program) {
 				fmt.Println(err)
 				return
 			}
+
+			sExpr = fmt.Sprintf("%d", int(val.Num))
 			i.rt.ExecHTab(int(val.Num))
 
 		case *parser.VTabStmt:
@@ -329,6 +326,8 @@ func (i *Interpreter) Run(prog *parser.Program) {
 				fmt.Println(err)
 				return
 			}
+
+			sExpr = fmt.Sprintf("%d", int(val.Num))
 			i.rt.ExecVTab(int(val.Num))
 
 		// -----------------------
@@ -419,6 +418,7 @@ func (i *Interpreter) Run(prog *parser.Program) {
 			}
 
 			line := int(val.Num)
+			sExpr = fmt.Sprintf("%d", line)
 			targetPC, ok := i.lineIndex[line]
 			if !ok {
 				fmt.Printf("?UNDEFINED LINE %d\n", line)
@@ -443,6 +443,7 @@ func (i *Interpreter) Run(prog *parser.Program) {
 			}
 
 			line := int(val.Num)
+			sExpr = fmt.Sprintf("%d", line)
 			targetPC, ok := i.lineIndex[line]
 			if !ok {
 				fmt.Printf("?UNDEFINED LINE %d\n", line)
@@ -527,6 +528,16 @@ func (i *Interpreter) Run(prog *parser.Program) {
 			}
 
 		}
+
+		logger.Debug(fmt.Sprintf(
+			"Executing line: %d, pc: %d, nextPC: %d - [%s]%s %s",
+			inst.LineNum,
+			pc,
+			nextPC,
+			parser.StmtName(inst.Stmt),
+			parser.StmtArgs(inst.Stmt),
+			sExpr,
+		))
 
 		pc = nextPC
 	}

@@ -88,6 +88,15 @@ An integer or string variable must be followed by a `%` or `$` at each use of th
 * `/`
 * `^`
 
+### Supported functions
+#### Maths functions
+* `INT`
+    * Returns the largest integer less than or equal to `aexpr`.
+
+        > If `aexpr` is a positive number, then the largest whole number can be found by chopping off the decimal part.
+        
+        > If `aexpr` is a negative number, the largest whole number can be found by moving down to the next lowest whole number (that is, make a negative number more  negative).
+
 #### Differences with Applesoft BASIC
 ##### Variable names
 1. In Applesoft BASIC, a variable name may be up to 238 characters long, but APPLESOFT uses only the first two characters to distinguish one name from another. Thus, the names `GOOD4NOUGHT` and `GOLDRUSH` refer to the same variable.
