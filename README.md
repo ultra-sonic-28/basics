@@ -102,6 +102,14 @@ An integer or string variable must be followed by a `%` or `$` at each use of th
         > `aexpr` if `aexpr` >= 0
 
         > -`aexpr` if `aexpr` < 0
+* `SGN`
+    * Returns the sign of `aexpr`.
+
+        > `1` if `aexpr` > 0
+
+        > `0` if `aexpr` = 0
+
+        > `-1` if `aexpr` < 0
 
 #### Differences with Applesoft BASIC
 ##### Variable names

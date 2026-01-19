@@ -344,6 +344,55 @@ func EvalExpr(expr parser.Expression, rt *runtime.Runtime) (runtime.Value, *erro
 			"INVALID ABS OPERAND",
 		)
 
+	case *parser.SgnExpr:
+		val, err := EvalExpr(e.Expr, rt)
+		if err != nil {
+			return runtime.Value{}, err
+		}
+
+		var retVal float64
+		switch val.Type {
+
+		case runtime.STRING:
+			return runtime.Value{}, errors.NewSyntax(
+				line, col, tok,
+				"TYPE MISMATCH",
+			)
+
+		case runtime.INTEGER:
+			if val.Int < 0 {
+				retVal = -1
+			} else if val.Int > 0 {
+				retVal = 1
+			} else {
+				retVal = 0
+			}
+
+			return runtime.Value{
+				Type: runtime.INTEGER,
+				Int:  int(retVal),
+			}, nil
+
+		case runtime.NUMBER:
+			if val.Num < 0 {
+				retVal = -1
+			} else if val.Num > 0 {
+				retVal = 1
+			} else {
+				retVal = 0
+			}
+
+			return runtime.Value{
+				Type: runtime.INTEGER,
+				Int:  int(retVal),
+			}, nil
+		}
+
+		return runtime.Value{}, errors.NewSyntax(
+			line, col, tok,
+			"INVALID ABS OPERAND",
+		)
+
 	}
 
 	// =========================

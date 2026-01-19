@@ -506,6 +506,33 @@ func (p *Parser) parseExpression(precedence int) Expression {
 				Token:  tok.Literal,
 			}
 
+		case "SGN":
+			line := p.curr.Line
+			col := p.curr.Column
+			tok := p.curr.Literal
+
+			p.next() // SGN
+
+			if !p.expect(token.LPAREN) {
+				return nil
+			}
+
+			expr := p.parseExpression(LOWEST)
+			if expr == nil {
+				return nil
+			}
+
+			if !p.expect(token.RPAREN) {
+				return nil
+			}
+
+			return &SgnExpr{
+				Expr:   expr,
+				Line:   line,
+				Column: col,
+				Token:  tok,
+			}
+
 		default:
 			p.syntaxError("UNEXPECTED KEYWORD")
 			return nil

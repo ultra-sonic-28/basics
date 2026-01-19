@@ -135,6 +135,10 @@ func dumpExpr(e Expression, indent string, emit Emitter) {
 		emit(indent + "ABS")
 		dumpExpr(n.Expr, indent+"  ", emit)
 
+	case *SgnExpr:
+		emit(indent + "SGN")
+		dumpExpr(n.Expr, indent+"  ", emit)
+
 	default:
 		emit(indent + "UNKNOWN EXPR")
 	}

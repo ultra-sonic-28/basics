@@ -632,6 +632,36 @@ All done!
 `,
 		},
 		{
+			name:   "Sgn-01",
+			file:   "sgn-01-example.bas",
+			errors: 0,
+			expected: `1
+-1
+1
+1
+0
+0
+1
+-1
+1
+-1
+`,
+		},
+		{
+			name:   "Sgn-02",
+			file:   "sgn-02-example.bas",
+			errors: 0,
+			expected: `⚠️ TYPE MISMATCH IN 2 (SGN)
+`,
+		},
+		{
+			name:   "Sgn-03",
+			file:   "sgn-03-example.bas",
+			errors: 0,
+			expected: `⚠️ TYPE MISMATCH IN 3 (SGN)
+`,
+		},
+		{
 			name:   "Square",
 			file:   "square-example.bas",
 			errors: 0,

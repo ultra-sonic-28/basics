@@ -238,3 +238,20 @@ func (*AbsExpr) exprNode() {}
 func (a *AbsExpr) Pos() (int, int, string) {
 	return a.Line, a.Column, a.Token
 }
+
+// =========================
+// SGN(expr)
+// =========================
+
+type SgnExpr struct {
+	Expr   Expression
+	Line   int
+	Column int
+	Token  string
+}
+
+func (*SgnExpr) exprNode() {}
+
+func (s *SgnExpr) Pos() (int, int, string) {
+	return s.Line, s.Column, s.Token
+}

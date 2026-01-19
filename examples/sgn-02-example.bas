@@ -1,0 +1,2 @@
+10 REM SGN Function
+20 PRINT SGN("1.75")
