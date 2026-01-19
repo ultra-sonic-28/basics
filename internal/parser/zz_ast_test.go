@@ -149,3 +149,157 @@ func TestStatementsTypes(t *testing.T) {
 	_, ok = s.(*NextStmt)
 	testutils.True(t, "NextStmt type", ok)
 }
+
+// ////////////////////////////////////
+// HOME / HTAB / VTAB
+// ////////////////////////////////////
+func TestHomeStmt_Pos(t *testing.T) {
+	h := &HomeStmt{
+		Line:   12,
+		Column: 3,
+	}
+
+	line, col, tok := h.Pos()
+	testutils.Equal(t, "line", line, 12)
+	testutils.Equal(t, "column", col, 3)
+	testutils.Equal(t, "token", tok, "HOME")
+}
+
+func TestHTabStmt(t *testing.T) {
+	expr := &NumberLiteral{Value: 5}
+	stmt := &HTabStmt{Expr: expr}
+
+	var s Statement = stmt
+	_, ok := s.(*HTabStmt)
+	testutils.True(t, "HTabStmt type", ok)
+	testutils.Equal(t, "expr value", stmt.Expr.(*NumberLiteral).Value, 5.0)
+}
+
+func TestVTabStmt(t *testing.T) {
+	expr := &NumberLiteral{Value: 10}
+	stmt := &VTabStmt{Expr: expr}
+
+	var s Statement = stmt
+	_, ok := s.(*VTabStmt)
+	testutils.True(t, "VTabStmt type", ok)
+	testutils.Equal(t, "expr value", stmt.Expr.(*NumberLiteral).Value, 10.0)
+}
+
+// ////////////////////////////////////
+// Flow Control
+// ////////////////////////////////////
+func TestEndStmt(t *testing.T) {
+	stmt := &EndStmt{}
+	var s Statement = stmt
+
+	_, ok := s.(*EndStmt)
+	testutils.True(t, "EndStmt type", ok)
+}
+
+func TestGotoStmt(t *testing.T) {
+	expr := &NumberLiteral{Value: 100}
+	stmt := &GotoStmt{Expr: expr}
+
+	var s Statement = stmt
+	_, ok := s.(*GotoStmt)
+	testutils.True(t, "GotoStmt type", ok)
+	testutils.Equal(t, "expr value", stmt.Expr.(*NumberLiteral).Value, 100.0)
+}
+
+func TestGosubStmt(t *testing.T) {
+	expr := &Identifier{Name: "A"}
+	stmt := &GosubStmt{Expr: expr}
+
+	var s Statement = stmt
+	_, ok := s.(*GosubStmt)
+	testutils.True(t, "GosubStmt type", ok)
+	testutils.Equal(t, "expr name", stmt.Expr.(*Identifier).Name, "A")
+}
+
+func TestReturnStmt(t *testing.T) {
+	stmt := &ReturnStmt{}
+	var s Statement = stmt
+
+	_, ok := s.(*ReturnStmt)
+	testutils.True(t, "ReturnStmt type", ok)
+}
+
+// ////////////////////////////////////
+// IF / IFJUMP
+// ////////////////////////////////////
+func TestIfStmt(t *testing.T) {
+	cond := &Identifier{Name: "X"}
+	thenStmt := &PrintStmt{}
+	elseStmt := &EndStmt{}
+
+	stmt := &IfStmt{
+		Cond: cond,
+		Then: []Statement{thenStmt},
+		Else: []Statement{elseStmt},
+	}
+
+	var s Statement = stmt
+	_, ok := s.(*IfStmt)
+	testutils.True(t, "IfStmt type", ok)
+
+	testutils.Equal(t, "then count", len(stmt.Then), 1)
+	testutils.Equal(t, "else count", len(stmt.Else), 1)
+}
+
+func TestIfJumpStmt(t *testing.T) {
+	cond := &Identifier{Name: "FLAG"}
+	stmt := &IfJumpStmt{
+		Cond:   cond,
+		Target: 42,
+	}
+
+	var s Statement = stmt
+	_, ok := s.(*IfJumpStmt)
+	testutils.True(t, "IfJumpStmt type", ok)
+	testutils.Equal(t, "target", stmt.Target, 42)
+}
+
+// ////////////////////////////////////
+// Maths
+// ////////////////////////////////////
+func TestIntExpr_Pos(t *testing.T) {
+	expr := &IntExpr{
+		Expr:   &NumberLiteral{Value: 3.7},
+		Line:   5,
+		Column: 2,
+		Token:  "INT",
+	}
+
+	line, col, tok := expr.Pos()
+	testutils.Equal(t, "line", line, 5)
+	testutils.Equal(t, "column", col, 2)
+	testutils.Equal(t, "token", tok, "INT")
+}
+
+func TestAbsExpr_Pos(t *testing.T) {
+	expr := &AbsExpr{
+		Expr:   &PrefixExpr{Op: "-", Right: &NumberLiteral{Value: 5}},
+		Line:   8,
+		Column: 1,
+		Token:  "ABS",
+	}
+
+	line, col, tok := expr.Pos()
+	testutils.Equal(t, "line", line, 8)
+	testutils.Equal(t, "column", col, 1)
+	testutils.Equal(t, "token", tok, "ABS")
+}
+
+func TestSgnExpr_Pos(t *testing.T) {
+	expr := &SgnExpr{
+		Expr:   &NumberLiteral{Value: -10},
+		Line:   12,
+		Column: 4,
+		Token:  "SGN",
+	}
+
+	line, col, tok := expr.Pos()
+	testutils.Equal(t, "line", line, 12)
+	testutils.Equal(t, "column", col, 4)
+	testutils.Equal(t, "token", tok, "SGN")
+}
