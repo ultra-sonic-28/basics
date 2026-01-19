@@ -205,6 +205,7 @@ func (i *Interpreter) buildInstructions(prog *parser.Program) {
 
 func (i *Interpreter) Run(prog *parser.Program) {
 	i.buildInstructions(prog)
+	logger.Debug("Program execution trace")
 	logger.Debug(fmt.Sprintf("Program contains %d lines and %d instructions", len(prog.Lines), len(i.insts)))
 
 	pc := 0
@@ -225,6 +226,7 @@ func (i *Interpreter) Run(prog *parser.Program) {
 		// END
 		// -----------------------
 		case *parser.EndStmt:
+			logger.Debug(LogTrace(inst, pc, nextPC, sExpr))
 			i.rt.Halt()
 			return
 
@@ -250,6 +252,7 @@ func (i *Interpreter) Run(prog *parser.Program) {
 					Type: runtime.INTEGER,
 					Int:  int(val.Num),
 				})
+				sExpr = fmt.Sprintf("%d", int(val.Num))
 
 			case "string":
 				if val.Type != runtime.STRING {
@@ -258,6 +261,7 @@ func (i *Interpreter) Run(prog *parser.Program) {
 					return
 				}
 				i.rt.Env.Set(s.Name, val)
+				sExpr = val.Str
 
 			case "float":
 				if val.Type == runtime.STRING {
@@ -269,6 +273,7 @@ func (i *Interpreter) Run(prog *parser.Program) {
 					Type: runtime.NUMBER,
 					Num:  val.Num,
 				})
+				sExpr = fmt.Sprintf("%g", val.Num)
 			}
 
 		// -----------------------
@@ -301,6 +306,8 @@ func (i *Interpreter) Run(prog *parser.Program) {
 						str = strings.Repeat(" ", spaces) + str
 					}
 				}
+
+				sExpr += str
 
 				i.rt.ExecPrint(str)
 				cursor += len(str)
@@ -379,6 +386,8 @@ func (i *Interpreter) Run(prog *parser.Program) {
 				PCStart: pc,
 			})
 
+			sExpr = fmt.Sprintf("-> %g TO %g STEP %g", startVal.Num, endVal.Num, step)
+
 		// -----------------------
 		// NEXT
 		// -----------------------
@@ -398,6 +407,7 @@ func (i *Interpreter) Run(prog *parser.Program) {
 			if !done {
 				i.rt.Env.Set(frame.Var, v)
 				nextPC = frame.PCStart + 1
+				sExpr = fmt.Sprintf("-> %g", v.Num)
 			} else {
 				i.forStack.Pop()
 			}
@@ -494,15 +504,18 @@ func (i *Interpreter) Run(prog *parser.Program) {
 				}
 
 				nextPC = pc2
+				sExpr = "THEN"
 			} else if s.Else != nil {
 				pc2 := pc + 1
 				for _, stmt := range s.Else {
 					pc2 = i.execInline(inst.LineNum, stmt, pc2-1)
 				}
 				nextPC = pc2
+				sExpr = "ELSE"
 			} else {
 				// condition fausse → instruction suivante
 				nextPC = pc + 1
+				sExpr = "ELSE"
 			}
 
 		// -----------------------
@@ -523,22 +536,15 @@ func (i *Interpreter) Run(prog *parser.Program) {
 				exec = cond.Num != 0
 			}
 
+			sExpr = "THEN"
 			if !exec {
 				nextPC = s.Target
+				sExpr = "ELSE"
 			}
 
 		}
 
-		logger.Debug(fmt.Sprintf(
-			"Executing line: %d, pc: %d, nextPC: %d - [%s]%s %s",
-			inst.LineNum,
-			pc,
-			nextPC,
-			parser.StmtName(inst.Stmt),
-			parser.StmtArgs(inst.Stmt),
-			sExpr,
-		))
-
+		logger.Debug(LogTrace(inst, pc, nextPC, sExpr))
 		pc = nextPC
 	}
 }
@@ -666,4 +672,16 @@ func VarType(name string) string {
 		return "string"
 	}
 	return "float"
+}
+
+func LogTrace(inst Instruction, pc int, nextPC int, sExpr string) string {
+	return fmt.Sprintf(
+		"Executing line: %d, pc: %d, nextPC: %d - [%s]%s %s",
+		inst.LineNum,
+		pc,
+		nextPC,
+		parser.StmtName(inst.Stmt),
+		parser.StmtArgs(inst.Stmt),
+		sExpr,
+	)
 }

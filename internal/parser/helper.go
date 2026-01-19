@@ -38,34 +38,15 @@ func StmtName(s Statement) string {
 func StmtArgs(s Statement) string {
 	switch stmt := s.(type) {
 	case *PrintStmt:
-		msg := ""
-		for iexpr, expr := range stmt.Exprs {
-			if len(msg) > 0 {
-				msg = msg + string(stmt.Separators[iexpr-1])
-			} else {
-				msg = " -> "
-			}
-			msg = msg + StmtExprValue(expr)
-		}
-		return msg
-	case *LetStmt:
-		return fmt.Sprintf(" %s -> %s", stmt.Name, StmtExprValue(stmt.Value))
-	case *IfStmt:
-		return ""
+		return " ->"
 	case *IfJumpStmt:
-		return ""
-	case *GotoStmt:
-		return StmtExprValue(stmt.Expr)
-	case *GosubStmt:
-		return StmtExprValue(stmt.Expr)
+		return " ->"
+	case *LetStmt:
+		return fmt.Sprintf(" %s ->", stmt.Name)
 	case *ForStmt:
 		return fmt.Sprintf(" %s", stmt.Var)
 	case *NextStmt:
 		return fmt.Sprintf(" %s", stmt.Var)
-	case *HTabStmt:
-		return StmtExprValue(stmt.Expr)
-	case *VTabStmt:
-		return StmtExprValue(stmt.Expr)
 	default:
 		return ""
 	}
