@@ -138,7 +138,7 @@ func main() {
 	// --- Résumé global ---
 	totalTests := globalPassed + globalFailed + globalSkipped
 	fmt.Println("\n\n================ Résumé Global =====================")
-	fmt.Printf("Total tests      : %d | %s%d%s | %s%d%s | %s%d%s | %.1f%% passés\n",
+	fmt.Printf("Total tests      : %4d | %s%d%s | %s%d%s | %s%d%s | 🎯 %.1f%% passés\n",
 		totalTests,
 		green("✅ "), globalPassed, reset(),
 		red("❌ "), globalFailed, reset(),
@@ -170,7 +170,7 @@ func main() {
 		s := packageSummaries[pkg]
 		bar := buildInteractiveBar(s.Passed, s.Failed, s.Skipped)
 		rate := calcPassRate(s.Passed, s.Failed, s.Skipped)
-		fmt.Printf("📦 %-*s: %s | %s%-3d%s | %s%d%s | %s%d%s | %.1f%%\n",
+		fmt.Printf("📦 %-*s: %s | %s%-4d%s | %s%d%s | %s%d%s | 🎯 %.1f%%\n",
 			maxNameLen, pkg, bar,
 			green("✅ "), s.Passed, reset(),
 			red("❌ "), s.Failed, reset(),
@@ -191,7 +191,7 @@ func main() {
 
 		for _, pkg := range packages {
 			count := stats.PerPackage[pkg]
-			fmt.Printf("📦 %-*s: 🔢 %-3d assertions\n", maxNameLen, pkg, count)
+			fmt.Printf("📦 %-*s: 🔢 %4d assertions\n", maxNameLen, pkg, count)
 		}
 	}
 
