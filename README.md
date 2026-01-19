@@ -96,6 +96,12 @@ An integer or string variable must be followed by a `%` or `$` at each use of th
         > If `aexpr` is a positive number, then the largest whole number can be found by chopping off the decimal part.
         
         > If `aexpr` is a negative number, the largest whole number can be found by moving down to the next lowest whole number (that is, make a negative number more  negative).
+* `ABS`
+    * Returns the absolute value of `aexpr`.
+
+        > `aexpr` if `aexpr` >= 0
+
+        > -`aexpr` if `aexpr` < 0
 
 #### Differences with Applesoft BASIC
 ##### Variable names

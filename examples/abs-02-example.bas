@@ -1,0 +1,2 @@
+10 REM ABS Function
+20 PRINT ABS("1.75")

@@ -23,6 +23,36 @@ func TestExamplesExecution(t *testing.T) {
 		expected string
 	}{
 		{
+			name:   "Abs-01",
+			file:   "abs-01-example.bas",
+			errors: 0,
+			expected: `1.75
+1.75
+2.8746841
+2.8746841
+10.751318534000001
+10.751318534000001
+5
+5
+14.3734205
+14.3734205
+`,
+		},
+		{
+			name:   "Abs-02",
+			file:   "abs-02-example.bas",
+			errors: 0,
+			expected: `⚠️ TYPE MISMATCH IN 2 (ABS)
+`,
+		},
+		{
+			name:   "Abs-03",
+			file:   "abs-03-example.bas",
+			errors: 0,
+			expected: `⚠️ TYPE MISMATCH IN 3 (ABS)
+`,
+		},
+		{
 			name:   "CubeExample",
 			file:   "cube-example.bas",
 			errors: 0,

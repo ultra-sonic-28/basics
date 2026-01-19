@@ -306,6 +306,44 @@ func EvalExpr(expr parser.Expression, rt *runtime.Runtime) (runtime.Value, *erro
 			"INVALID INT OPERAND",
 		)
 
+	case *parser.AbsExpr:
+		val, err := EvalExpr(e.Expr, rt)
+		if err != nil {
+			return runtime.Value{}, err
+		}
+
+		switch val.Type {
+
+		case runtime.STRING:
+			return runtime.Value{}, errors.NewSyntax(
+				line, col, tok,
+				"TYPE MISMATCH",
+			)
+
+		case runtime.INTEGER:
+			if val.Int < 0 {
+				return runtime.Value{
+					Type: runtime.INTEGER,
+					Int:  -val.Int,
+				}, nil
+			}
+			return val, nil
+
+		case runtime.NUMBER:
+			if val.Num < 0 {
+				return runtime.Value{
+					Type: runtime.NUMBER,
+					Num:  -val.Num,
+				}, nil
+			}
+			return val, nil
+		}
+
+		return runtime.Value{}, errors.NewSyntax(
+			line, col, tok,
+			"INVALID ABS OPERAND",
+		)
+
 	}
 
 	// =========================

@@ -222,3 +222,19 @@ func (*IntExpr) exprNode() {}
 func (i *IntExpr) Pos() (int, int, string) {
 	return i.Line, i.Column, i.Token
 }
+
+// =========================
+// ABS(expr)
+// =========================
+type AbsExpr struct {
+	Expr   Expression
+	Line   int
+	Column int
+	Token  string
+}
+
+func (*AbsExpr) exprNode() {}
+
+func (a *AbsExpr) Pos() (int, int, string) {
+	return a.Line, a.Column, a.Token
+}
