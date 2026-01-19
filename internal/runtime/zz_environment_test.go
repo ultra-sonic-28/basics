@@ -89,3 +89,67 @@ func TestEnv_SetGet(t *testing.T) {
 		})
 	}
 }
+
+func TestValue_String(t *testing.T) {
+	tests := []struct {
+		name     string
+		value    Value
+		expected string
+	}{
+		{
+			name: "STRING value",
+			value: Value{
+				Type: STRING,
+				Str:  "HELLO",
+			},
+			expected: "HELLO",
+		},
+		{
+			name: "INTEGER positive",
+			value: Value{
+				Type: INTEGER,
+				Int:  42,
+			},
+			expected: "42",
+		},
+		{
+			name: "INTEGER negative",
+			value: Value{
+				Type: INTEGER,
+				Int:  -7,
+			},
+			expected: "-7",
+		},
+		{
+			name: "NUMBER integer-like",
+			value: Value{
+				Type: NUMBER,
+				Num:  5,
+			},
+			expected: "5.000000",
+		},
+		{
+			name: "NUMBER float",
+			value: Value{
+				Type: NUMBER,
+				Num:  3.14159,
+			},
+			expected: "3.141590",
+		},
+		{
+			name: "NUMBER negative float",
+			value: Value{
+				Type: NUMBER,
+				Num:  -1.75,
+			},
+			expected: "-1.750000",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result := tt.value.String()
+			testutils.Equal(t, "string representation", tt.expected, result)
+		})
+	}
+}
