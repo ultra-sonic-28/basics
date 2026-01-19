@@ -70,6 +70,50 @@ func TestExamplesExecution(t *testing.T) {
 `,
 		},
 		{
+			name:   "BooleanOperator-01",
+			file:   "boolean-operator-01-example.bas",
+			errors: 0,
+			expected: `0
+1
+0
+1
+1
+0
+1
+0
+0
+1
+1
+0
+1
+0
+`,
+		},
+		{
+			name:   "BooleanOperator-02",
+			file:   "boolean-operator-02-example.bas",
+			errors: 0,
+			expected: `0
+0
+1
+1
+0
+1
+0
+0
+1
+1
+1
+1
+0
+0
+1
+1
+0
+0
+`,
+		},
+		{
 			name:   "End-01",
 			file:   "end-01-example.bas",
 			errors: 0,

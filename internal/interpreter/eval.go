@@ -187,17 +187,35 @@ func EvalExpr(expr parser.Expression, rt *runtime.Runtime) (runtime.Value, *erro
 				}, nil
 
 			case "<":
-				return runtime.Value{Type: runtime.BOOLEAN, Flag: left.Int < right.Int}, nil
+				if left.Int < right.Int {
+					return runtime.Value{Type: runtime.NUMBER, Num: 1}, nil
+				}
+				return runtime.Value{Type: runtime.NUMBER, Num: 0}, nil
 			case ">":
-				return runtime.Value{Type: runtime.BOOLEAN, Flag: left.Int > right.Int}, nil
+				if left.Int > right.Int {
+					return runtime.Value{Type: runtime.NUMBER, Num: 1}, nil
+				}
+				return runtime.Value{Type: runtime.NUMBER, Num: 0}, nil
 			case "<=":
-				return runtime.Value{Type: runtime.BOOLEAN, Flag: left.Int <= right.Int}, nil
+				if left.Int <= right.Int {
+					return runtime.Value{Type: runtime.NUMBER, Num: 1}, nil
+				}
+				return runtime.Value{Type: runtime.NUMBER, Num: 0}, nil
 			case ">=":
-				return runtime.Value{Type: runtime.BOOLEAN, Flag: left.Int >= right.Int}, nil
+				if left.Int >= right.Int {
+					return runtime.Value{Type: runtime.NUMBER, Num: 1}, nil
+				}
+				return runtime.Value{Type: runtime.NUMBER, Num: 0}, nil
 			case "=":
-				return runtime.Value{Type: runtime.BOOLEAN, Flag: left.Int == right.Int}, nil
+				if left.Int == right.Int {
+					return runtime.Value{Type: runtime.NUMBER, Num: 1}, nil
+				}
+				return runtime.Value{Type: runtime.NUMBER, Num: 0}, nil
 			case "<>":
-				return runtime.Value{Type: runtime.BOOLEAN, Flag: left.Int != right.Int}, nil
+				if left.Int != right.Int {
+					return runtime.Value{Type: runtime.NUMBER, Num: 1}, nil
+				}
+				return runtime.Value{Type: runtime.NUMBER, Num: 0}, nil
 			}
 
 			err = errors.NewSyntax(
@@ -247,17 +265,35 @@ func EvalExpr(expr parser.Expression, rt *runtime.Runtime) (runtime.Value, *erro
 			return runtime.Value{Type: runtime.NUMBER, Num: lf / rf}, nil
 
 		case "<":
-			return runtime.Value{Type: runtime.BOOLEAN, Flag: lf < rf}, nil
+			if lf < rf {
+				return runtime.Value{Type: runtime.NUMBER, Num: 1}, nil
+			}
+			return runtime.Value{Type: runtime.NUMBER, Num: 0}, nil
 		case ">":
-			return runtime.Value{Type: runtime.BOOLEAN, Flag: lf > rf}, nil
+			if lf > rf {
+				return runtime.Value{Type: runtime.NUMBER, Num: 1}, nil
+			}
+			return runtime.Value{Type: runtime.NUMBER, Num: 0}, nil
 		case "<=":
-			return runtime.Value{Type: runtime.BOOLEAN, Flag: lf <= rf}, nil
+			if lf <= rf {
+				return runtime.Value{Type: runtime.NUMBER, Num: 1}, nil
+			}
+			return runtime.Value{Type: runtime.NUMBER, Num: 0}, nil
 		case ">=":
-			return runtime.Value{Type: runtime.BOOLEAN, Flag: lf >= rf}, nil
+			if lf >= rf {
+				return runtime.Value{Type: runtime.NUMBER, Num: 1}, nil
+			}
+			return runtime.Value{Type: runtime.NUMBER, Num: 0}, nil
 		case "<>":
-			return runtime.Value{Type: runtime.BOOLEAN, Flag: lf != rf}, nil
+			if lf != rf {
+				return runtime.Value{Type: runtime.NUMBER, Num: 1}, nil
+			}
+			return runtime.Value{Type: runtime.NUMBER, Num: 0}, nil
 		case "=":
-			return runtime.Value{Type: runtime.BOOLEAN, Flag: lf == rf}, nil
+			if lf == rf {
+				return runtime.Value{Type: runtime.NUMBER, Num: 1}, nil
+			}
+			return runtime.Value{Type: runtime.NUMBER, Num: 0}, nil
 		default:
 			return runtime.Value{}, errors.NewSyntax(
 				line, col, e.Op,
