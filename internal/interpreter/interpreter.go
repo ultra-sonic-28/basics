@@ -280,6 +280,12 @@ func (i *Interpreter) Run(prog *parser.Program) {
 		// PRINT
 		// -----------------------
 		case *parser.PrintStmt:
+			// PRINT sans arguments
+			if len(s.Exprs) == 0 {
+				i.rt.ExecPrint("\n")
+				break
+			}
+
 			cursor := 0
 
 			for iExpr, expr := range s.Exprs {

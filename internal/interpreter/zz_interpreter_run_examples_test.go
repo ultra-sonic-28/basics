@@ -688,6 +688,22 @@ All done!
 			expected: `2`,
 		},
 		{
+			name:   "Print-11",
+			file:   "print-11-example.bas",
+			errors: 0,
+			expected: `
+`,
+		},
+		{
+			name:   "Print-12",
+			file:   "print-12-example.bas",
+			errors: 0,
+			expected: `Line 1
+
+Line 3
+`,
+		},
+		{
 			name:   "Sgn-01",
 			file:   "sgn-01-example.bas",
 			errors: 0,
