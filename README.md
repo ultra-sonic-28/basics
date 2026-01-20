@@ -54,10 +54,12 @@ An integer or string variable must be followed by a `%` or `$` at each use of th
 ##### Input / Output
 * `PRINT`
     * Print a string, a float, an integer, variable or an expression.
+    * Without any arguments, PRINT causes line feed
     * Multiple arguments may be separated by commas (`,`) and/or semicolons (`;`).
     * If an item on the list is followed by a semicolon, then the first character of the next item to be printed will appear immediatly after the current item.
     * If an item on the list is followed by a comma, then the first character of the next item to be printed will appear in the first position of the next available tab field.
     * Tab fields are 14 positions wide
+    * If neither a comma nor a semi-colon ends the list, a line feed and return are executed following the last item printed.
 * `LET`
     * Assign a value to a variable, creating it if necessary. Optionnal.
 
