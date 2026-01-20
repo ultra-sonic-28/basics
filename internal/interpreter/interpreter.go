@@ -312,7 +312,10 @@ func (i *Interpreter) Run(prog *parser.Program) {
 				i.rt.ExecPrint(str)
 				cursor += len(str)
 			}
-			i.rt.ExecPrint("\n")
+
+			if len(s.Separators) < len(s.Exprs) {
+				i.rt.ExecPrint("\n")
+			}
 
 		// -----------------------
 		// HTAB / VTAB

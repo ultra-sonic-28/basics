@@ -676,6 +676,18 @@ All done!
 `,
 		},
 		{
+			name:     "Print-09",
+			file:     "print-09-example.bas",
+			errors:   0,
+			expected: `0 1 2 3 4 5 6 7 8 9 10 `,
+		},
+		{
+			name:     "Print-10",
+			file:     "print-10-example.bas",
+			errors:   0,
+			expected: `2`,
+		},
+		{
 			name:   "Sgn-01",
 			file:   "sgn-01-example.bas",
 			errors: 0,

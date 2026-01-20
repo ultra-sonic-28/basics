@@ -249,22 +249,37 @@ func (p *Parser) parseReturn(lineNum int) Statement {
 }
 
 func (p *Parser) parsePrint() Statement {
-	p.next() // PRINT
+	p.next() // consommer PRINT
 
 	var exprs []Expression
 	var separators []rune
 
 	for {
+		// 🛑 fin légale de PRINT
+		if p.curr.Type == token.EOL ||
+			p.curr.Type == token.COLON ||
+			p.curr.Type == token.EOF {
+			break
+		}
+
+		// expression
 		expr := p.parseExpression(LOWEST)
 		if expr == nil {
 			break
 		}
 		exprs = append(exprs, expr)
 
-		// séparateurs PRINT
+		// séparateur optionnel
 		if p.curr.Type == token.SEMICOLON || p.curr.Type == token.COMMA {
 			separators = append(separators, rune(p.curr.Literal[0]))
 			p.next()
+
+			// ⚠️ autoriser PRINT expr; <EOL>
+			if p.curr.Type == token.EOL ||
+				p.curr.Type == token.COLON ||
+				p.curr.Type == token.EOF {
+				break
+			}
 			continue
 		}
 
