@@ -2,15 +2,31 @@ package tty
 
 import (
 	"basics/internal/video"
+	"bufio"
 	"fmt"
+	"io"
+	"strings"
 )
 
 type TTYDevice struct {
 	buffer []rune
+	in     *bufio.Reader
+	out    io.Writer
 }
 
-func New() video.Device {
-	return &TTYDevice{}
+func New(in io.Reader, out io.Writer) video.Device {
+	return &TTYDevice{
+		in:  bufio.NewReader(in),
+		out: out,
+	}
+}
+
+func (t *TTYDevice) SetInput(r io.Reader) {
+	t.in = bufio.NewReader(r)
+}
+
+func (t *TTYDevice) SetOutput(w io.Writer) {
+	t.out = w
 }
 
 func (t *TTYDevice) PrintString(s string) {
@@ -35,6 +51,16 @@ func (t *TTYDevice) Clear() {
 }
 
 func (t *TTYDevice) Render() {
-	fmt.Print(string(t.buffer))
+	//fmt.Print(string(t.buffer))
+	fmt.Fprint(t.out, string(t.buffer))
 	t.buffer = nil
+}
+
+func (t *TTYDevice) ReadLine() (string, error) {
+	line, err := t.in.ReadString('\n')
+	if err != nil {
+		return "", err
+	}
+
+	return strings.TrimRight(line, "\r\n"), err
 }

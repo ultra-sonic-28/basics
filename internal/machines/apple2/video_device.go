@@ -1,6 +1,14 @@
 package apple2
 
-import "basics/internal/video"
+import (
+	"basics/internal/video"
+	"bufio"
+	"bytes"
+	"fmt"
+	"io"
+	"os"
+	"strings"
+)
 
 type VideoDevice struct {
 	mode     video.VideoModeID
@@ -9,6 +17,8 @@ type VideoDevice struct {
 	renderer video.Renderer
 	cursorX  int
 	cursorY  int
+	in       *bufio.Reader
+	out      io.Writer
 }
 
 func NewVideoDevice(
@@ -23,7 +33,17 @@ func NewVideoDevice(
 		vram:     vram,
 		cursorX:  0,
 		cursorY:  0,
+		in:       bufio.NewReader(os.Stdin),
+		out:      &bytes.Buffer{},
 	}
+}
+
+func (t *VideoDevice) SetInput(r io.Reader) {
+	t.in = bufio.NewReader(r)
+}
+
+func (t *VideoDevice) SetOutput(w io.Writer) {
+	t.out = w
 }
 
 func (v *VideoDevice) VRAM() video.VRAM {
@@ -87,6 +107,11 @@ func (v *VideoDevice) SetCursorY(y int) {
 	v.cursorY = y
 }
 
+func (v *VideoDevice) MoveTerminalCursor() {
+	// +1 car ANSI est 1-based
+	fmt.Printf("\033[%d;%dH", v.cursorY+1, v.cursorX+1)
+}
+
 func (v *VideoDevice) Clear() {
 	v.vram.Clear()
 	v.cursorX = 0
@@ -114,4 +139,22 @@ func (v *VideoDevice) Render() {
 	}
 
 	v.renderer.RenderText(lines)
+}
+
+func (v *VideoDevice) ReadLine() (string, error) {
+	// synchroniser le curseur terminal avec le curseur Apple II
+	v.MoveTerminalCursor()
+
+	line, err := v.in.ReadString('\n')
+	line = strings.TrimRight(line, "\r\n")
+
+	// recopier la saisie dans la VRAM
+	for _, r := range line {
+		v.PrintChar(r)
+	}
+	v.cursorX = 0
+	v.cursorY++
+
+	v.Render()
+	return line, err
 }

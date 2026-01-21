@@ -27,6 +27,15 @@ func DumpProgram(p *Program, emit Emitter) {
 func dumpStatement(s Statement, indent string, emit Emitter) {
 	switch stmt := s.(type) {
 
+	case *InputStmt:
+		emit("INPUT")
+		if stmt.Prompt != nil {
+			emit(fmt.Sprintf("  PROMPT \"%s\"", stmt.Prompt.Value))
+		}
+		for i, v := range stmt.Vars {
+			emit(fmt.Sprintf("  VAR %d: %s", i, v.Name))
+		}
+
 	case *PrintStmt:
 		emit(indent + "PRINT")
 		for i, expr := range stmt.Exprs {

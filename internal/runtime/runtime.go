@@ -2,6 +2,7 @@ package runtime
 
 import (
 	"basics/internal/video"
+	"io"
 )
 
 type Runtime struct {
@@ -17,12 +18,31 @@ func New(video video.Device) *Runtime {
 	}
 }
 
+func (r *Runtime) SetInput(in io.Reader) {
+	r.Video.SetInput(in)
+}
+
+func (r *Runtime) SetOutput(out io.Writer) {
+	r.Video.SetOutput(out)
+}
+
+// runtime/runtime.go
+func (rt *Runtime) ExecError(err error) {
+	rt.Video.PrintString(err.Error())
+	rt.Video.PrintString("\n")
+	rt.Video.Render()
+}
+
 func (r *Runtime) Halt() {
 	r.halted = true
 }
 
 func (r *Runtime) IsHalted() bool {
 	return r.halted
+}
+
+func (rt *Runtime) ExecInput() (string, error) {
+	return rt.Video.ReadLine()
 }
 
 func (rt *Runtime) ExecPrint(value string) {

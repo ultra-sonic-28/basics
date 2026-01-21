@@ -6,6 +6,8 @@ func StmtName(s Statement) string {
 	switch s.(type) {
 	case *HomeStmt:
 		return "HOME"
+	case *InputStmt:
+		return "INPUT"
 	case *PrintStmt:
 		return "PRINT"
 	case *LetStmt:
@@ -37,6 +39,15 @@ func StmtName(s Statement) string {
 
 func StmtArgs(s Statement) string {
 	switch stmt := s.(type) {
+	case *InputStmt:
+		var allVars string
+		for _, v := range stmt.Vars {
+			allVars += v.Name
+		}
+		if stmt.Prompt != nil {
+			return fmt.Sprintf(" -> %s -> %s", stmt.Prompt.Value, allVars)
+		}
+		return fmt.Sprintf(" -> %s", allVars)
 	case *PrintStmt:
 		return " ->"
 	case *IfJumpStmt:

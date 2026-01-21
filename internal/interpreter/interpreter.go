@@ -2,6 +2,7 @@ package interpreter
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 
 	"basics/internal/errors"
@@ -236,7 +237,7 @@ func (i *Interpreter) Run(prog *parser.Program) {
 		case *parser.LetStmt:
 			val, err := EvalExpr(s.Value, i.rt)
 			if err != nil {
-				fmt.Println(err)
+				i.rt.ExecError(err)
 				return
 			}
 
@@ -245,7 +246,7 @@ func (i *Interpreter) Run(prog *parser.Program) {
 			case "int":
 				if val.Type == runtime.STRING || val.Num != float64(int(val.Num)) {
 					err := errors.NewSemantic(inst.LineNum, "TYPE MISMATCH: INTEGER EXPECTED")
-					fmt.Println(err)
+					i.rt.ExecError(err)
 					return
 				}
 				i.rt.Env.Set(s.Name, runtime.Value{
@@ -257,7 +258,7 @@ func (i *Interpreter) Run(prog *parser.Program) {
 			case "string":
 				if val.Type != runtime.STRING {
 					err := errors.NewSemantic(inst.LineNum, "TYPE MISMATCH: STRING EXPECTED")
-					fmt.Println(err)
+					i.rt.ExecError(err)
 					return
 				}
 				i.rt.Env.Set(s.Name, val)
@@ -266,7 +267,7 @@ func (i *Interpreter) Run(prog *parser.Program) {
 			case "float":
 				if val.Type == runtime.STRING {
 					err := errors.NewSemantic(inst.LineNum, "TYPE MISMATCH: FLOAT EXPECTED")
-					fmt.Println(err)
+					i.rt.ExecError(err)
 					return
 				}
 				i.rt.Env.Set(s.Name, runtime.Value{
@@ -275,6 +276,12 @@ func (i *Interpreter) Run(prog *parser.Program) {
 				})
 				sExpr = fmt.Sprintf("%g", val.Num)
 			}
+
+			// -----------------------
+			// INPUT
+			// -----------------------
+		case *parser.InputStmt:
+			i.execInput(s)
 
 		// -----------------------
 		// PRINT
@@ -291,7 +298,7 @@ func (i *Interpreter) Run(prog *parser.Program) {
 			for iExpr, expr := range s.Exprs {
 				val, err := EvalExpr(expr, i.rt)
 				if err != nil {
-					fmt.Println(err)
+					i.rt.ExecError(err)
 					return
 				}
 
@@ -329,7 +336,7 @@ func (i *Interpreter) Run(prog *parser.Program) {
 		case *parser.HTabStmt:
 			val, err := EvalExpr(s.Expr, i.rt)
 			if err != nil {
-				fmt.Println(err)
+				i.rt.ExecError(err)
 				return
 			}
 
@@ -339,7 +346,7 @@ func (i *Interpreter) Run(prog *parser.Program) {
 		case *parser.VTabStmt:
 			val, err := EvalExpr(s.Expr, i.rt)
 			if err != nil {
-				fmt.Println(err)
+				i.rt.ExecError(err)
 				return
 			}
 
@@ -352,13 +359,13 @@ func (i *Interpreter) Run(prog *parser.Program) {
 		case *parser.ForStmt:
 			startVal, err := EvalExpr(s.Start, i.rt)
 			if err != nil {
-				fmt.Println(err)
+				i.rt.ExecError(err)
 				return
 			}
 
 			endVal, err := EvalExpr(s.End, i.rt)
 			if err != nil {
-				fmt.Println(err)
+				i.rt.ExecError(err)
 				return
 			}
 
@@ -371,10 +378,11 @@ func (i *Interpreter) Run(prog *parser.Program) {
 				}
 				step = stepVal.Num
 				if step == 0 {
-					fmt.Println(errors.NewSemantic(
+					err = errors.NewSemantic(
 						inst.LineNum,
 						"STEP CANNOT BE ZERO",
-					))
+					)
+					i.rt.ExecError(err)
 					return
 				}
 			}
@@ -427,7 +435,7 @@ func (i *Interpreter) Run(prog *parser.Program) {
 		case *parser.GotoStmt:
 			val, err := EvalExpr(s.Expr, i.rt)
 			if err != nil {
-				fmt.Println(err)
+				i.rt.ExecError(err)
 				return
 			}
 
@@ -452,7 +460,7 @@ func (i *Interpreter) Run(prog *parser.Program) {
 		case *parser.GosubStmt:
 			val, err := EvalExpr(s.Expr, i.rt)
 			if err != nil {
-				fmt.Println(err)
+				i.rt.ExecError(err)
 				return
 			}
 
@@ -491,7 +499,7 @@ func (i *Interpreter) Run(prog *parser.Program) {
 		case *parser.IfStmt:
 			cond, err := EvalExpr(s.Cond, i.rt)
 			if err != nil {
-				fmt.Println(err)
+				i.rt.ExecError(err)
 				return
 			}
 
@@ -533,7 +541,7 @@ func (i *Interpreter) Run(prog *parser.Program) {
 		case *parser.IfJumpStmt:
 			cond, err := EvalExpr(s.Cond, i.rt)
 			if err != nil {
-				fmt.Println(err)
+				i.rt.ExecError(err)
 				return
 			}
 
@@ -563,6 +571,8 @@ func (i *Interpreter) Run(prog *parser.Program) {
 // =======================
 
 func (i *Interpreter) execInline(line int, stmt parser.Statement, pc int) int {
+	_ = line
+
 	switch s := stmt.(type) {
 
 	case *parser.HomeStmt:
@@ -572,7 +582,7 @@ func (i *Interpreter) execInline(line int, stmt parser.Statement, pc int) int {
 	case *parser.GotoStmt:
 		val, err := EvalExpr(s.Expr, i.rt)
 		if err != nil {
-			fmt.Println(err)
+			i.rt.ExecError(err)
 			return pc + 1
 		}
 		target, ok := i.lineIndex[int(val.Num)]
@@ -585,7 +595,7 @@ func (i *Interpreter) execInline(line int, stmt parser.Statement, pc int) int {
 	case *parser.GosubStmt:
 		val, err := EvalExpr(s.Expr, i.rt)
 		if err != nil {
-			fmt.Println(err)
+			i.rt.ExecError(err)
 			return pc + 1
 		}
 
@@ -610,7 +620,7 @@ func (i *Interpreter) execInline(line int, stmt parser.Statement, pc int) int {
 	case *parser.LetStmt:
 		val, err := EvalExpr(s.Value, i.rt)
 		if err != nil {
-			fmt.Println(err)
+			i.rt.ExecError(err)
 			return pc + 1
 		}
 		i.rt.Env.Set(s.Name, val)
@@ -622,7 +632,7 @@ func (i *Interpreter) execInline(line int, stmt parser.Statement, pc int) int {
 		for iExpr, expr := range s.Exprs {
 			val, err := EvalExpr(expr, i.rt)
 			if err != nil {
-				fmt.Println(err)
+				i.rt.ExecError(err)
 				return pc
 			}
 
@@ -660,6 +670,71 @@ func (i *Interpreter) execInline(line int, stmt parser.Statement, pc int) int {
 	}
 
 	return pc + 1
+}
+
+func (i *Interpreter) execInput(s *parser.InputStmt) {
+	for {
+		// afficher le prompt
+		if s.Prompt != nil {
+			i.rt.ExecPrint(s.Prompt.Value)
+		} else {
+			i.rt.ExecPrint("? ")
+		}
+
+		line, _ := i.rt.ExecInput()
+		line = strings.TrimRight(line, "\r\n")
+
+		values := strings.Split(line, ",")
+
+		if len(values) != len(s.Vars) {
+			i.rt.ExecPrint("\n?REENTER\n")
+			continue
+		}
+
+		ok := true
+
+		for idx, v := range s.Vars {
+			val := strings.TrimSpace(values[idx])
+
+			// STRING variable
+			if strings.HasSuffix(v.Name, "$") {
+				i.rt.Env.Set(v.Name, runtime.Value{
+					Type: runtime.STRING,
+					Str:  strings.TrimSpace(val),
+				})
+				continue
+			}
+
+			// NUMERIC variable
+			numStr := strings.ReplaceAll(val, " ", "")
+			num, err := strconv.ParseFloat(numStr, 64)
+			if err != nil {
+				ok = false
+				break
+			}
+
+			// INTEGER or NUMBER
+			if strings.HasSuffix(v.Name, "%") {
+				i.rt.Env.Set(v.Name, runtime.Value{
+					Type: runtime.INTEGER,
+					Int:  int(num),
+				})
+			} else {
+				i.rt.Env.Set(v.Name, runtime.Value{
+					Type: runtime.NUMBER,
+					Num:  num,
+				})
+			}
+		}
+
+		if !ok {
+			i.rt.ExecPrint("\n?REENTER\n")
+			continue
+		}
+
+		//i.rt.ExecPrint("\n")
+		break
+	}
 }
 
 // =======================

@@ -28,6 +28,16 @@ type PrintStmt struct {
 
 func (*PrintStmt) stmtNode() {}
 
+// INPUT
+type InputStmt struct {
+	Prompt *StringLiteral // nil si absent
+	Vars   []*Identifier
+	Line   int
+	Column int
+}
+
+func (*InputStmt) stmtNode() {}
+
 // LET
 type LetStmt struct {
 	Name  string

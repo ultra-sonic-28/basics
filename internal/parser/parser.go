@@ -147,6 +147,9 @@ func (p *Parser) parseStatement(lineNum int) Statement {
 		case "PRINT":
 			return p.parsePrint()
 
+		case "INPUT":
+			return p.parseInput()
+
 		case "FOR":
 			return p.parseFor(lineNum)
 
@@ -231,7 +234,60 @@ func (p *Parser) parseStatement(lineNum int) Statement {
 	return nil
 }
 
+func (p *Parser) parseInput() Statement {
+	line := p.curr.Line
+	col := p.curr.Column
+
+	p.next() // consommer INPUT
+
+	var prompt *StringLiteral
+
+	// INPUT "string";
+	if p.curr.Type == token.STRING && p.peek.Type == token.SEMICOLON {
+		prompt = &StringLiteral{
+			Value:  p.curr.Literal,
+			Line:   p.curr.Line,
+			Column: p.curr.Column,
+			Token:  p.curr.Literal,
+		}
+		p.next() // string
+		p.next() // ;
+	}
+
+	var vars []*Identifier
+
+	for {
+		if p.curr.Type != token.IDENT {
+			p.syntaxError("EXPECTED VARIABLE AFTER INPUT")
+			return nil
+		}
+
+		vars = append(vars, &Identifier{
+			Name:   p.curr.Literal,
+			Line:   p.curr.Line,
+			Column: p.curr.Column,
+			Token:  p.curr.Literal,
+		})
+
+		p.next()
+
+		if p.curr.Type == token.COMMA {
+			p.next()
+			continue
+		}
+		break
+	}
+
+	return &InputStmt{
+		Prompt: prompt,
+		Vars:   vars,
+		Line:   line,
+		Column: col,
+	}
+}
+
 func (p *Parser) parseGosub(lineNum int) Statement {
+	_ = lineNum
 	p.next() // consommer GOSUB
 
 	expr := p.parseExpression(LOWEST)
@@ -244,6 +300,8 @@ func (p *Parser) parseGosub(lineNum int) Statement {
 }
 
 func (p *Parser) parseReturn(lineNum int) Statement {
+	_ = lineNum
+
 	p.next() // consommer RETURN
 	return &ReturnStmt{}
 }

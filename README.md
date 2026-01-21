@@ -62,6 +62,12 @@ An integer or string variable must be followed by a `%` or `$` at each use of th
     * If neither a comma nor a semi-colon ends the list, a line feed and return are executed following the last item printed.
 * `LET`
     * Assign a value to a variable, creating it if necessary. Optionnal.
+* `INPUT`
+    * If the optional string is left out, `INPUT` prints a question mark and waits for the user to type a number (if var is an arithmetic variable) or characters (if var is a string variable). The value of this number or string is put into var.
+    * When the string is present, it is printed exactly as specified; no question mark, spaces, or other punctuation are printed after the string. Note that only one optional string may be used. It must appear directly after `INPUT` and be followed by a semi-colon. 
+    * `INPUT` will accept only a real or an integer as numeric input, not an arithmetic expression. The characters space, +, -, E, and the period are legitimate parts of numeric input. `INPUT` will accept any of these characters or any concatenation of these characters in acceptable form (e.g. +E- is acceptable, +- is not); such input by itself evaluates as Ø.
+    * In numeric input, spaces in any position are ignored. If numeric input which is not a real, an integer, a comma or a colon, the message `?REENTER` is displayed and the `INPUT` instruction re-executed.
+    * Similarly, a response assigned to a string variable must be a single string or literal, not a string expression. Spaces preceding the first character are ignored.
 
 ##### Flow Control
 * `FOR ... TO ... STEP ... NEXT`

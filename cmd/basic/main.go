@@ -172,6 +172,10 @@ func main() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
+
+	rt.SetInput(os.Stdin)
+	rt.SetOutput(os.Stdout)
+
 	interp := interpreter.New(rt)
 	interp.Run(prog)
 }

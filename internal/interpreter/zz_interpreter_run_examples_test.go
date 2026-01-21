@@ -839,24 +839,28 @@ A$=A String Another one
 			testutils.Equal(t, "no parser errors", len(errs), tt.errors)
 
 			// --- Capture stdout ---
-			var buf bytes.Buffer
+			/* var buf bytes.Buffer
 			oldStdout := os.Stdout
 			r, w, _ := os.Pipe()
-			os.Stdout = w
+			os.Stdout = w */
 
 			// --- Interpreter ---
 			rt, err := machines.NewRuntime(constants.BASIC_TTY)
 			testutils.True(t, "runtime ok", err == nil)
 
+			out := &bytes.Buffer{}
+			rt.SetOutput(out)
+
 			interp := New(rt)
 			interp.Run(prog)
 
 			// --- Restore stdout ---
-			_ = w.Close()
+			/* _ = w.Close()
 			os.Stdout = oldStdout
 			_, _ = buf.ReadFrom(r)
 
-			output := buf.String()
+			output := buf.String() */
+			output := out.String()
 
 			// --- Assertion ---
 			testutils.Equal(t, "program output", common.StripANSI(output), tt.expected)

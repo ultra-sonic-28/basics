@@ -1,7 +1,10 @@
 package machines
 
 import (
+	"bufio"
+	"bytes"
 	"fmt"
+	"os"
 
 	"basics/internal/constants"
 	"basics/internal/machines/apple2"
@@ -21,7 +24,9 @@ func NewRuntime(basicType byte) (*runtime.Runtime, error) {
 		return runtime.New(video), nil
 
 	case constants.BASIC_TTY:
-		video := tty.New()
+		in := bufio.NewReader(os.Stdin)
+		out := &bytes.Buffer{}
+		video := tty.New(in, out)
 		return runtime.New(video), nil
 
 	default:
