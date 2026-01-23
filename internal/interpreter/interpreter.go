@@ -283,6 +283,11 @@ func (i *Interpreter) Run(prog *parser.Program) {
 		case *parser.InputStmt:
 			i.execInput(s)
 
+			if i.rt.Video.NeedsNewLineAfterInput() {
+				i.rt.Video.PrintString("\n")
+				i.rt.Video.Render()
+			}
+
 		// -----------------------
 		// PRINT
 		// -----------------------

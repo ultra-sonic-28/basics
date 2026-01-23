@@ -5,6 +5,7 @@ import "io"
 // Device représente un périphérique vidéo logique.
 type Device interface {
 	//SetMode(VideoModeID) error
+	NeedsNewLineAfterInput() bool
 	SetInput(io.Reader)
 	SetOutput(io.Writer)
 
@@ -21,5 +22,7 @@ type Device interface {
 	SetCursorY(y int)
 
 	Render()
+	RenderChar(x, y int, r rune)
+
 	ReadLine() (string, error)
 }

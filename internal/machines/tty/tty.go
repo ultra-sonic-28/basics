@@ -21,6 +21,10 @@ func New(in io.Reader, out io.Writer) video.Device {
 	}
 }
 
+func (t *TTYDevice) NeedsNewLineAfterInput() bool {
+	return false
+}
+
 func (t *TTYDevice) SetInput(r io.Reader) {
 	t.in = bufio.NewReader(r)
 }
@@ -44,6 +48,8 @@ func (t *TTYDevice) Plot(x, y int) {}
 func (v *TTYDevice) SetCursorX(x int) {}
 
 func (v *TTYDevice) SetCursorY(y int) {}
+
+func (v *TTYDevice) RenderChar(x, y int, r rune) {}
 
 func (t *TTYDevice) Clear() {
 	t.buffer = nil

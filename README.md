@@ -164,6 +164,9 @@ An integer or string variable must be followed by a `%` or `$` at each use of th
 130 NEXT A
 ```
 
+## Known Bugs
+- Blinking cursor support is partial, as during input cursor `x` position is not properly set
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
