@@ -51,6 +51,10 @@ func (a *EbitenApp) Update() error {
 		go a.Interpreter.Run(a.Program)
 	}
 
+	if t, ok := a.Runtime.Video.(*apple2.Text40); ok {
+		t.Update()
+	}
+
 	a.handleInput()
 
 	return nil

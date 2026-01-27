@@ -175,7 +175,7 @@ An integer or string variable must be followed by a `%` or `$` at each use of th
 
 ##### Supported display device
 * Results display in program execution could be in `terminal mode` (usefull for debug or test sessions) or in `graphic mode`
-* In `terminal mode`, you cannot have any any graphic primitives
+* In `terminal mode`, you cannot have any graphic primitives
 
 ## License
 

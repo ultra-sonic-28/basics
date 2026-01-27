@@ -28,6 +28,11 @@ type Text40 struct {
 
 	inputBuffer []rune
 	lineReady   bool
+
+	// Blinking cursor
+	cursorVisible bool
+	blinkCounter  int
+	inInput       bool
 }
 
 func NewText40(renderer video.Renderer) *Text40 {
@@ -97,15 +102,34 @@ func (t *Text40) SetOutput(w io.Writer) {
 // --------------------
 
 func (t *Text40) Update() error {
+	if !t.inInput {
+		return nil
+	}
+
+	t.blinkCounter++
+	if t.blinkCounter >= 30 { // ~0.5s à 60 FPS
+		t.cursorVisible = !t.cursorVisible
+		t.blinkCounter = 0
+	}
+
 	return nil
 }
 
 func (t *Text40) Draw(screen *ebiten.Image) {
-	// 1. Demande au TextMode de rasteriser le buffer
+	// Gestion du curseur clignotant
+	if t.inInput && t.cursorVisible {
+		t.Mode.PutChar('░')
+		t.SetCursorX(t.Mode.CursorX() - 1)
+	} else if t.inInput && !t.cursorVisible {
+		t.Mode.PutChar(' ')
+		t.SetCursorX(t.Mode.CursorX() - 1)
+	}
+
+	// Demande au TextMode de rasteriser le buffer
 	t.Mode.Render()
 	t.Mode.Renderer.(*ebitenrenderer.Renderer).BlitTo(screen)
 
-	// 2. Demande au renderer Ebiten d’afficher l’image
+	// Demande au renderer Ebiten d’afficher l’image
 	if r, ok := t.renderer.(ebitenRenderer); ok {
 		screen.Fill(color.Black)
 		r.Draw(screen)
@@ -123,6 +147,9 @@ func (t *Text40) Layout(w, h int) (int, int) {
 // Input & cursor movement
 // --------------------
 func (t *Text40) ReadLine() (string, error) {
+	t.BeginInput()
+	defer t.EndInput()
+
 	for !t.lineReady {
 		// attente active mais NON bloquante
 		time.Sleep(5 * time.Millisecond)
@@ -150,9 +177,22 @@ func (t *Text40) Backspace() {
 	}
 
 	t.inputBuffer = t.inputBuffer[:len(t.inputBuffer)-1]
+	t.cursorVisible = false
 	t.Mode.Backspace()
 }
 
 func (t *Text40) Enter() {
+	t.EndInput()
 	t.lineReady = true
+}
+
+func (t *Text40) BeginInput() {
+	t.inInput = true
+	t.cursorVisible = true
+	t.blinkCounter = 0
+}
+
+func (t *Text40) EndInput() {
+	t.inInput = false
+	t.cursorVisible = false
 }
