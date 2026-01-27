@@ -277,16 +277,11 @@ func (i *Interpreter) Run(prog *parser.Program) {
 				sExpr = fmt.Sprintf("%g", val.Num)
 			}
 
-			// -----------------------
-			// INPUT
-			// -----------------------
+		// -----------------------
+		// INPUT
+		// -----------------------
 		case *parser.InputStmt:
 			i.execInput(s)
-
-			if i.rt.Video.NeedsNewLineAfterInput() {
-				i.rt.Video.PrintString("\n")
-				i.rt.Video.Render()
-			}
 
 		// -----------------------
 		// PRINT
@@ -692,7 +687,7 @@ func (i *Interpreter) execInput(s *parser.InputStmt) {
 		values := strings.Split(line, ",")
 
 		if len(values) != len(s.Vars) {
-			i.rt.ExecPrint("\n?REENTER\n")
+			i.rt.ExecPrint("\n?NOT ENOUGH VALUES, REENTER\n")
 			continue
 		}
 
@@ -733,7 +728,7 @@ func (i *Interpreter) execInput(s *parser.InputStmt) {
 		}
 
 		if !ok {
-			i.rt.ExecPrint("\n?REENTER\n")
+			i.rt.ExecPrint("\n?TYPE MISMATCH, REENTER\n")
 			continue
 		}
 

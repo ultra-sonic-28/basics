@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"basics/internal/app"
 	"basics/internal/binary"
 	"basics/internal/constants"
 	"basics/internal/interpreter"
@@ -173,11 +174,29 @@ func main() {
 		os.Exit(1)
 	}
 
-	rt.SetInput(os.Stdin)
-	rt.SetOutput(os.Stdout)
-
 	interp := interpreter.New(rt)
-	interp.Run(prog)
+
+	// --------------------
+	// Mode Terminal (for test and debug purpose)
+	// --------------------
+	if basicType == constants.BASIC_TTY {
+		rt.SetInput(os.Stdin)
+		rt.SetOutput(os.Stdout)
+		interp.Run(prog)
+		return
+	}
+
+	// --------------------
+	// Mode graphique
+	// --------------------
+	basicApp := app.NewBasicEbitenApp(rt, interp, prog)
+	ebitenApp := app.NewEbitenApp(basicApp)
+
+	if err := ebitenApp.Run(); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
 }
 
 // changeExt remplace l'extension d'un fichier

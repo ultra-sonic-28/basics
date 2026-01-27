@@ -1,4 +1,4 @@
-# Basics - BASIC Interpreter for old computers
+# BASICS - BASIC Interpreter for old computers
 
 The project is currently primarily focused on APPLE II computers, with an architecture that allows for expansion to other `retro computers`.
 
@@ -17,6 +17,7 @@ The project is currently primarily focused on APPLE II computers, with an archit
 ## Technical Stack
 
 * **Go 1.25+**
+* **Ebiten 2.9.7**
 
 ## Version control system
 * **Jujutsu (jj) + Git**
@@ -164,8 +165,17 @@ An integer or string variable must be followed by a `%` or `$` at each use of th
 130 NEXT A
 ```
 
-## Known Bugs
-- Blinking cursor support is partial, as during input cursor `x` position is not properly set
+#### Differences with old computers
+##### Extended charset
+* BASICS support extended charset, such as:
+    * Uppercase letters
+    * Lowercase letters
+    * Accented letters
+    * Box drawing: simple, double and mixed
+
+##### Supported display device
+* Results display in program execution could be in `terminal mode` (usefull for debug or test sessions) or in `graphic mode`
+* In `terminal mode`, you cannot have any any graphic primitives
 
 ## License
 

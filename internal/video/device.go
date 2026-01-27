@@ -2,27 +2,24 @@ package video
 
 import "io"
 
-// Device représente un périphérique vidéo logique.
+// Device représente l’interface vidéo vue par le runtime BASIC
 type Device interface {
-	//SetMode(VideoModeID) error
-	NeedsNewLineAfterInput() bool
-	SetInput(io.Reader)
-	SetOutput(io.Writer)
-
+	// --- API BASIC ---
+	Clear()
 	PrintChar(r rune)
 	PrintString(s string)
-
-	Plot(x, y int)
-	Clear()
-
-	//Width() int
-	//Height() int
 
 	SetCursorX(x int)
 	SetCursorY(y int)
 
-	Render()
-	RenderChar(x, y int, r rune)
+	Plot(x, y int)
 
 	ReadLine() (string, error)
+
+	// --- I/O ---
+	SetInput(r io.Reader)
+	SetOutput(w io.Writer)
+
+	// --- Rendu ---
+	Render()
 }

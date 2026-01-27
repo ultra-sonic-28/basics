@@ -1,7 +1,22 @@
 package video
 
-// Renderer affiche un buffer déjà interprété par la machine.
+// Renderer est l'unique abstraction de rendu graphique.
+// Il ne contient aucune logique métier.
 type Renderer interface {
-	RenderText(lines []string)
-	RenderChar(x, y int, r rune)
+	// Taille logique du framebuffer courant
+	Width() int
+	Height() int
+
+	// Nettoyage complet
+	Clear()
+
+	// Dessin pixel (mode graphique)
+	DrawPixel(x, y int, color int)
+
+	// Dessin caractère (mode texte)
+	DrawGlyph(
+		x, y int, // position en pixels
+		glyph rune, // caractère à dessiner
+		fg, bg int, // couleurs (index palette)
+	)
 }
