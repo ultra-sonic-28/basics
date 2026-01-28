@@ -25,7 +25,7 @@ func TestExamplesExecution(t *testing.T) {
 	}{
 		{
 			name:   "Abs-01",
-			file:   "abs-01-example.bas",
+			file:   "maths/abs-01-example.bas",
 			errors: 0,
 			expected: `1.75
 1.75
@@ -41,21 +41,21 @@ func TestExamplesExecution(t *testing.T) {
 		},
 		{
 			name:   "Abs-02",
-			file:   "abs-02-example.bas",
+			file:   "maths/abs-02-example.bas",
 			errors: 0,
 			expected: `⚠️ TYPE MISMATCH IN 2 (ABS)
 `,
 		},
 		{
 			name:   "Abs-03",
-			file:   "abs-03-example.bas",
+			file:   "maths/abs-03-example.bas",
 			errors: 0,
 			expected: `⚠️ TYPE MISMATCH IN 3 (ABS)
 `,
 		},
 		{
 			name:   "CubeExample",
-			file:   "cube-example.bas",
+			file:   "programs/maths/cube-example.bas",
 			errors: 0,
 			expected: `Affichage des cubes de 1 a 10
 1 ^ 3 = 1
@@ -72,7 +72,7 @@ func TestExamplesExecution(t *testing.T) {
 		},
 		{
 			name:   "BooleanOperator-01",
-			file:   "boolean-operator-01-example.bas",
+			file:   "operators/boolean-operator-01-example.bas",
 			errors: 0,
 			expected: `0
 1
@@ -92,7 +92,7 @@ func TestExamplesExecution(t *testing.T) {
 		},
 		{
 			name:   "BooleanOperator-02",
-			file:   "boolean-operator-02-example.bas",
+			file:   "operators/boolean-operator-02-example.bas",
 			errors: 0,
 			expected: `0
 0
@@ -116,21 +116,21 @@ func TestExamplesExecution(t *testing.T) {
 		},
 		{
 			name:   "End-01",
-			file:   "end-01-example.bas",
+			file:   "flow_control/end-01-example.bas",
 			errors: 0,
 			expected: `Hello
 `,
 		},
 		{
 			name:   "Factorial",
-			file:   "factorial.bas",
+			file:   "programs/maths/factorial.bas",
 			errors: 0,
 			expected: `6! = 720
 `,
 		},
 		{
 			name:   "Fibonacci",
-			file:   "fibonacci.bas",
+			file:   "programs/maths/fibonacci.bas",
 			errors: 0,
 			expected: `
 Here is(are) your 20 Fibonacci number(s):
@@ -159,7 +159,7 @@ All done!
 		},
 		{
 			name:   "For-01",
-			file:   "for-01-example.bas",
+			file:   "flow_control/for-01-example.bas",
 			errors: 0,
 			expected: `0
 1
@@ -176,7 +176,7 @@ All done!
 		},
 		{
 			name:   "For-02",
-			file:   "for-02-example.bas",
+			file:   "flow_control/for-02-example.bas",
 			errors: 0,
 			expected: `0
 1
@@ -193,7 +193,7 @@ All done!
 		},
 		{
 			name:   "For-03",
-			file:   "for-03-example.bas",
+			file:   "flow_control/for-03-example.bas",
 			errors: 0,
 			expected: `0
 2
@@ -205,7 +205,7 @@ All done!
 		},
 		{
 			name:   "For-04",
-			file:   "for-04-example.bas",
+			file:   "flow_control/for-04-example.bas",
 			errors: 0,
 			expected: `0
 2.5
@@ -216,7 +216,7 @@ All done!
 		},
 		{
 			name:   "For-05",
-			file:   "for-05-example.bas",
+			file:   "flow_control/for-05-example.bas",
 			errors: 0,
 			expected: `10
 8
@@ -228,7 +228,7 @@ All done!
 		},
 		{
 			name:   "For-06",
-			file:   "for-06-example.bas",
+			file:   "flow_control/for-06-example.bas",
 			errors: 0,
 			expected: `A=0, B=0, A*B=0
 A=0, B=2, A*B=0
@@ -276,14 +276,14 @@ A=10, B=10, A*B=100
 		}, */
 		{
 			name:   "For-08",
-			file:   "for-08-example.bas",
+			file:   "flow_control/for-08-example.bas",
 			errors: 0,
 			expected: `⚠️ STEP CANNOT BE ZERO IN 10 ()
 `,
 		},
 		{
 			name:   "Gosub-01",
-			file:   "gosub-01-example.bas",
+			file:   "flow_control/gosub-01-example.bas",
 			errors: 0,
 			expected: `Hello
 World
@@ -292,7 +292,7 @@ World
 		},
 		{
 			name:   "Gosub-02",
-			file:   "gosub-02-example.bas",
+			file:   "flow_control/gosub-02-example.bas",
 			errors: 0,
 			expected: `Hello
 World
@@ -301,7 +301,7 @@ World
 		},
 		{
 			name:   "Gosub-03",
-			file:   "gosub-03-example.bas",
+			file:   "flow_control/gosub-03-example.bas",
 			errors: 0,
 			expected: `TABLE DE 4 :
 1             4
@@ -318,7 +318,7 @@ World
 		},
 		{
 			name:   "Gosub-04",
-			file:   "gosub-04-example.bas",
+			file:   "flow_control/gosub-04-example.bas",
 			errors: 0,
 			expected: `Hello
 World
@@ -327,7 +327,7 @@ World
 		},
 		{
 			name:   "Goto-01",
-			file:   "goto-01-example.bas",
+			file:   "flow_control/goto-01-example.bas",
 			errors: 0,
 			expected: `First line
 Second line
@@ -337,27 +337,27 @@ Last line
 		},
 		{
 			name:   "HelloWorld-01",
-			file:   "hello-world-01-example.bas",
+			file:   "others/hello-world-01-example.bas",
 			errors: 0,
 			expected: `Hello World
 `,
 		},
 		{
 			name:     "HelloWorld-02",
-			file:     "hello-world-02-example.bas",
+			file:     "others/hello-world-02-example.bas",
 			errors:   2,
 			expected: ``,
 		},
 		{
 			name:   "Home-01",
-			file:   "home-01-example.bas",
+			file:   "display/home-01-example.bas",
 			errors: 0,
 			expected: `HELLO
 `,
 		},
 		{
 			name:   "HtabVtab-01",
-			file:   "htab-vtab-01-example.bas",
+			file:   "tabs/htab-vtab-01-example.bas",
 			errors: 0,
 			expected: `1
 2
@@ -399,7 +399,7 @@ Last line
 		},
 		{
 			name:   "If-01",
-			file:   "if-01-example.bas",
+			file:   "flow_control/if-01-example.bas",
 			errors: 0,
 			expected: `Count:        0
 Count:        1
@@ -416,7 +416,7 @@ All done!
 		},
 		{
 			name:   "If-02",
-			file:   "if-02-example.bas",
+			file:   "flow_control/if-02-example.bas",
 			errors: 0,
 			expected: `Count:        0
 Count:        1
@@ -433,7 +433,7 @@ All done!
 		},
 		{
 			name:   "If-03",
-			file:   "if-03-example.bas",
+			file:   "flow_control/if-03-example.bas",
 			errors: 0,
 			expected: `Count:        0
 Go to line 20
@@ -460,7 +460,7 @@ All done!
 		},
 		{
 			name:   "If-04",
-			file:   "if-04-example.bas",
+			file:   "flow_control/if-04-example.bas",
 			errors: 0,
 			expected: `Count:        0
 Count:        1
@@ -477,7 +477,7 @@ All done!
 		},
 		{
 			name:   "If-05",
-			file:   "if-05-example.bas",
+			file:   "flow_control/if-05-example.bas",
 			errors: 0,
 			expected: `Let's count...
 Count:        0
@@ -496,7 +496,7 @@ All done!
 		},
 		{
 			name:   "If-06",
-			file:   "if-06-example.bas",
+			file:   "flow_control/if-06-example.bas",
 			errors: 0,
 			expected: `Let's count...
 Count:        0
@@ -516,7 +516,7 @@ All done!
 		},
 		{
 			name:   "Int-01",
-			file:   "int-01-example.bas",
+			file:   "maths/int-01-example.bas",
 			errors: 0,
 			expected: `1
 1
@@ -530,39 +530,39 @@ All done!
 		},
 		{
 			name:   "Int-02",
-			file:   "int-02-example.bas",
+			file:   "maths/int-02-example.bas",
 			errors: 0,
 			expected: `⚠️ TYPE MISMATCH IN 2 (INT)
 `,
 		},
 		{
 			name:   "Int-03",
-			file:   "int-03-example.bas",
+			file:   "maths/int-03-example.bas",
 			errors: 0,
 			expected: `⚠️ TYPE MISMATCH IN 3 (INT)
 `,
 		},
 		{
 			name:     "LinenumWithoutInst-01",
-			file:     "linenum-without-inst-01-example.bas",
+			file:     "others/linenum-without-inst-01-example.bas",
 			errors:   0,
 			expected: ``,
 		},
 		{
 			name:     "LinenumWithoutInst-02",
-			file:     "linenum-without-inst-02-example.bas",
+			file:     "others/linenum-without-inst-02-example.bas",
 			errors:   0,
 			expected: ``,
 		},
 		{
 			name:     "LinenumWithoutInst-03",
-			file:     "linenum-without-inst-03-example.bas",
+			file:     "others/linenum-without-inst-03-example.bas",
 			errors:   0,
 			expected: ``,
 		},
 		{
 			name:   "MultipleOf4",
-			file:   "multpile-of-4-example.bas",
+			file:   "programs/maths/multpile-of-4-example.bas",
 			errors: 0,
 			expected: `TABLE DE 4 :
 1             4
@@ -579,7 +579,7 @@ All done!
 		},
 		{
 			name:   "Primes-01",
-			file:   "primes-01-example.bas",
+			file:   "programs/maths/primes-01-example.bas",
 			errors: 0,
 			expected: `NOMBRES PREMIERS JUSQU'A 50
 3
@@ -601,7 +601,7 @@ All done!
 		},
 		{
 			name:   "Primes-02",
-			file:   "primes-02-example.bas",
+			file:   "programs/maths/primes-02-example.bas",
 			errors: 0,
 			expected: `NOMBRES PREMIERS JUSQU'A 50
 3
@@ -622,82 +622,82 @@ All done!
 		},
 		{
 			name:   "Print-01",
-			file:   "print-01-example.bas",
+			file:   "display/print-01-example.bas",
 			errors: 0,
 			expected: `A=7, A+1=8
 `,
 		},
 		{
 			name:   "Print-02",
-			file:   "print-02-example.bas",
+			file:   "display/print-02-example.bas",
 			errors: 0,
 			expected: `7             7             8
 `,
 		},
 		{
 			name:   "Print-03",
-			file:   "print-03-example.bas",
+			file:   "display/print-03-example.bas",
 			errors: 0,
 			expected: `⚠️ DIVISION BY ZERO IN 1 (/)
 `,
 		},
 		{
 			name:   "Print-04",
-			file:   "print-04-example.bas",
+			file:   "display/print-04-example.bas",
 			errors: 0,
 			expected: `7
 `,
 		},
 		{
 			name:   "Print-05",
-			file:   "print-05-example.bas",
+			file:   "display/print-05-example.bas",
 			errors: 0,
 			expected: `7
 `,
 		},
 		{
 			name:   "Print-06",
-			file:   "print-06-example.bas",
+			file:   "display/print-06-example.bas",
 			errors: 2,
 			expected: `⚠️ UNDEFINED VARIABLE A IN 3 ()
 `,
 		},
 		{
 			name:   "Print-07",
-			file:   "print-07-example.bas",
+			file:   "display/print-07-example.bas",
 			errors: 2,
 			expected: `⚠️ UNDEFINED VARIABLE A IN 3 ()
 `,
 		},
 		{
 			name:   "Print-08",
-			file:   "print-08-example.bas",
+			file:   "display/print-08-example.bas",
 			errors: 1,
 			expected: `Hello World
 `,
 		},
 		{
 			name:     "Print-09",
-			file:     "print-09-example.bas",
+			file:     "display/print-09-example.bas",
 			errors:   0,
 			expected: `0 1 2 3 4 5 6 7 8 9 10 `,
 		},
 		{
 			name:     "Print-10",
-			file:     "print-10-example.bas",
+			file:     "display/print-10-example.bas",
 			errors:   0,
 			expected: `2`,
 		},
 		{
 			name:   "Print-11",
-			file:   "print-11-example.bas",
+			file:   "display/print-11-example.bas",
 			errors: 0,
 			expected: `
 `,
 		},
 		{
 			name:   "Print-12",
-			file:   "print-12-example.bas",
+			file:   "display/print-12-example.bas",
 			errors: 0,
 			expected: `Line 1
 
@@ -706,7 +706,7 @@ Line 3
 		},
 		{
 			name:   "Sgn-01",
-			file:   "sgn-01-example.bas",
+			file:   "maths/sgn-01-example.bas",
 			errors: 0,
 			expected: `1
 -1
@@ -722,21 +722,21 @@ Line 3
 		},
 		{
 			name:   "Sgn-02",
-			file:   "sgn-02-example.bas",
+			file:   "maths/sgn-02-example.bas",
 			errors: 0,
 			expected: `⚠️ TYPE MISMATCH IN 2 (SGN)
 `,
 		},
 		{
 			name:   "Sgn-03",
-			file:   "sgn-03-example.bas",
+			file:   "maths/sgn-03-example.bas",
 			errors: 0,
 			expected: `⚠️ TYPE MISMATCH IN 3 (SGN)
 `,
 		},
 		{
 			name:   "Square",
-			file:   "square-example.bas",
+			file:   "programs/maths/square-example.bas",
 			errors: 0,
 			expected: `Affichage des carres de 1 a 10
 1 x 1 = 1
@@ -753,7 +753,7 @@ Line 3
 		},
 		{
 			name:   "Vars-01",
-			file:   "vars-01-example.bas",
+			file:   "variables/vars-01-example.bas",
 			errors: 0,
 			expected: `A=1.5
 A%=1
@@ -762,7 +762,7 @@ A$=A String
 		},
 		{
 			name:   "Vars-02",
-			file:   "vars-02-example.bas",
+			file:   "variables/vars-02-example.bas",
 			errors: 0,
 			expected: `A=3
 A%=2
@@ -771,49 +771,49 @@ A$=A String Another one
 		},
 		{
 			name:   "Vars-03",
-			file:   "vars-03-example.bas",
+			file:   "variables/vars-03-example.bas",
 			errors: 0,
 			expected: `⚠️ TYPE MISMATCH: STRING EXPECTED IN 20 ()
 `,
 		},
 		{
 			name:   "Vars-04",
-			file:   "vars-04-example.bas",
+			file:   "variables/vars-04-example.bas",
 			errors: 0,
 			expected: `⚠️ TYPE MISMATCH: STRING EXPECTED IN 20 ()
 `,
 		},
 		{
 			name:   "Vars-05",
-			file:   "vars-05-example.bas",
+			file:   "variables/vars-05-example.bas",
 			errors: 0,
 			expected: `⚠️ TYPE MISMATCH: INTEGER EXPECTED IN 20 ()
 `,
 		},
 		{
 			name:   "Vars-06",
-			file:   "vars-06-example.bas",
+			file:   "variables/vars-06-example.bas",
 			errors: 0,
 			expected: `⚠️ TYPE MISMATCH: FLOAT EXPECTED IN 20 ()
 `,
 		},
 		{
 			name:   "Vars-07",
-			file:   "vars-07-example.bas",
+			file:   "variables/vars-07-example.bas",
 			errors: 0,
 			expected: `⚠️ TYPE MISMATCH IN 4 (*)
 `,
 		},
 		{
 			name:   "Vars-08",
-			file:   "vars-08-example.bas",
+			file:   "variables/vars-08-example.bas",
 			errors: 0,
 			expected: `⚠️ TYPE MISMATCH IN 4 (/)
 `,
 		},
 		{
 			name:   "Vars-09",
-			file:   "vars-09-example.bas",
+			file:   "variables/vars-09-example.bas",
 			errors: 0,
 			expected: `⚠️ TYPE MISMATCH IN 4 (^)
 `,
