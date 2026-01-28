@@ -1,0 +1,1 @@
+10 PRINT "Press a key from 0 to 9":GET A: PRINT A

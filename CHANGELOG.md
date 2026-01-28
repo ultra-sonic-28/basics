@@ -7,6 +7,7 @@ The format is based on Keep a Changelog (https://keepachangelog.com), and this p
 ### Added
 - Add `GET` support in Apple II Basic. Add relevant unit tests.
 - Add new `input` package to properly handle inputs in Ebiten, TTY and unit test modes.
+- Add support for real and integer variables in GET instruction
 
 ### Changed
 - Refactor input/output devices implementation.

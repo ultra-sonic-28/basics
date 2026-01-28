@@ -69,9 +69,9 @@ An integer or string variable must be followed by a `%` or `$` at each use of th
     * `INPUT` will accept only a real or an integer as numeric input, not an arithmetic expression. The characters space, +, -, E, and the period are legitimate parts of numeric input. `INPUT` will accept any of these characters or any concatenation of these characters in acceptable form (e.g. +E- is acceptable, +- is not); such input by itself evaluates as Ø.
     * In numeric input, spaces in any position are ignored. If numeric input which is not a real, an integer, a comma or a colon, the message `?REENTER` is displayed and the `INPUT` instruction re-executed.
     * Similarly, a response assigned to a string variable must be a single string or literal, not a string expression. Spaces preceding the first character are ignored.
-* `GET` var$
+* `GET` var$ | var | var%
     * Fetches a single character from the keyboard without displaying it on the screen and without requiring that the RETURN key be pressed.
-    * The character corresponding to the pressed key is assigned to the variable `var$`
+    * The character corresponding to the pressed key is assigned to the variable `var$` | `var%` | `var`
 
 ##### Flow Control
 * `FOR ... TO ... STEP ... NEXT`

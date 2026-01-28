@@ -753,16 +753,47 @@ func (i *Interpreter) execInput(s *parser.InputStmt) {
 
 func (i *Interpreter) execGet(s *parser.GetStmt) {
 	// lecture bloquante d'un caractère
-	ch, err := i.rt.ExecGet()
-	if err != nil {
-		i.rt.ExecError(err)
-		return
-	}
+	for {
+		ch, err := i.rt.ExecGet()
+		if err != nil {
+			i.rt.ExecError(err)
+			return
+		}
 
-	i.rt.Env.Set(s.Var.Name, runtime.Value{
-		Type: runtime.STRING,
-		Str:  string(ch),
-	})
+		if strings.HasSuffix(s.Var.Name, "$") {
+			i.rt.Env.Set(s.Var.Name, runtime.Value{
+				Type: runtime.STRING,
+				Str:  string(ch),
+			})
+
+			break
+		}
+
+		val := strings.TrimSpace(string(ch))
+
+		// NUMERIC variable
+		numStr := strings.ReplaceAll(val, " ", "")
+		num, err := strconv.ParseFloat(numStr, 64)
+		if err != nil {
+			i.rt.ExecPrint("\n?TYPE MISMATCH, REENTER\n")
+			continue
+		}
+
+		// INTEGER or NUMBER
+		if strings.HasSuffix(s.Var.Name, "%") {
+			i.rt.Env.Set(s.Var.Name, runtime.Value{
+				Type: runtime.INTEGER,
+				Int:  int(num),
+			})
+		} else {
+			i.rt.Env.Set(s.Var.Name, runtime.Value{
+				Type: runtime.NUMBER,
+				Num:  num,
+			})
+		}
+
+		break
+	}
 }
 
 // =======================

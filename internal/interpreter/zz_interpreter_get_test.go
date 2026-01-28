@@ -67,6 +67,15 @@ func TestGET_TableDriven(t *testing.T) {
 			input: "K",
 			want:  "Key was: K\n",
 		},
+		{
+			name: "GET single character from 0 to 9",
+			program: `
+10 GET A
+20 PRINT A
+`,
+			input: "7",
+			want:  "7\n",
+		},
 	}
 
 	rt, _ := machines.NewRuntime(constants.BASIC_TTY)
