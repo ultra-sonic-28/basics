@@ -5,6 +5,7 @@ import (
 	"bufio"
 	"fmt"
 	"io"
+	"os"
 	"strings"
 )
 
@@ -41,9 +42,9 @@ func (t *TTYDevice) PrintChar(r rune) {
 
 func (t *TTYDevice) Plot(x, y int) {}
 
-func (v *TTYDevice) SetCursorX(x int) {}
+func (t *TTYDevice) SetCursorX(x int) {}
 
-func (v *TTYDevice) SetCursorY(y int) {}
+func (t *TTYDevice) SetCursorY(y int) {}
 
 func (t *TTYDevice) Clear() {
 	t.buffer = nil
@@ -51,7 +52,6 @@ func (t *TTYDevice) Clear() {
 }
 
 func (t *TTYDevice) Render() {
-	//fmt.Print(string(t.buffer))
 	fmt.Fprint(t.out, string(t.buffer))
 	t.buffer = nil
 }
@@ -64,3 +64,11 @@ func (t *TTYDevice) ReadLine() (string, error) {
 
 	return strings.TrimRight(line, "\r\n"), err
 }
+
+func (t *TTYDevice) GetChar() (rune, error) {
+	reader := bufio.NewReader(os.Stdin)
+	r, _, err := reader.ReadRune()
+	return r, err
+}
+
+func (t *TTYDevice) DisableKeyboard() {}

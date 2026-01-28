@@ -36,6 +36,10 @@ func dumpStatement(s Statement, indent string, emit Emitter) {
 			emit(fmt.Sprintf("  VAR %d: %s", i, v.Name))
 		}
 
+	case *GetStmt:
+		emit(fmt.Sprintf("%sGET %s", indent, stmt.Var.Name))
+		//dumpExpr(stmt.Var, indent+"    ", emit)
+
 	case *PrintStmt:
 		emit(indent + "PRINT")
 		for i, expr := range stmt.Exprs {

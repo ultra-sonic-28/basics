@@ -9,6 +9,7 @@ import (
 
 	"basics/internal/common"
 	"basics/internal/constants"
+	"basics/internal/input"
 	"basics/internal/lexer"
 	"basics/internal/machines"
 	"basics/internal/parser"
@@ -849,7 +850,8 @@ A$=A String Another one
 			testutils.True(t, "runtime ok", err == nil)
 
 			out := &bytes.Buffer{}
-			rt.SetOutput(out)
+			rt.Input = input.NewTTYInput(os.Stdin, out)
+			rt.Video.SetOutput(out)
 
 			interp := New(rt)
 			interp.Run(prog)

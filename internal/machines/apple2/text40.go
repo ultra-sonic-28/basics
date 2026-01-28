@@ -26,13 +26,21 @@ type Text40 struct {
 	in  *bufio.Reader
 	out io.Writer
 
+	// For INPUT
 	inputBuffer []rune
 	lineReady   bool
+
+	// For GET
+	getActive bool
+	getChan   chan rune
 
 	// Blinking cursor
 	cursorVisible bool
 	blinkCounter  int
 	inInput       bool
+
+	// Input is allowed
+	allowInput bool
 }
 
 func NewText40(renderer video.Renderer) *Text40 {
@@ -50,6 +58,7 @@ func NewText40(renderer video.Renderer) *Text40 {
 		out:         io.Discard,
 		inputBuffer: make([]rune, 0, 64),
 		lineReady:   false,
+		allowInput:  false,
 	}
 }
 
@@ -103,6 +112,8 @@ func (t *Text40) SetOutput(w io.Writer) {
 
 func (t *Text40) Update() error {
 	if !t.inInput {
+		t.cursorVisible = false
+		t.blinkCounter = 0
 		return nil
 	}
 
@@ -167,32 +178,91 @@ func (t *Text40) ReadLine() (string, error) {
 }
 
 func (t *Text40) InputRune(r rune) {
+	if !t.allowInput {
+		return
+	}
+
+	t.eraseCursorIfVisible()
+
 	t.inputBuffer = append(t.inputBuffer, r)
 	t.Mode.PutChar(r)
 }
 
 func (t *Text40) Backspace() {
-	if len(t.inputBuffer) == 0 {
+	if !t.allowInput || len(t.inputBuffer) == 0 {
 		return
 	}
 
-	t.inputBuffer = t.inputBuffer[:len(t.inputBuffer)-1]
-	t.cursorVisible = false
+	t.eraseCursorIfVisible()
 	t.Mode.Backspace()
+
+	t.inputBuffer = t.inputBuffer[:len(t.inputBuffer)-1]
 }
 
 func (t *Text40) Enter() {
+	if !t.allowInput {
+		return
+	}
+
+	t.eraseCursorIfVisible()
 	t.EndInput()
 	t.lineReady = true
 }
 
 func (t *Text40) BeginInput() {
 	t.inInput = true
+	t.allowInput = true
 	t.cursorVisible = true
 	t.blinkCounter = 0
 }
 
 func (t *Text40) EndInput() {
+	t.eraseCursorIfVisible()
 	t.inInput = false
+	t.allowInput = false
 	t.cursorVisible = false
+}
+
+func (t *Text40) BeginGet() {
+	t.getActive = true
+	t.getChan = make(chan rune, 1)
+}
+
+func (t *Text40) EndGet() {
+	t.getActive = false
+}
+
+func (t *Text40) PushGetRune(r rune) {
+	if t.getActive {
+		select {
+		case t.getChan <- r:
+		default:
+		}
+	}
+}
+
+func (t *Text40) GetChar() (rune, error) {
+	t.BeginGet()
+	r := <-t.getChan
+	t.EndGet()
+	return r, nil
+}
+
+func (t *Text40) IsGetActive() bool {
+	return t.getActive
+}
+
+func (t *Text40) eraseCursorIfVisible() {
+	if t.inInput && t.cursorVisible {
+		// remplacer le curseur par un espace
+		t.Mode.PutChar(' ')
+		t.SetCursorX(t.Mode.CursorX() - 1)
+		t.cursorVisible = false
+		t.blinkCounter = 0
+	}
+}
+
+func (t *Text40) DisableKeyboard() {
+	t.allowInput = false
+	t.inInput = false
 }

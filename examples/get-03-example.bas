@@ -1,0 +1,2 @@
+10 GET A$
+20 PRINT A$

@@ -67,20 +67,40 @@ func (a *EbitenApp) handleInput() {
 	}
 
 	// caractères imprimables
-	for _, r := range ebiten.InputChars() {
+	/* for _, r := range ebiten.InputChars() {
+		if r == '\r' || r == '\n' {
+			continue
+		}
 		if r >= 32 && r <= 126 {
 			t.InputRune(r)
+		} else {
+			continue
 		}
+	} */
+	for _, r := range ebiten.InputChars() {
+		if r < 32 || r > 126 {
+			continue
+		}
+
+		// 🔴 MODE GET
+		if t.IsGetActive() {
+			t.PushGetRune(r)
+			return // 👈 STOP : 1 touche suffit
+		}
+
+		// 🟢 MODE INPUT
+		t.InputRune(r)
 	}
 
-	// BACKSPACE (edge-triggered)
-	if a.keyJustPressed(ebiten.KeyBackspace) {
+	// BACKSPACE uniquement en INPUT
+	if !t.IsGetActive() && a.keyJustPressed(ebiten.KeyBackspace) {
 		t.Backspace()
 	}
 
-	// ENTER (edge-triggered)
-	if a.keyJustPressed(ebiten.KeyEnter) ||
-		a.keyJustPressed(ebiten.KeyNumpadEnter) {
+	// ENTER uniquement en INPUT
+	if !t.IsGetActive() &&
+		(a.keyJustPressed(ebiten.KeyEnter) ||
+			a.keyJustPressed(ebiten.KeyNumpadEnter)) {
 		t.Enter()
 	}
 }

@@ -150,6 +150,9 @@ func (p *Parser) parseStatement(lineNum int) Statement {
 		case "INPUT":
 			return p.parseInput()
 
+		case "GET":
+			return p.parseGet()
+
 		case "FOR":
 			return p.parseFor(lineNum)
 
@@ -284,6 +287,27 @@ func (p *Parser) parseInput() Statement {
 		Line:   line,
 		Column: col,
 	}
+}
+
+func (p *Parser) parseGet() *GetStmt {
+	stmt := &GetStmt{}
+
+	p.next() // consomme GET
+
+	if p.curr.Type != token.IDENT {
+		p.syntaxError("EXPECTED IDENTIFIER AFTER GET")
+		return nil
+	}
+
+	stmt.Var = &Identifier{
+		Name:   p.curr.Literal,
+		Line:   p.curr.Line,
+		Column: p.curr.Column,
+		Token:  p.curr.Literal,
+	}
+
+	p.next()
+	return stmt
 }
 
 func (p *Parser) parseGosub(lineNum int) Statement {

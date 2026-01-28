@@ -1,0 +1,1 @@
+10 PRINT "Press key":GET A$:PRINT "You press '";A$;"' key"

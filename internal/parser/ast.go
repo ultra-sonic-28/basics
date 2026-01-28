@@ -38,6 +38,12 @@ type InputStmt struct {
 
 func (*InputStmt) stmtNode() {}
 
+type GetStmt struct {
+	Var *Identifier
+}
+
+func (*GetStmt) stmtNode() {}
+
 // LET
 type LetStmt struct {
 	Name  string

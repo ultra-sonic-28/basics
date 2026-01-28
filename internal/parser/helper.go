@@ -8,6 +8,8 @@ func StmtName(s Statement) string {
 		return "HOME"
 	case *InputStmt:
 		return "INPUT"
+	case *GetStmt:
+		return "GET"
 	case *PrintStmt:
 		return "PRINT"
 	case *LetStmt:
@@ -54,6 +56,8 @@ func StmtArgs(s Statement) string {
 		return " ->"
 	case *LetStmt:
 		return fmt.Sprintf(" %s ->", stmt.Name)
+	case *GetStmt:
+		return fmt.Sprintf(" %s ->", stmt.Var.Name)
 	case *ForStmt:
 		return fmt.Sprintf(" %s", stmt.Var)
 	case *NextStmt:

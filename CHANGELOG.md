@@ -3,6 +3,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog (https://keepachangelog.com), and this project adheres to Semantic Versioning (https://semver.org).
 
+## [Unreleased] - 2026-01-28
+### Added
+- Add `GET` support in Apple II Basic. Add relevant unit tests.
+- Add new `input` package to properly handle inputs in Ebiten, TTY and unit test modes.
+
+### Changed
+- Refactor input/output devices implementation.
+
+### Fixed
+- Disable keyboard input after program ended
+- Fix blinking cursor when hitting backspace or enter keys
+
 ## [Unreleased] - 2026-01-27
 ### Added
 - Add blinking cursor support using Ebiten in Apple II Basic.

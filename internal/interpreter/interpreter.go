@@ -284,6 +284,14 @@ func (i *Interpreter) Run(prog *parser.Program) {
 			i.execInput(s)
 
 		// -----------------------
+		// GET
+		// -----------------------
+		case *parser.GetStmt:
+			i.execGet(s)
+			val, _ := i.rt.Env.Get(s.Var.Name)
+			sExpr = val.Str
+
+		// -----------------------
 		// PRINT
 		// -----------------------
 		case *parser.PrintStmt:
@@ -626,6 +634,10 @@ func (i *Interpreter) execInline(line int, stmt parser.Statement, pc int) int {
 		i.rt.Env.Set(s.Name, val)
 		return pc + 1
 
+	case *parser.GetStmt:
+		i.execGet(s)
+		return pc + 1
+
 	case *parser.PrintStmt:
 		//i.rt.ExecPrint(s.Exprs[0].(*parser.StringLiteral).Value)
 		//i.rt.ExecPrint("\n")
@@ -735,6 +747,22 @@ func (i *Interpreter) execInput(s *parser.InputStmt) {
 		//i.rt.ExecPrint("\n")
 		break
 	}
+
+	i.rt.DisableKeyboard()
+}
+
+func (i *Interpreter) execGet(s *parser.GetStmt) {
+	// lecture bloquante d'un caractère
+	ch, err := i.rt.ExecGet()
+	if err != nil {
+		i.rt.ExecError(err)
+		return
+	}
+
+	i.rt.Env.Set(s.Var.Name, runtime.Value{
+		Type: runtime.STRING,
+		Str:  string(ch),
+	})
 }
 
 // =======================

@@ -10,6 +10,7 @@ import (
 	"basics/internal/app"
 	"basics/internal/binary"
 	"basics/internal/constants"
+	"basics/internal/input"
 	"basics/internal/interpreter"
 	"basics/internal/lexer"
 	"basics/internal/logger"
@@ -180,8 +181,7 @@ func main() {
 	// Mode Terminal (for test and debug purpose)
 	// --------------------
 	if basicType == constants.BASIC_TTY {
-		rt.SetInput(os.Stdin)
-		rt.SetOutput(os.Stdout)
+		rt.Input = input.NewTTYInput(os.Stdin, os.Stdout)
 		interp.Run(prog)
 		return
 	}

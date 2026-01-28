@@ -1,12 +1,18 @@
 package runtime
 
 import (
+	"basics/internal/input"
 	"basics/internal/video"
 	"io"
 )
 
+type InputDevice interface {
+	GetChar() (rune, error)
+}
+
 type Runtime struct {
 	Video  video.Device
+	Input  input.Device
 	Env    *Environment
 	halted bool
 }
@@ -18,31 +24,37 @@ func New(video video.Device) *Runtime {
 	}
 }
 
-func (r *Runtime) SetInput(in io.Reader) {
-	r.Video.SetInput(in)
-}
-
 func (r *Runtime) SetOutput(out io.Writer) {
 	r.Video.SetOutput(out)
 }
 
-// runtime/runtime.go
 func (rt *Runtime) ExecError(err error) {
 	rt.Video.PrintString(err.Error())
 	rt.Video.PrintString("\n")
 	rt.Video.Render()
 }
 
-func (r *Runtime) Halt() {
-	r.halted = true
+func (rt *Runtime) Halt() {
+	rt.halted = true
 }
 
-func (r *Runtime) IsHalted() bool {
-	return r.halted
+func (rt *Runtime) IsHalted() bool {
+	return rt.halted
 }
 
 func (rt *Runtime) ExecInput() (string, error) {
+	if rt.Input != nil {
+		return rt.Input.ReadLine()
+	}
+
 	return rt.Video.ReadLine()
+}
+
+func (rt *Runtime) ExecGet() (rune, error) {
+	if rt.Input != nil {
+		return rt.Input.GetChar()
+	}
+	return rt.Video.GetChar()
 }
 
 func (rt *Runtime) ExecPrint(value string) {
@@ -67,4 +79,8 @@ func (rt *Runtime) ExecHome() {
 	rt.Video.Clear()
 	rt.Video.SetCursorX(0)
 	rt.Video.SetCursorY(0)
+}
+
+func (rt *Runtime) DisableKeyboard() {
+	rt.Video.DisableKeyboard()
 }

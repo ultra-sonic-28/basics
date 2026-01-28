@@ -2,6 +2,7 @@ package interpreter
 
 import (
 	"basics/internal/constants"
+	"basics/internal/input"
 	"basics/internal/lexer"
 	"basics/internal/machines"
 	"basics/internal/parser"
@@ -97,12 +98,12 @@ func TestINPUT_TableDriven(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			in := bytes.NewBufferString(tc.input)
+			in := input.NewFakeInput(tc.input)
 			out := &bytes.Buffer{}
 
 			// connecter le runtime au test lors de son exécution
 			// objectif : passer la saisie au programme et récupérer la sortie de celui-ci
-			rt.SetInput(in)
+			rt.Input = in
 			rt.SetOutput(out)
 
 			i := New(rt)

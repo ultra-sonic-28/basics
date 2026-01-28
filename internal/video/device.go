@@ -15,10 +15,11 @@ type Device interface {
 	Plot(x, y int)
 
 	ReadLine() (string, error)
+	GetChar() (rune, error)
 
 	// --- I/O ---
-	SetInput(r io.Reader)
 	SetOutput(w io.Writer)
+	DisableKeyboard()
 
 	// --- Rendu ---
 	Render()
