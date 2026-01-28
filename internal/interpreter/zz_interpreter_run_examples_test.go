@@ -356,6 +356,14 @@ Last line
 `,
 		},
 		{
+			name:   "Home-02",
+			file:   "display/home-02-example.bas",
+			errors: 0,
+			expected: `A
+B
+`,
+		},
+		{
 			name:   "HtabVtab-01",
 			file:   "tabs/htab-vtab-01-example.bas",
 			errors: 0,
@@ -381,6 +389,27 @@ Last line
 3
 0
 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+`,
+		},
+		{
+			name:   "HtabVtab-02",
+			file:   "tabs/htab-vtab-02-example.bas",
+			errors: 0,
+			expected: `1
 2
 3
 4
