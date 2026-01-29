@@ -51,6 +51,10 @@ An integer or string variable must be followed by a `%` or `$` at each use of th
     * Moves the cursor to the position that is `aexpr` positions from the left edge of the current screen line.
 * `VTAB`
     * Moves the cursor to the line that is `aexpr` lines down on the screen. The top line is line l; the bottom line is line 24. This statement may involve moving the cursor either up or down, but never to the right or left.
+* `NORMAL`
+    * Sets the mode to the usual white letters on a black background.
+* `INVERSE`
+    * Sets the video mode so that the computer's output prints as black letters on a white background.
 
 ##### Input / Output
 * `PRINT`

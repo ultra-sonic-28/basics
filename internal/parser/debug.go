@@ -111,6 +111,12 @@ func dumpStatement(s Statement, indent string, emit Emitter) {
 	case *EndStmt:
 		emit(indent + "END")
 
+	case *NormalStmt:
+		emit(indent + "NORMAL")
+
+	case *InverseStmt:
+		emit(indent + "INVERSE")
+
 	case nil:
 		// REM / instruction vide
 

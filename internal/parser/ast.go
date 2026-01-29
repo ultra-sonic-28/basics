@@ -91,6 +91,30 @@ type EndStmt struct {
 
 func (*EndStmt) stmtNode() {}
 
+// NORMAL
+type NormalStmt struct {
+	Line   int
+	Column int
+}
+
+func (*NormalStmt) stmtNode() {}
+
+func (s *NormalStmt) Pos() (int, int, string) {
+	return s.Line, s.Column, "NORMAL"
+}
+
+// INVERSE
+type InverseStmt struct {
+	Line   int
+	Column int
+}
+
+func (*InverseStmt) stmtNode() {}
+
+func (s *InverseStmt) Pos() (int, int, string) {
+	return s.Line, s.Column, "INVERSE"
+}
+
 // =======================
 // HOME
 // =======================

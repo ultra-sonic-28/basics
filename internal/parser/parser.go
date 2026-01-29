@@ -213,6 +213,22 @@ func (p *Parser) parseStatement(lineNum int) Statement {
 			p.next()
 			return &EndStmt{}
 
+		case "NORMAL":
+			stmt := &NormalStmt{
+				Line:   p.curr.Line,
+				Column: p.curr.Column,
+			}
+			p.next()
+			return stmt
+
+		case "INVERSE":
+			stmt := &InverseStmt{
+				Line:   p.curr.Line,
+				Column: p.curr.Column,
+			}
+			p.next()
+			return stmt
+
 		default:
 			p.syntaxError("UNKNOWN KEYWORD")
 			p.next()

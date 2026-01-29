@@ -339,6 +339,17 @@ func (i *Interpreter) Run(prog *parser.Program) {
 			}
 
 		// -----------------------
+		// NORMAL / INVERSE
+		// -----------------------
+		case *parser.NormalStmt:
+			//i.textInverse = false
+			i.rt.SetInverse(false)
+
+		case *parser.InverseStmt:
+			//i.textInverse = true
+			i.rt.SetInverse(true)
+
+		// -----------------------
 		// HTAB / VTAB
 		// -----------------------
 		case *parser.HTabStmt:

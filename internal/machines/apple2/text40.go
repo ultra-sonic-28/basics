@@ -41,6 +41,9 @@ type Text40 struct {
 
 	// Input is allowed
 	allowInput bool
+
+	// Printing in normal or inverse mode
+	inverse bool
 }
 
 func NewText40(renderer video.Renderer) *Text40 {
@@ -59,6 +62,7 @@ func NewText40(renderer video.Renderer) *Text40 {
 		inputBuffer: make([]rune, 0, 64),
 		lineReady:   false,
 		allowInput:  false,
+		inverse:     false,
 	}
 }
 
@@ -92,6 +96,11 @@ func (t *Text40) Plot(x, y int) {
 
 func (t *Text40) Render() {
 	t.Mode.Render()
+}
+
+func (t *Text40) SetInverse(v bool) {
+	t.inverse = v
+	t.Mode.SetInverse(v)
 }
 
 // --------------------

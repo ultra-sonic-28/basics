@@ -84,3 +84,7 @@ func (rt *Runtime) ExecHome() {
 func (rt *Runtime) DisableKeyboard() {
 	rt.Video.DisableKeyboard()
 }
+
+func (rt *Runtime) SetInverse(v bool) {
+	rt.Video.SetInverse(v)
+}

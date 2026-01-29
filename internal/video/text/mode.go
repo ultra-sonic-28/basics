@@ -14,6 +14,9 @@ type TextMode struct {
 
 	FG int
 	BG int
+
+	// Printing in normal or inverse mode
+	inverse bool
 }
 
 func NewTextMode(
@@ -32,6 +35,7 @@ func NewTextMode(
 		CellH:    cellH,
 		FG:       fg,
 		BG:       bg,
+		inverse:  false,
 	}
 }
 
@@ -51,6 +55,10 @@ func (t *TextMode) SetCursor(x, y int) {
 	if y >= 0 && y < t.Buffer.Rows {
 		t.Buffer.CursorY = y
 	}
+}
+
+func (t *TextMode) SetInverse(v bool) {
+	t.inverse = v
 }
 
 func (t *TextMode) Home() {
@@ -86,11 +94,20 @@ func (t *TextMode) Print(s string) {
 	}
 }
 
+func (t *TextMode) currentColors(fgCell, bgCell int) (fg, bg int) {
+	if t.inverse {
+		return bgCell, fgCell
+	}
+	return fgCell, bgCell
+}
+
 func (t *TextMode) putGlyph(r rune) {
 	x := t.Buffer.CursorX
 	y := t.Buffer.CursorY
 
-	t.Buffer.SetCell(x, y, r, t.FG, t.BG)
+	fg, bg := t.currentColors(t.FG, t.BG)
+
+	t.Buffer.SetCell(x, y, r, fg, bg)
 
 	t.Buffer.CursorX++
 	if t.Buffer.CursorX >= t.Buffer.Cols {

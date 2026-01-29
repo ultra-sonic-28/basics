@@ -2,6 +2,7 @@ package testutils
 
 import (
 	"fmt"
+	"reflect"
 	"testing"
 )
 
@@ -19,6 +20,19 @@ func Equal[T comparable](t *testing.T, msg string, got T, want T) {
 		wantStr := fmt.Sprintf("%v", want)
 
 		t.Fatalf("%s got=%q want=%q", msg, gotStr, wantStr)
+	}
+
+	RecordAssertion(t)
+}
+
+func DeepEqual[T any](t *testing.T, msg string, got, want T) {
+	t.Helper()
+
+	if !reflect.DeepEqual(got, want) {
+		if msg == "" {
+			msg = "assert.DeepEqual failed:"
+		}
+		t.Fatalf("%s got=%v want=%v", msg, got, want)
 	}
 
 	RecordAssertion(t)

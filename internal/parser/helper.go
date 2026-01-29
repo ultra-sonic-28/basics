@@ -34,6 +34,10 @@ func StmtName(s Statement) string {
 		return "HTAB"
 	case *VTabStmt:
 		return "VTAB"
+	case *NormalStmt:
+		return "NORMAL"
+	case *InverseStmt:
+		return "INVERSE"
 	default:
 		return "UNKNOWN"
 	}

@@ -1,6 +1,7 @@
 package interpreter
 
 import (
+	"basics/internal/common"
 	"basics/internal/constants"
 	"basics/internal/input"
 	"basics/internal/lexer"
@@ -97,7 +98,7 @@ func TestGET_TableDriven(t *testing.T) {
 
 			i.Run(prog)
 
-			got := out.String()
+			got := common.StripANSI(out.String())
 			testutils.True(
 				t,
 				fmt.Sprintf(

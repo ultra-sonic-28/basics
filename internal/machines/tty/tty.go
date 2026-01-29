@@ -10,15 +10,17 @@ import (
 )
 
 type TTYDevice struct {
-	buffer []rune
-	in     *bufio.Reader
-	out    io.Writer
+	buffer  []rune
+	in      *bufio.Reader
+	out     io.Writer
+	inverse bool
 }
 
 func New(in io.Reader, out io.Writer) video.Device {
 	return &TTYDevice{
-		in:  bufio.NewReader(in),
-		out: out,
+		in:      bufio.NewReader(in),
+		out:     out,
+		inverse: false,
 	}
 }
 
@@ -52,7 +54,13 @@ func (t *TTYDevice) Clear() {
 }
 
 func (t *TTYDevice) Render() {
-	fmt.Fprint(t.out, string(t.buffer))
+	if t.inverse {
+		fmt.Fprintf(t.out, "\033[7m%s", string(t.buffer)) // inverse video
+	} else {
+		fmt.Fprintf(t.out, "\033[27m%s", string(t.buffer)) // normal
+	}
+
+	//fmt.Fprint(t.out, string(t.buffer))
 	t.buffer = nil
 }
 
@@ -72,3 +80,7 @@ func (t *TTYDevice) GetChar() (rune, error) {
 }
 
 func (t *TTYDevice) DisableKeyboard() {}
+
+func (t *TTYDevice) SetInverse(v bool) {
+	t.inverse = v
+}

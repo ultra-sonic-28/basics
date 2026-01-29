@@ -607,6 +607,28 @@ All done!
 `,
 		},
 		{
+			name:   "NormalInverse-01",
+			file:   "display/normal-inverse-01-example.bas",
+			errors: 0,
+			expected: `HELLO
+WORLD
+`,
+		},
+		{
+			name:   "NormalInverse-02",
+			file:   "display/normal-inverse-02-example.bas",
+			errors: 0,
+			expected: `HELLO WORLD!
+`,
+		},
+		{
+			name:   "NormalInverse-03",
+			file:   "display/normal-inverse-03-example.bas",
+			errors: 0,
+			expected: `HELLO WORLD!
+`,
+		},
+		{
 			name:   "Primes-01",
 			file:   "programs/maths/primes-01-example.bas",
 			errors: 0,

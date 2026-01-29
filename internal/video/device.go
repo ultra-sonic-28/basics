@@ -6,6 +6,7 @@ import "io"
 type Device interface {
 	// --- API BASIC ---
 	Clear()
+	SetInverse(v bool)
 	PrintChar(r rune)
 	PrintString(s string)
 
