@@ -237,6 +237,14 @@ func (p *Parser) parseStatement(lineNum int) Statement {
 			p.next()
 			return stmt
 
+		case "CLEAR":
+			stmt := &ClearStmt{
+				Line:   p.curr.Line,
+				Column: p.curr.Column,
+			}
+			p.next()
+			return stmt
+
 		default:
 			p.syntaxError("UNKNOWN KEYWORD")
 			p.next()

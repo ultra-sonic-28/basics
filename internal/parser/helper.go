@@ -40,6 +40,8 @@ func StmtName(s Statement) string {
 		return "INVERSE"
 	case *FlashStmt:
 		return "FLASH"
+	case *ClearStmt:
+		return "CLEAR"
 	default:
 		return "UNKNOWN"
 	}

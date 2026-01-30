@@ -120,6 +120,9 @@ func dumpStatement(s Statement, indent string, emit Emitter) {
 	case *FlashStmt:
 		emit(indent + "FLASH")
 
+	case *ClearStmt:
+		emit(indent + "CLEAR")
+
 	case nil:
 		// REM / instruction vide
 

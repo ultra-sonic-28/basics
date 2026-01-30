@@ -193,6 +193,21 @@ func TestFlashStmt_Pos(t *testing.T) {
 }
 
 // ////////////////////////////////////
+// CLEAR
+// ////////////////////////////////////
+func TestClearStmt_Pos(t *testing.T) {
+	h := &ClearStmt{
+		Line:   12,
+		Column: 3,
+	}
+
+	line, col, tok := h.Pos()
+	testutils.Equal(t, "line", line, 12)
+	testutils.Equal(t, "column", col, 3)
+	testutils.Equal(t, "token", tok, "CLEAR")
+}
+
+// ////////////////////////////////////
 // HOME / HTAB / VTAB
 // ////////////////////////////////////
 func TestHomeStmt_Pos(t *testing.T) {

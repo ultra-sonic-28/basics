@@ -357,6 +357,12 @@ func (i *Interpreter) Run(prog *parser.Program) {
 			i.rt.SetFlash(true)
 
 		// -----------------------
+		// CLEAR
+		// -----------------------
+		case *parser.ClearStmt:
+			i.rt.Clear()
+
+		// -----------------------
 		// HTAB / VTAB
 		// -----------------------
 		case *parser.HTabStmt:

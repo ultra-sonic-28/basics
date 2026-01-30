@@ -90,6 +90,11 @@ func TestDumpStatement(t *testing.T) {
 			expected: "END\n",
 		},
 		{
+			name:     "ClearStmt",
+			stmt:     &ClearStmt{},
+			expected: "CLEAR\n",
+		},
+		{
 			name: "ForStmt without Step",
 			stmt: &ForStmt{
 				Var:     "I",

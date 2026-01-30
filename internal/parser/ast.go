@@ -142,6 +142,20 @@ func (s *HomeStmt) Pos() (int, int, string) {
 	return s.Line, s.Column, "HOME"
 }
 
+// =======================
+// CLEAR
+// =======================
+type ClearStmt struct {
+	Line   int
+	Column int
+}
+
+func (*ClearStmt) stmtNode() {}
+
+func (s *ClearStmt) Pos() (int, int, string) {
+	return s.Line, s.Column, "CLEAR"
+}
+
 // =========================
 // Flow control
 // =========================

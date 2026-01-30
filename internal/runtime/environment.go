@@ -52,3 +52,23 @@ func (v Value) String() string {
 
 	return fmt.Sprintf("%f", v.Num)
 }
+
+func (e *Environment) Clear() {
+	for name, v := range e.vars {
+		switch v.Type {
+		case NUMBER:
+			v.Num = 0
+
+		case INTEGER:
+			v.Int = 0
+
+		case STRING:
+			v.Str = ""
+
+		case BOOLEAN:
+			v.Flag = false
+		}
+
+		e.vars[name] = v
+	}
+}

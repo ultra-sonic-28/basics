@@ -115,6 +115,18 @@ func TestExamplesExecution(t *testing.T) {
 `,
 		},
 		{
+			name:   "Clear-01",
+			file:   "variables/clear-01-example.bas",
+			errors: 0,
+			expected: `A=1.5
+A%=1
+A$=A String
+A=0
+A%=0
+A$=
+`,
+		},
+		{
 			name:   "End-01",
 			file:   "flow_control/end-01-example.bas",
 			errors: 0,

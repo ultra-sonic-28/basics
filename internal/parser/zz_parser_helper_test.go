@@ -147,6 +147,11 @@ func TestStmtArgs(t *testing.T) {
 			expected: "",
 		},
 		{
+			name:     "NO_ARGS_CLEAR",
+			stmt:     &ClearStmt{},
+			expected: "",
+		},
+		{
 			name:     "UNKNOWN",
 			stmt:     nil,
 			expected: "",

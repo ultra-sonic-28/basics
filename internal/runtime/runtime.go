@@ -92,3 +92,7 @@ func (rt *Runtime) SetInverse(v bool) {
 func (rt *Runtime) SetFlash(v bool) {
 	rt.Video.SetFlash(v)
 }
+
+func (rt *Runtime) Clear() {
+	rt.Env.Clear()
+}

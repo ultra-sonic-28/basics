@@ -9,7 +9,7 @@ var Keywords = map[string]bool{
 
 	// Variables & logique
 	"LET": true, "DIM": true,
-	"REM": true,
+	"REM": true, "CLEAR": true,
 
 	// I/O
 	"PRINT": true, "INPUT": true,

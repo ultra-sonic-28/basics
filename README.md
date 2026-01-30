@@ -57,6 +57,8 @@ An integer or string variable must be followed by a `%` or `$` at each use of th
     * Sets the video mode so that the computer's output prints as black letters on a white background.
 * `FLASH`
     * Sets the video mode to "flashing", so the output from the computer is alternately shown on the screen in white on black and then reversed to black on white.
+* `CLEAR`
+    * Zeroes all float, integer and strings variables.
 
 ##### Input / Output
 * `PRINT`
