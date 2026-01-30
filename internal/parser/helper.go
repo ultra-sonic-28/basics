@@ -38,6 +38,8 @@ func StmtName(s Statement) string {
 		return "NORMAL"
 	case *InverseStmt:
 		return "INVERSE"
+	case *FlashStmt:
+		return "FLASH"
 	default:
 		return "UNKNOWN"
 	}
