@@ -6,6 +6,7 @@ The format is based on Keep a Changelog (https://keepachangelog.com), and this p
 ## [Unreleased] - 2026-01-30
 ### Added
 - Add `FLASH` support in Apple II Basic. Add relevant unit tests.
+- Add `CLEAR` support in Apple II Basic. Add relevant unit tests.
 
 ### Fixed
 - Add missing unit tests for parser helper.
