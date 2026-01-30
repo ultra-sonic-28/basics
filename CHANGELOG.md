@@ -13,6 +13,7 @@ The format is based on Keep a Changelog (https://keepachangelog.com), and this p
 - Add missing unit tests for parser debug functions.
 - Add missing unit tests for interpreter when running programs.
 - Add renderer's interface unit tests for video package.
+- Add provider's interface unit tests for video package.
 
 ## [Unreleased] - 2026-01-29
 ### Added
