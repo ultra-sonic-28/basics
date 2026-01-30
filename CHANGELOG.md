@@ -18,6 +18,7 @@ The format is based on Keep a Changelog (https://keepachangelog.com), and this p
 - Add EbitenDevice interface unit tests for video package.
 - Add Device interface unit tests for video package.
 - Add unit tests for font package (DefaultFont).
+- Add unit tests for font package (BitmapFont struct and Glyph function).
 
 ## [Unreleased] - 2026-01-29
 ### Added
