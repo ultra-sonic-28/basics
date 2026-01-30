@@ -3,6 +3,7 @@ package testutils
 import (
 	"fmt"
 	"reflect"
+	"strings"
 	"testing"
 )
 
@@ -51,6 +52,24 @@ func NotEqual[T comparable](t *testing.T, msg string, got T, want T) {
 		gotStr := fmt.Sprintf("%v", got)
 
 		t.Fatalf("%s value=%q", msg, gotStr)
+	}
+
+	RecordAssertion(t)
+}
+
+// Contains échoue le test si got n'est pas contenu dans want
+func Contains(t *testing.T, msg string, got string, want string) {
+	t.Helper()
+
+	if !strings.Contains(want, got) {
+		if msg == "" {
+			msg = "assert.Contains failed:"
+		}
+
+		gotStr := fmt.Sprintf("%v", got)
+		wantStr := fmt.Sprintf("%v", want)
+
+		t.Fatalf("%s got=%q not in want=%q", msg, gotStr, wantStr)
 	}
 
 	RecordAssertion(t)
