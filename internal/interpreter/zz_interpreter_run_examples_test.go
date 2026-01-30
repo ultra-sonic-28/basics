@@ -170,6 +170,29 @@ All done!
 `,
 		},
 		{
+			name:   "Flash-01",
+			file:   "display/flash-01-example.bas",
+			errors: 0,
+			expected: `HELLO
+WORLD
+`,
+		},
+		{
+			name:   "Flash-02",
+			file:   "display/flash-02-example.bas",
+			errors: 0,
+			expected: `HELLO WORLD!
+`,
+		},
+		{
+			name:   "Flash-03",
+			file:   "display/flash-03-example.bas",
+			errors: 0,
+			expected: `HELLO WORLD!
+This is the End..
+`,
+		},
+		{
 			name:   "For-01",
 			file:   "flow_control/for-01-example.bas",
 			errors: 0,
