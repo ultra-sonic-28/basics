@@ -115,6 +115,18 @@ func (s *InverseStmt) Pos() (int, int, string) {
 	return s.Line, s.Column, "INVERSE"
 }
 
+// FLASH
+type FlashStmt struct {
+	Line   int
+	Column int
+}
+
+func (*FlashStmt) stmtNode() {}
+
+func (s *FlashStmt) Pos() (int, int, string) {
+	return s.Line, s.Column, "FLASH"
+}
+
 // =======================
 // HOME
 // =======================

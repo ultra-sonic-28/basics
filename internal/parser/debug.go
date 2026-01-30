@@ -117,6 +117,9 @@ func dumpStatement(s Statement, indent string, emit Emitter) {
 	case *InverseStmt:
 		emit(indent + "INVERSE")
 
+	case *FlashStmt:
+		emit(indent + "FLASH")
+
 	case nil:
 		// REM / instruction vide
 

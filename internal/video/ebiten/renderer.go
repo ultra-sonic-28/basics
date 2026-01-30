@@ -17,6 +17,8 @@ type Renderer struct {
 
 	framebuffer *image.RGBA
 	font        *font.BitmapFont
+
+	FrameCounter int
 }
 
 func New(
@@ -92,4 +94,8 @@ func (r *Renderer) BlitTo(screen *ebiten.Image) {
 	op := &ebiten.DrawImageOptions{}
 	op.GeoM.Scale(float64(r.scale), float64(r.scale))
 	screen.DrawImage(img, op)
+}
+
+func (r *Renderer) NextFrame() {
+	r.FrameCounter++
 }

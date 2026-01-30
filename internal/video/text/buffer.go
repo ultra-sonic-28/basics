@@ -34,6 +34,7 @@ func (t *TextBuffer) Clear() {
 			Glyph: ' ',
 			FG:    t.DefaultFG,
 			BG:    t.DefaultBG,
+			Flash: false,
 		}
 	}
 	t.CursorX = 0
@@ -45,7 +46,7 @@ func (t *TextBuffer) index(x, y int) int {
 	return y*t.Cols + x
 }
 
-func (t *TextBuffer) SetCell(x, y int, glyph rune, fg, bg int) {
+func (t *TextBuffer) SetCell(x, y int, glyph rune, fg, bg int, flash bool) {
 	if x < 0 || y < 0 || x >= t.Cols || y >= t.Rows {
 		return
 	}
@@ -53,6 +54,7 @@ func (t *TextBuffer) SetCell(x, y int, glyph rune, fg, bg int) {
 		Glyph: glyph,
 		FG:    fg,
 		BG:    bg,
+		Flash: flash,
 	}
 }
 

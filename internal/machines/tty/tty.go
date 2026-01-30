@@ -14,6 +14,7 @@ type TTYDevice struct {
 	in      *bufio.Reader
 	out     io.Writer
 	inverse bool
+	flash   bool
 }
 
 func New(in io.Reader, out io.Writer) video.Device {
@@ -21,6 +22,7 @@ func New(in io.Reader, out io.Writer) video.Device {
 		in:      bufio.NewReader(in),
 		out:     out,
 		inverse: false,
+		flash:   false,
 	}
 }
 
@@ -54,13 +56,18 @@ func (t *TTYDevice) Clear() {
 }
 
 func (t *TTYDevice) Render() {
-	if t.inverse {
-		fmt.Fprintf(t.out, "\033[7m%s", string(t.buffer)) // inverse video
-	} else {
-		fmt.Fprintf(t.out, "\033[27m%s", string(t.buffer)) // normal
+	if t.flash {
+		fmt.Fprintf(t.out, "\x1b[5m%s", string(t.buffer)) // ANSI blink
+		t.buffer = nil
+		return
 	}
 
-	//fmt.Fprint(t.out, string(t.buffer))
+	if t.inverse {
+		fmt.Fprintf(t.out, "\x1b[0m\033[7m%s", string(t.buffer)) // inverse video
+	} else {
+		fmt.Fprintf(t.out, "\x1b[0m\033[27m%s", string(t.buffer)) // normal
+	}
+
 	t.buffer = nil
 }
 
@@ -83,4 +90,8 @@ func (t *TTYDevice) DisableKeyboard() {}
 
 func (t *TTYDevice) SetInverse(v bool) {
 	t.inverse = v
+}
+
+func (t *TTYDevice) SetFlash(v bool) {
+	t.flash = v
 }

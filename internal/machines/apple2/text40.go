@@ -44,6 +44,9 @@ type Text40 struct {
 
 	// Printing in normal or inverse mode
 	inverse bool
+
+	// Printed chars are flashing
+	flash bool
 }
 
 func NewText40(renderer video.Renderer) *Text40 {
@@ -63,6 +66,7 @@ func NewText40(renderer video.Renderer) *Text40 {
 		lineReady:   false,
 		allowInput:  false,
 		inverse:     false,
+		flash:       false,
 	}
 }
 
@@ -101,6 +105,11 @@ func (t *Text40) Render() {
 func (t *Text40) SetInverse(v bool) {
 	t.inverse = v
 	t.Mode.SetInverse(v)
+}
+
+func (t *Text40) SetFlash(v bool) {
+	t.flash = v
+	t.Mode.SetFlash(v)
 }
 
 // --------------------
@@ -143,6 +152,10 @@ func (t *Text40) Draw(screen *ebiten.Image) {
 	} else if t.inInput && !t.cursorVisible {
 		t.Mode.PutChar(' ')
 		t.SetCursorX(t.Mode.CursorX() - 1)
+	}
+
+	if r, ok := t.renderer.(*ebitenrenderer.Renderer); ok {
+		r.NextFrame()
 	}
 
 	// Demande au TextMode de rasteriser le buffer

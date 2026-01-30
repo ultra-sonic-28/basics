@@ -26,6 +26,7 @@ func (f *FakeVideoDevice) SetInverse(v bool) {
 	f.InverseCalls = append(f.InverseCalls, v)
 }
 
+func (f *FakeVideoDevice) SetFlash(v bool)      {}
 func (f *FakeVideoDevice) PrintChar(r rune)     {}
 func (f *FakeVideoDevice) PrintString(s string) {}
 func (f *FakeVideoDevice) SetCursorX(x int)     {}

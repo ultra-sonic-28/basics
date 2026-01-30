@@ -88,3 +88,7 @@ func (rt *Runtime) DisableKeyboard() {
 func (rt *Runtime) SetInverse(v bool) {
 	rt.Video.SetInverse(v)
 }
+
+func (rt *Runtime) SetFlash(v bool) {
+	rt.Video.SetFlash(v)
+}

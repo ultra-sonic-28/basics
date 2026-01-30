@@ -17,6 +17,9 @@ type TextMode struct {
 
 	// Printing in normal or inverse mode
 	inverse bool
+
+	// Printed chars are flashing
+	flash bool
 }
 
 func NewTextMode(
@@ -36,6 +39,7 @@ func NewTextMode(
 		FG:       fg,
 		BG:       bg,
 		inverse:  false,
+		flash:    false,
 	}
 }
 
@@ -59,6 +63,10 @@ func (t *TextMode) SetCursor(x, y int) {
 
 func (t *TextMode) SetInverse(v bool) {
 	t.inverse = v
+}
+
+func (t *TextMode) SetFlash(v bool) {
+	t.flash = v
 }
 
 func (t *TextMode) Home() {
@@ -107,7 +115,7 @@ func (t *TextMode) putGlyph(r rune) {
 
 	fg, bg := t.currentColors(t.FG, t.BG)
 
-	t.Buffer.SetCell(x, y, r, fg, bg)
+	t.Buffer.SetCell(x, y, r, fg, bg, t.flash)
 
 	t.Buffer.CursorX++
 	if t.Buffer.CursorX >= t.Buffer.Cols {

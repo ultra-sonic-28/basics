@@ -229,6 +229,14 @@ func (p *Parser) parseStatement(lineNum int) Statement {
 			p.next()
 			return stmt
 
+		case "FLASH":
+			stmt := &FlashStmt{
+				Line:   p.curr.Line,
+				Column: p.curr.Column,
+			}
+			p.next()
+			return stmt
+
 		default:
 			p.syntaxError("UNKNOWN KEYWORD")
 			p.next()

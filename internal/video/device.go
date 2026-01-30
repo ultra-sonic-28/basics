@@ -7,6 +7,7 @@ type Device interface {
 	// --- API BASIC ---
 	Clear()
 	SetInverse(v bool)
+	SetFlash(v bool)
 	PrintChar(r rune)
 	PrintString(s string)
 

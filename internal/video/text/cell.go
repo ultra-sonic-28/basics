@@ -5,4 +5,5 @@ type Cell struct {
 	Glyph rune
 	FG    int
 	BG    int
+	Flash bool
 }

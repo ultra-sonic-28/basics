@@ -55,6 +55,8 @@ An integer or string variable must be followed by a `%` or `$` at each use of th
     * Sets the mode to the usual white letters on a black background.
 * `INVERSE`
     * Sets the video mode so that the computer's output prints as black letters on a white background.
+* `FLASH`
+    * Sets the video mode to "flashing", so the output from the computer is alternately shown on the screen in white on black and then reversed to black on white.
 
 ##### Input / Output
 * `PRINT`

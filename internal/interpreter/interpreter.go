@@ -342,12 +342,19 @@ func (i *Interpreter) Run(prog *parser.Program) {
 		// NORMAL / INVERSE
 		// -----------------------
 		case *parser.NormalStmt:
-			//i.textInverse = false
 			i.rt.SetInverse(false)
+			i.rt.SetFlash(false)
 
 		case *parser.InverseStmt:
-			//i.textInverse = true
 			i.rt.SetInverse(true)
+			i.rt.SetFlash(false)
+
+		// -----------------------
+		// FLASH
+		// -----------------------
+		case *parser.FlashStmt:
+			i.rt.SetInverse(false)
+			i.rt.SetFlash(true)
 
 		// -----------------------
 		// HTAB / VTAB
