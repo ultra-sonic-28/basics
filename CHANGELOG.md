@@ -17,6 +17,7 @@ The format is based on Keep a Changelog (https://keepachangelog.com), and this p
 - Add Mode interface and ModeInfo struct unit tests for video package.
 - Add EbitenDevice interface unit tests for video package.
 - Add Device interface unit tests for video package.
+- Add unit tests for font package (DefaultFont).
 
 ## [Unreleased] - 2026-01-29
 ### Added
