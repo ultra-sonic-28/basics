@@ -1,5 +1,7 @@
 package parser
 
+import "basics/internal/runtime"
+
 type Node interface {
 	Pos() (line int, col int, token string)
 }
@@ -154,6 +156,27 @@ func (*ClearStmt) stmtNode() {}
 
 func (s *ClearStmt) Pos() (int, int, string) {
 	return s.Line, s.Column, "CLEAR"
+}
+
+// =======================
+// DIM
+// =======================
+type DimStmt struct {
+	Arrays []DimDecl
+	Line   int
+	Column int
+}
+
+func (*DimStmt) stmtNode() {}
+
+type DimDecl struct {
+	Name       string
+	BaseType   runtime.ValueType
+	Dimensions []Expression
+}
+
+func (s *DimStmt) Pos() (int, int, string) {
+	return s.Line, s.Column, "DIM"
 }
 
 // =========================

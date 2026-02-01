@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strconv"
 
+	"basics/internal/common"
 	"basics/internal/errors"
 	"basics/internal/logger"
 	"basics/internal/token"
@@ -245,6 +246,9 @@ func (p *Parser) parseStatement(lineNum int) Statement {
 			p.next()
 			return stmt
 
+		case "DIM":
+			return p.parseDim()
+
 		default:
 			p.syntaxError("UNKNOWN KEYWORD")
 			p.next()
@@ -267,6 +271,43 @@ func (p *Parser) parseStatement(lineNum int) Statement {
 	p.syntaxError("SYNTAX ERROR")
 	p.next()
 	return nil
+}
+
+func (p *Parser) parseDim() Statement {
+	stmt := &DimStmt{}
+
+	p.next()
+
+	for {
+		name := p.expectIdent()
+		baseType := common.VarTypeAsInt(name)
+
+		p.expect(token.LPAREN)
+
+		var dims []Expression
+		dims = append(dims, p.parseExpression(LOWEST))
+
+		// We check current because parseExpression advance to next token
+		for p.curr.Type == token.COMMA {
+			p.next()
+			dims = append(dims, p.parseExpression(LOWEST))
+		}
+
+		p.expect(token.RPAREN)
+
+		stmt.Arrays = append(stmt.Arrays, DimDecl{
+			Name:       name,
+			BaseType:   baseType,
+			Dimensions: dims,
+		})
+
+		if !(p.curr.Type == token.COMMA) {
+			break
+		}
+		p.next()
+	}
+
+	return stmt
 }
 
 func (p *Parser) parseInput() Statement {
@@ -810,4 +851,14 @@ func (p *Parser) skipToNextStatement() {
 		p.curr.Type != token.EOF {
 		p.next()
 	}
+}
+
+func (p *Parser) expectIdent() string {
+	if p.curr.Type != token.IDENT {
+		p.syntaxError("EXPECTED IDENTIFIER AFTER DIM")
+	}
+
+	name := p.curr.Literal
+	p.next()
+	return name
 }

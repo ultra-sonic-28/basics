@@ -1,6 +1,9 @@
 package parser
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 func StmtName(s Statement) string {
 	switch s.(type) {
@@ -42,6 +45,8 @@ func StmtName(s Statement) string {
 		return "FLASH"
 	case *ClearStmt:
 		return "CLEAR"
+	case *DimStmt:
+		return "DIM"
 	default:
 		return "UNKNOWN"
 	}
@@ -70,6 +75,20 @@ func StmtArgs(s Statement) string {
 		return fmt.Sprintf(" %s", stmt.Var)
 	case *NextStmt:
 		return fmt.Sprintf(" %s", stmt.Var)
+	case *DimStmt:
+		var allVars strings.Builder
+		for _, v := range stmt.Arrays {
+			allVars.WriteString(v.Name)
+			allVars.WriteRune('(')
+			for j, d := range v.Dimensions {
+				if j > 0 {
+					allVars.WriteString(", ")
+				}
+				allVars.WriteString(StmtExprValue(d))
+			}
+			allVars.WriteRune(')')
+		}
+		return fmt.Sprintf(" -> %s", allVars.String())
 	default:
 		return ""
 	}
@@ -83,6 +102,10 @@ func StmtExprValue(e Expression) string {
 		return fmt.Sprintf("\"%s\"", expr.Value)
 	case *Identifier:
 		return expr.Name
+	case *InfixExpr:
+		sLeft := StmtExprValue(expr.Left)
+		sRight := StmtExprValue(expr.Right)
+		return fmt.Sprintf("%s %s %s", sLeft, expr.Op, sRight)
 	default:
 		return ""
 	}

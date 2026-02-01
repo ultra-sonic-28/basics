@@ -80,6 +80,16 @@ An integer or string variable must be followed by a `%` or `$` at each use of th
 * `GET` var$ | var | var%
     * Fetches a single character from the keyboard without displaying it on the screen and without requiring that the RETURN key be pressed.
     * The character corresponding to the pressed key is assigned to the variable `var$` | `var%` | `var`
+* `DIM`
+    * Define and allocate space for an array of reals, integers or strings. Use:
+        * DIM A(10) for array of real numbers
+        * DIM A%(10) for array of integer numbers
+        * DIM A$(10) for array of strings
+    * Arrays could have any number of dimensions:
+        * DIM A$(10)
+        * DIM B%(5, 5)
+        * DIM C(1, 2, 3, 4, 5)
+        * All these are correct
 
 ##### Flow Control
 * `FOR ... TO ... STEP ... NEXT`

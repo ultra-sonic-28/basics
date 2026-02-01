@@ -1,6 +1,7 @@
 package interpreter
 
 import (
+	"basics/internal/common"
 	"basics/internal/errors"
 	"basics/internal/parser"
 	"basics/internal/runtime"
@@ -35,7 +36,7 @@ func EvalExpr(expr parser.Expression, rt *runtime.Runtime) (runtime.Value, *erro
 			)
 		} else {
 			// valeur par défaut Applesoft
-			switch VarType(e.Name) {
+			switch common.VarType(e.Name) {
 			case "string":
 				return runtime.Value{Type: runtime.STRING, Str: val.Str}, nil
 			case "int":

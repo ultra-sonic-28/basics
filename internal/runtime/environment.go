@@ -9,14 +9,22 @@ const (
 	INTEGER
 	STRING
 	BOOLEAN
+	ARRAY
 )
 
+type ArrayValue struct {
+	BaseType   ValueType // NUMBER / INTEGER / STRING
+	Dimensions []int     // tailles déclarées (+1 déjà appliqué)
+	Data       []Value   // stockage linéaire
+}
+
 type Value struct {
-	Type ValueType
-	Num  float64
-	Int  int
-	Str  string
-	Flag bool
+	Type  ValueType
+	Num   float64
+	Int   int
+	Str   string
+	Flag  bool
+	Array *ArrayValue
 }
 
 type Environment struct {
@@ -70,5 +78,50 @@ func (e *Environment) Clear() {
 		}
 
 		e.vars[name] = v
+	}
+}
+
+func (a *ArrayValue) index(indices []int) (int, error) {
+	if len(indices) != len(a.Dimensions) {
+		return 0, fmt.Errorf("BAD SUBSCRIPT")
+	}
+
+	stride := 1
+	idx := 0
+
+	for i := len(a.Dimensions) - 1; i >= 0; i-- {
+		if indices[i] < 0 || indices[i] >= a.Dimensions[i] {
+			return 0, fmt.Errorf("BAD SUBSCRIPT")
+		}
+		idx += indices[i] * stride
+		stride *= a.Dimensions[i]
+	}
+
+	return idx, nil
+}
+
+func NewArray(baseType ValueType, dims []int) *ArrayValue {
+	total := 1
+	for _, d := range dims {
+		total *= d
+	}
+
+	data := make([]Value, total)
+
+	for i := range data {
+		switch baseType {
+		case INTEGER:
+			data[i] = Value{Type: INTEGER, Int: 0}
+		case STRING:
+			data[i] = Value{Type: STRING, Str: ""}
+		default:
+			data[i] = Value{Type: NUMBER, Num: 0}
+		}
+	}
+
+	return &ArrayValue{
+		BaseType:   baseType,
+		Dimensions: dims,
+		Data:       data,
 	}
 }

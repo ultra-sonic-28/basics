@@ -1,0 +1,2 @@
+10 REM Arrays declaration
+20 DIM OA$(75):DIM OD$(75):DIM OM(75):DIM OL(75):DIM OV(75):DIM OT(75)

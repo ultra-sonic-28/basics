@@ -51,6 +51,16 @@ func dumpStatement(s Statement, indent string, emit Emitter) {
 		emit(fmt.Sprintf("%sLET %s", indent, stmt.Name))
 		dumpExpr(stmt.Value, indent+"  ", emit)
 
+	case *DimStmt:
+		emit("DIM")
+		for i, v := range stmt.Arrays {
+			emit(fmt.Sprintf("  VAR %d: %s", i, v.Name))
+			for j, d := range v.Dimensions {
+				emit(fmt.Sprintf("%s  EXPR %d:", indent, j))
+				dumpExpr(d, indent+"    ", emit)
+			}
+		}
+
 	case *ForStmt:
 		emit(fmt.Sprintf("%sFOR %s (Line %d)", indent, stmt.Var, stmt.LineNum))
 		emit(indent + "  FROM:")

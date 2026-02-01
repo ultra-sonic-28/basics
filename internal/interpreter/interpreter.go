@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"strings"
 
+	"basics/internal/common"
 	"basics/internal/errors"
 	"basics/internal/logger"
 	"basics/internal/parser"
@@ -241,7 +242,7 @@ func (i *Interpreter) Run(prog *parser.Program) {
 				return
 			}
 
-			vType := VarType(s.Name)
+			vType := common.VarType(s.Name)
 			switch vType {
 			case "int":
 				if val.Type == runtime.STRING || val.Num != float64(int(val.Num)) {
@@ -361,6 +362,12 @@ func (i *Interpreter) Run(prog *parser.Program) {
 		// -----------------------
 		case *parser.ClearStmt:
 			i.rt.Clear()
+
+		// -----------------------
+		// DIM
+		// -----------------------
+		case *parser.DimStmt:
+			sExpr = i.execDim(s)
 
 		// -----------------------
 		// HTAB / VTAB
@@ -662,6 +669,10 @@ func (i *Interpreter) execInline(line int, stmt parser.Statement, pc int) int {
 		i.execGet(s)
 		return pc + 1
 
+	case *parser.DimStmt:
+		_ = i.execDim(s)
+		return pc + 1
+
 	case *parser.PrintStmt:
 		//i.rt.ExecPrint(s.Exprs[0].(*parser.StringLiteral).Value)
 		//i.rt.ExecPrint("\n")
@@ -706,6 +717,57 @@ func (i *Interpreter) execInline(line int, stmt parser.Statement, pc int) int {
 	}
 
 	return pc + 1
+}
+
+func (i *Interpreter) execDim(s *parser.DimStmt) string {
+	var allVars strings.Builder
+	allVars.WriteString("-> (")
+	for _, decl := range s.Arrays {
+
+		var dims []int
+		for j, expr := range decl.Dimensions {
+			v, err := EvalExpr(expr, i.rt)
+			if err != nil {
+				i.rt.ExecError(err)
+				return ""
+			}
+
+			if v.Type != runtime.NUMBER && v.Type != runtime.INTEGER {
+				err = errors.NewSemantic(
+					s.Line,
+					"BAD SUBSCRIPT: DIMENSION MUST BE A NUMBER OR AN INTEGER",
+				)
+				i.rt.ExecError(err)
+				return ""
+			}
+
+			size := int(v.Num) + 1
+			if size <= 0 {
+				err = errors.NewSemantic(
+					s.Line,
+					"BAD SUBSCRIPT: DIMENSION MUST BE POSITIVE",
+				)
+				i.rt.ExecError(err)
+				return ""
+			}
+
+			if j > 0 {
+				allVars.WriteString(", ")
+			}
+			allVars.WriteString(fmt.Sprintf("%d", int(v.Num)))
+			dims = append(dims, size)
+		}
+
+		arr := runtime.NewArray(decl.BaseType, dims)
+
+		i.rt.Env.Set(decl.Name, runtime.Value{
+			Type:  runtime.ARRAY,
+			Array: arr,
+		})
+	}
+
+	allVars.WriteString(")")
+	return allVars.String()
 }
 
 func (i *Interpreter) execInput(s *parser.InputStmt) {
@@ -829,16 +891,6 @@ func formatNumber(f float64) string {
 		return fmt.Sprintf("%d", int64(f))
 	}
 	return fmt.Sprintf("%g", f)
-}
-
-func VarType(name string) string {
-	if strings.HasSuffix(name, "%") {
-		return "int"
-	}
-	if strings.HasSuffix(name, "$") {
-		return "string"
-	}
-	return "float"
 }
 
 func LogTrace(inst Instruction, pc int, nextPC int, sExpr string) string {

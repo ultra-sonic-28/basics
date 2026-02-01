@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"testing"
 
+	"basics/internal/common"
 	"basics/testutils"
 )
 
@@ -62,7 +63,7 @@ func TestVarType(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := VarType(tt.input)
+			got := common.VarType(tt.input)
 			testutils.True(t, fmt.Sprintf("VarType(%q) = %q, want %q", tt.input, got, tt.expected), got == tt.expected)
 		})
 	}
@@ -133,7 +134,7 @@ func TestVarType_ErrorsAndEdgeCases(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := VarType(tt.input)
+			got := common.VarType(tt.input)
 			testutils.True(t, fmt.Sprintf("VarType(%q) = %q, want %q", tt.input, got, tt.expected), got == tt.expected)
 		})
 	}
