@@ -75,6 +75,19 @@ func (e *Environment) Clear() {
 
 		case BOOLEAN:
 			v.Flag = false
+
+		case ARRAY:
+			arr := v.Array
+			for i := range arr.Data {
+				switch arr.BaseType {
+				case INTEGER:
+					arr.Data[i] = Value{Type: INTEGER, Int: 0}
+				case STRING:
+					arr.Data[i] = Value{Type: STRING, Str: ""}
+				default:
+					arr.Data[i] = Value{Type: NUMBER, Num: 0}
+				}
+			}
 		}
 
 		e.vars[name] = v
