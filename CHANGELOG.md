@@ -8,6 +8,9 @@ The format is based on Keep a Changelog (https://keepachangelog.com), and this p
 - Add `DIM` support in Apple II Basic. Add relevant unit tests.
 - `CLEAR` support for arrays. Add relevant unit tests.
 
+### Changed
+- Update README.
+
 ## [Unreleased] - 2026-01-30
 ### Added
 - Add `FLASH` support in Apple II Basic. Add relevant unit tests.

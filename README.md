@@ -25,7 +25,7 @@ The project is currently primarily focused on APPLE II computers, with an archit
 ## Supported computers
 
 ### APPLE II
-### Real, Integer and String variables
+#### Real, Integer and String variables
 There are three different types of variables used in APPLESOFT BASIC.
 * Real
 * Integer
@@ -42,6 +42,21 @@ The table below summarizes the three types of variables used in APPLESOFT
 An integer or string variable must be followed by a `%` or `$` at each use of that variable. For example, `X`, `X%` and `X$` are different variables.
 
 #### Supported instructions set
+##### Variables management
+* `LET`
+    * Assign a value to a variable, creating it if necessary. Optionnal.
+* `DIM`
+    * Define and allocate space for an array of reals, integers or strings. Use:
+        * DIM A(10) for array of real numbers
+        * DIM A%(10) for array of integer numbers
+        * DIM A$(10) for array of strings
+    * Arrays could have any number of dimensions, dimensions can be a number or an expression:
+        * DIM A$(10)
+        * DIM B%(5, 5)
+        * DIM C(1, 2, 3, 4, 5)
+        * SIZE=10 : DIM A(SIZE)
+        * All these are correct
+
 ##### Editing and format related
 * `REM`
     * This serves to allow text of any sort to be inserted in a program. A1l characters, including statement separators and blanks may be included. Their usual meanings are ignored. A REM is terminated only by return.
@@ -58,7 +73,7 @@ An integer or string variable must be followed by a `%` or `$` at each use of th
 * `FLASH`
     * Sets the video mode to "flashing", so the output from the computer is alternately shown on the screen in white on black and then reversed to black on white.
 * `CLEAR`
-    * Zeroes all float, integer and strings variables.
+    * Zeroes all float, integer and strings variables. Zeroes all arrays.
 
 ##### Input / Output
 * `PRINT`
@@ -69,8 +84,6 @@ An integer or string variable must be followed by a `%` or `$` at each use of th
     * If an item on the list is followed by a comma, then the first character of the next item to be printed will appear in the first position of the next available tab field.
     * Tab fields are 14 positions wide
     * If neither a comma nor a semi-colon ends the list, a line feed and return are executed following the last item printed.
-* `LET`
-    * Assign a value to a variable, creating it if necessary. Optionnal.
 * `INPUT`
     * If the optional string is left out, `INPUT` prints a question mark and waits for the user to type a number (if var is an arithmetic variable) or characters (if var is a string variable). The value of this number or string is put into var.
     * When the string is present, it is printed exactly as specified; no question mark, spaces, or other punctuation are printed after the string. Note that only one optional string may be used. It must appear directly after `INPUT` and be followed by a semi-colon. 
@@ -80,16 +93,6 @@ An integer or string variable must be followed by a `%` or `$` at each use of th
 * `GET` var$ | var | var%
     * Fetches a single character from the keyboard without displaying it on the screen and without requiring that the RETURN key be pressed.
     * The character corresponding to the pressed key is assigned to the variable `var$` | `var%` | `var`
-* `DIM`
-    * Define and allocate space for an array of reals, integers or strings. Use:
-        * DIM A(10) for array of real numbers
-        * DIM A%(10) for array of integer numbers
-        * DIM A$(10) for array of strings
-    * Arrays could have any number of dimensions:
-        * DIM A$(10)
-        * DIM B%(5, 5)
-        * DIM C(1, 2, 3, 4, 5)
-        * All these are correct
 
 ##### Flow Control
 * `FOR ... TO ... STEP ... NEXT`
@@ -118,8 +121,8 @@ An integer or string variable must be followed by a `%` or `$` at each use of th
 * `/`
 * `^`
 
-### Supported functions
-#### Maths functions
+#### Supported functions
+##### Maths functions
 * `INT`
     * Returns the largest integer less than or equal to `aexpr`.
 
@@ -186,15 +189,15 @@ An integer or string variable must be followed by a `%` or `$` at each use of th
 130 NEXT A
 ```
 
-#### Differences with old computers
-##### Extended charset
+### Differences with old computers
+#### Extended charset
 * BASICS support extended charset, such as:
     * Uppercase letters
     * Lowercase letters
     * Accented letters
     * Box drawing: simple, double and mixed
 
-##### Supported display device
+#### Supported display device
 * Results display in program execution could be in `terminal mode` (usefull for debug or test sessions) or in `graphic mode`
 * In `terminal mode`, you cannot have any graphic primitives
 
