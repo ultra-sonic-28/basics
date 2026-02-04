@@ -30,6 +30,8 @@ func TestStmtName(t *testing.T) {
 		{"NORMAL", &NormalStmt{}, "NORMAL"},
 		{"INVERSE", &InverseStmt{}, "INVERSE"},
 		{"FLASH", &FlashStmt{}, "FLASH"},
+		{"CLEAR", &ClearStmt{}, "CLEAR"},
+		{"DIM", &DimStmt{}, "DIM"},
 		{"UNKNOWN", nil, "UNKNOWN"},
 	}
 
@@ -238,6 +240,88 @@ func TestStmtArgs(t *testing.T) {
 				},
 			},
 			expected: " A(I,J + 2) ->",
+		},
+		{
+			name: "DIM single array single numeric dimension",
+			stmt: &DimStmt{
+				Arrays: []DimDecl{
+					{
+						Name: "A",
+						Dimensions: []Expression{
+							&NumberLiteral{Value: 10, Token: "10"},
+						},
+					},
+				},
+			},
+			expected: " -> A(10)",
+		},
+		{
+			name: "DIM single array identifier dimension",
+			stmt: &DimStmt{
+				Arrays: []DimDecl{
+					{
+						Name: "A%",
+						Dimensions: []Expression{
+							&Identifier{Name: "SIZE", Token: "SIZE"},
+						},
+					},
+				},
+			},
+			expected: " -> A%(SIZE)",
+		},
+		{
+			name: "DIM single array multiple numeric dimensions",
+			stmt: &DimStmt{
+				Arrays: []DimDecl{
+					{
+						Name: "B",
+						Dimensions: []Expression{
+							&NumberLiteral{Value: 10, Token: "10"},
+							&NumberLiteral{Value: 20, Token: "20"},
+						},
+					},
+				},
+			},
+			expected: " -> B(10, 20)",
+		},
+		{
+			name: "DIM with infix expression dimension",
+			stmt: &DimStmt{
+				Arrays: []DimDecl{
+					{
+						Name: "C",
+						Dimensions: []Expression{
+							&InfixExpr{
+								Left:  &Identifier{Name: "N", Token: "N"},
+								Op:    "*",
+								Right: &NumberLiteral{Value: 2, Token: "2"},
+							},
+						},
+					},
+				},
+			},
+			expected: " -> C(N * 2)",
+		},
+		{
+			name: "DIM multiple arrays",
+			stmt: &DimStmt{
+				Arrays: []DimDecl{
+					{
+						Name: "A",
+						Dimensions: []Expression{
+							&NumberLiteral{Value: 10, Token: "10"},
+						},
+					},
+					{
+						Name: "B$",
+						Dimensions: []Expression{
+							&Identifier{Name: "SIZE", Token: "SIZE"},
+							&NumberLiteral{Value: 5, Token: "5"},
+						},
+					},
+				},
+			},
+			expected: " -> A(10)B$(SIZE, 5)",
 		},
 
 		// Statements without args
