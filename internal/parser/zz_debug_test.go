@@ -47,6 +47,66 @@ func TestDumpExpr(t *testing.T) {
 			},
 			expected: "Infix +\n  Number 2\n  Number 3\n",
 		},
+		{
+			name: "IndexExpr single identifier",
+			expr: &IndexExpr{
+				Name: "A",
+				Indices: []Expression{
+					&Identifier{Name: "I"},
+				},
+			},
+			expected: "A(I)\n",
+		},
+		{
+			name: "IndexExpr single number",
+			expr: &IndexExpr{
+				Name: "A",
+				Indices: []Expression{
+					&NumberLiteral{Value: 3},
+				},
+			},
+			expected: "A(3)\n",
+		},
+		{
+			name: "IndexExpr infix expression",
+			expr: &IndexExpr{
+				Name: "A",
+				Indices: []Expression{
+					&InfixExpr{
+						Left:  &Identifier{Name: "I"},
+						Op:    "+",
+						Right: &NumberLiteral{Value: 1},
+					},
+				},
+			},
+			expected: "A(I + 1)\n",
+		},
+		{
+			name: "IndexExpr multiple identifiers",
+			expr: &IndexExpr{
+				Name: "A",
+				Indices: []Expression{
+					&Identifier{Name: "I"},
+					&Identifier{Name: "J"},
+				},
+			},
+			expected: "A(I,J)\n",
+		},
+		{
+			name: "IndexExpr mixed expressions",
+			expr: &IndexExpr{
+				Name: "A",
+				Indices: []Expression{
+					&Identifier{Name: "I"},
+					&InfixExpr{
+						Left:  &Identifier{Name: "J"},
+						Op:    "+",
+						Right: &NumberLiteral{Value: 2},
+					},
+				},
+			},
+			expected: "A(I,J + 2)\n",
+		},
 	}
 
 	for _, tt := range tests {
@@ -368,6 +428,87 @@ func TestDumpStatement(t *testing.T) {
 				"  PRINT\n" +
 				"    EXPR 0:\n" +
 				"      String \"NO\"\n",
+		},
+		{
+			name: "LetStmt with single index identifier",
+			stmt: &LetStmt{
+				Name: "A",
+				Indices: []Expression{
+					&Identifier{Name: "I"},
+				},
+				Value: &NumberLiteral{Value: 10, Token: "10"},
+			},
+			expected: "" +
+				"LET A(I)\n" +
+				"  Number 10\n",
+		},
+		{
+			name: "LetStmt with single numeric index",
+			stmt: &LetStmt{
+				Name: "A",
+				Indices: []Expression{
+					&NumberLiteral{Value: 3, Token: "3"},
+				},
+				Value: &Identifier{Name: "X", Token: "X"},
+			},
+			expected: "" +
+				"LET A(3)\n" +
+				"  Ident X\n",
+		},
+		{
+			name: "LetStmt with infix index",
+			stmt: &LetStmt{
+				Name: "A",
+				Indices: []Expression{
+					&InfixExpr{
+						Left:  &Identifier{Name: "I", Token: "I"},
+						Op:    "+",
+						Right: &NumberLiteral{Value: 1, Token: "1"},
+					},
+				},
+				Value: &NumberLiteral{Value: 42, Token: "42"},
+			},
+			expected: "" +
+				"LET A(I + 1)\n" +
+				"  Number 42\n",
+		},
+		{
+			name: "LetStmt with multiple indices",
+			stmt: &LetStmt{
+				Name: "A",
+				Indices: []Expression{
+					&Identifier{Name: "I", Token: "I"},
+					&Identifier{Name: "J", Token: "J"},
+				},
+				Value: &Identifier{Name: "X", Token: "X"},
+			},
+			expected: "" +
+				"LET A(I,J)\n" +
+				"  Ident X\n",
+		},
+		{
+			name: "LetStmt with mixed indices expressions",
+			stmt: &LetStmt{
+				Name: "A",
+				Indices: []Expression{
+					&Identifier{Name: "I", Token: "I"},
+					&InfixExpr{
+						Left:  &Identifier{Name: "J", Token: "J"},
+						Op:    "+",
+						Right: &NumberLiteral{Value: 2, Token: "2"},
+					},
+				},
+				Value: &InfixExpr{
+					Left:  &Identifier{Name: "X", Token: "X"},
+					Op:    "*",
+					Right: &NumberLiteral{Value: 3, Token: "3"},
+				},
+			},
+			expected: "" +
+				"LET A(I,J + 2)\n" +
+				"  Infix *\n" +
+				"    Ident X\n" +
+				"    Number 3\n",
 		},
 	}
 

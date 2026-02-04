@@ -45,6 +45,7 @@ An integer or string variable must be followed by a `%` or `$` at each use of th
 ##### Variables management
 * `LET`
     * Assign a value to a variable, creating it if necessary. Optionnal.
+    * For arrays, they must be defined using `DIM` before any assignments take place
 * `DIM`
     * Define and allocate space for an array of reals, integers or strings. Use:
         * DIM A(10) for array of real numbers

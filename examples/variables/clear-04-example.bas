@@ -1,0 +1,10 @@
+10 REM Clear arrays
+15 SIZE = 10
+20 DIM A$(SIZE)
+30 FOR I=1 TO SIZE
+40 IF I=1 THEN A$(I) = "A" : GOTO 60
+50 A$(I) = "A" + A$(I-1)
+60 NEXT I
+70 FOR I=1 TO 10:PRINT "A$(";I;")=";A$(I):NEXT I
+80 CLEAR
+90 FOR I=10 TO 1 STEP -1:PRINT "A$(";I;")=";A$(I):NEXT I

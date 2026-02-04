@@ -54,6 +54,68 @@ func TestExamplesExecution(t *testing.T) {
 `,
 		},
 		{
+			name:   "Array-01",
+			file:   "variables/array-01-example.bas",
+			errors: 0,
+			expected: `1
+0.9
+0.8
+0.7
+0.6
+0.5
+0.4
+0.3
+0.2
+0.1
+`,
+		},
+		{
+			name:   "Array-02",
+			file:   "variables/array-02-example.bas",
+			errors: 0,
+			expected: `1
+4
+9
+16
+25
+36
+49
+64
+81
+100
+`,
+		},
+		{
+			name:   "Array-03",
+			file:   "variables/array-03-example.bas",
+			errors: 0,
+			expected: `A
+AA
+AAA
+AAAA
+AAAAA
+AAAAAA
+AAAAAAA
+AAAAAAAA
+AAAAAAAAA
+AAAAAAAAAA
+`,
+		},
+		{
+			name:   "Array-04",
+			file:   "variables/array-04-example.bas",
+			errors: 0,
+			expected: `111           55555
+`,
+		},
+		{
+			name:   "Array-05",
+			file:   "variables/array-05-example.bas",
+			errors: 0,
+			expected: `999
+`,
+		},
+		{
 			name:   "CubeExample",
 			file:   "programs/maths/cube-example.bas",
 			errors: 0,
@@ -124,6 +186,84 @@ A$=A String
 A=0
 A%=0
 A$=
+`,
+		},
+		{
+			name:   "Clear-02",
+			file:   "variables/clear-02-example.bas",
+			errors: 0,
+			expected: `1
+0.9
+0.8
+0.7
+0.6
+0.5
+0.4
+0.3
+0.2
+0.1
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+`,
+		},
+		{
+			name:   "Clear-03",
+			file:   "variables/clear-03-example.bas",
+			errors: 0,
+			expected: `1
+4
+9
+16
+25
+36
+49
+64
+81
+100
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+`,
+		},
+		{
+			name:   "Clear-04",
+			file:   "variables/clear-04-example.bas",
+			errors: 0,
+			expected: `A$(1)=A
+A$(2)=AA
+A$(3)=AAA
+A$(4)=AAAA
+A$(5)=AAAAA
+A$(6)=AAAAAA
+A$(7)=AAAAAAA
+A$(8)=AAAAAAAA
+A$(9)=AAAAAAAAA
+A$(10)=AAAAAAAAAA
+A$(10)=
+A$(9)=
+A$(8)=
+A$(7)=
+A$(6)=
+A$(5)=
+A$(4)=
+A$(3)=
+A$(2)=
+A$(1)=
 `,
 		},
 		{

@@ -9,11 +9,11 @@ import (
 	"strconv"
 )
 
-func EvalExpr(expr parser.Expression, rt *runtime.Runtime) (runtime.Value, *errors.Error) {
+func EvalExpr(expr parser.Expression, rt *runtime.Runtime) (runtime.Value, *[]int, *errors.Error) {
 
 	node, ok := expr.(parser.Node)
 	if !ok {
-		return runtime.Value{}, errors.NewSemantic(0, "INTERNAL AST ERROR")
+		return runtime.Value{}, nil, errors.NewSemantic(0, "INTERNAL AST ERROR")
 	}
 	line, col, tok := node.Pos()
 
@@ -22,40 +22,98 @@ func EvalExpr(expr parser.Expression, rt *runtime.Runtime) (runtime.Value, *erro
 	case *parser.NumberLiteral:
 		// NumberLitteral représente soit un flottant, soit un entier
 		// La distinction se fait au niveau de l'interpreteur
-		return runtime.Value{Type: runtime.NUMBER, Num: e.Value}, nil
+		return runtime.Value{Type: runtime.NUMBER, Num: e.Value}, nil, nil
 
 	case *parser.StringLiteral:
-		return runtime.Value{Type: runtime.STRING, Str: e.Value}, nil
+		return runtime.Value{Type: runtime.STRING, Str: e.Value}, nil, nil
+
+	case *parser.IndexExpr:
+		// 1. récupérer la variable
+		val, ok := rt.Env.Get(e.Name)
+		if !ok || val.Type != runtime.ARRAY {
+			return runtime.Value{}, nil, errors.NewSemantic(
+				line,
+				"BAD SUBSCRIPT",
+			)
+		}
+
+		arr := val.Array
+
+		// 2. évaluer les indices
+		var indices []int
+		for _, idxExpr := range e.Indices {
+			v, _, err := EvalExpr(idxExpr, rt)
+			if err != nil {
+				return runtime.Value{}, nil, err
+			}
+
+			if v.Type != runtime.NUMBER && v.Type != runtime.INTEGER {
+				return runtime.Value{}, nil, errors.NewSemantic(
+					line,
+					"BAD SUBSCRIPT",
+				)
+			}
+
+			indices = append(indices, int(v.Num))
+		}
+
+		// 3. calculer l'index linéaire
+		i, err := arr.Index(indices)
+		if err != nil {
+			return runtime.Value{}, nil, errors.NewSemantic(
+				line,
+				err.Error(),
+			)
+		}
+
+		// 4. retourner la valeur (copie)
+		elem := arr.Data[i]
+
+		switch arr.BaseType {
+		case runtime.STRING:
+			return runtime.Value{Type: runtime.STRING, Str: elem.Str}, &indices, nil
+		case runtime.INTEGER:
+			return runtime.Value{Type: runtime.INTEGER, Int: elem.Int}, &indices, nil
+		default:
+			return runtime.Value{Type: runtime.NUMBER, Num: elem.Num}, &indices, nil
+		}
 
 	case *parser.Identifier:
 		val, ok := rt.Env.Get(e.Name)
 		if !ok {
-			return runtime.Value{}, errors.NewSemantic(
+			return runtime.Value{}, nil, errors.NewSemantic(
 				line,
 				"UNDEFINED VARIABLE "+e.Name,
 			)
-		} else {
-			// valeur par défaut Applesoft
-			switch common.VarType(e.Name) {
-			case "string":
-				return runtime.Value{Type: runtime.STRING, Str: val.Str}, nil
-			case "int":
-				return runtime.Value{Type: runtime.INTEGER, Int: val.Int}, nil
-			case "float":
-				return runtime.Value{Type: runtime.NUMBER, Num: val.Num}, nil
-			}
+		}
+
+		if val.Type == runtime.ARRAY {
+			return runtime.Value{}, nil, errors.NewSemantic(
+				line,
+				"BAD SUBSCRIPT",
+			)
+		}
+
+		// valeur par défaut Applesoft
+		switch common.VarType(e.Name) {
+		case "string":
+			return runtime.Value{Type: runtime.STRING, Str: val.Str}, nil, nil
+		case "int":
+			return runtime.Value{Type: runtime.INTEGER, Int: val.Int}, nil, nil
+		case "float":
+			return runtime.Value{Type: runtime.NUMBER, Num: val.Num}, nil, nil
 		}
 
 	case *parser.PrefixExpr:
-		right, err := EvalExpr(e.Right, rt)
+		right, _, err := EvalExpr(e.Right, rt)
 		if err != nil {
-			return runtime.Value{}, err
+			return runtime.Value{}, nil, err
 		}
 
 		switch right.Type {
 
 		case runtime.STRING:
-			return runtime.Value{}, errors.NewSyntax(
+			return runtime.Value{}, nil, errors.NewSyntax(
 				line, col, tok,
 				"TYPE MISMATCH",
 			)
@@ -63,14 +121,14 @@ func EvalExpr(expr parser.Expression, rt *runtime.Runtime) (runtime.Value, *erro
 		case runtime.INTEGER:
 			switch e.Op {
 			case "+":
-				return right, nil
+				return right, nil, nil
 			case "-":
 				return runtime.Value{
 					Type: runtime.INTEGER,
 					Int:  -right.Int,
-				}, nil
+				}, nil, nil
 			default:
-				return runtime.Value{}, errors.NewSyntax(
+				return runtime.Value{}, nil, errors.NewSyntax(
 					line, col, e.Op,
 					"UNKNOWN PREFIX OPERATOR",
 				)
@@ -79,14 +137,14 @@ func EvalExpr(expr parser.Expression, rt *runtime.Runtime) (runtime.Value, *erro
 		case runtime.NUMBER:
 			switch e.Op {
 			case "+":
-				return right, nil
+				return right, nil, nil
 			case "-":
 				return runtime.Value{
 					Type: runtime.NUMBER,
 					Num:  -right.Num,
-				}, nil
+				}, nil, nil
 			default:
-				return runtime.Value{}, errors.NewSyntax(
+				return runtime.Value{}, nil, errors.NewSyntax(
 					line, col, e.Op,
 					"UNKNOWN PREFIX OPERATOR",
 				)
@@ -94,20 +152,20 @@ func EvalExpr(expr parser.Expression, rt *runtime.Runtime) (runtime.Value, *erro
 		}
 
 		// Sécurité (ne devrait jamais arriver)
-		return runtime.Value{}, errors.NewSyntax(
+		return runtime.Value{}, nil, errors.NewSyntax(
 			line, col, tok,
 			"INVALID PREFIX EXPRESSION",
 		)
 
 	case *parser.InfixExpr:
-		left, err := EvalExpr(e.Left, rt)
+		left, _, err := EvalExpr(e.Left, rt)
 		if err != nil {
-			return runtime.Value{}, err
+			return runtime.Value{}, nil, err
 		}
 
-		right, err := EvalExpr(e.Right, rt)
+		right, _, err := EvalExpr(e.Right, rt)
 		if err != nil {
-			return runtime.Value{}, err
+			return runtime.Value{}, nil, err
 		}
 
 		op := e.Op
@@ -125,7 +183,7 @@ func EvalExpr(expr parser.Expression, rt *runtime.Runtime) (runtime.Value, *erro
 					tok,
 					"TYPE MISMATCH",
 				)
-				return runtime.Value{}, err
+				return runtime.Value{}, nil, err
 			}
 
 			// conversion implicite nombre → string
@@ -153,7 +211,7 @@ func EvalExpr(expr parser.Expression, rt *runtime.Runtime) (runtime.Value, *erro
 			return runtime.Value{
 				Type: runtime.STRING,
 				Str:  ls + rs,
-			}, nil
+			}, nil, nil
 		}
 
 		// =========================
@@ -164,13 +222,13 @@ func EvalExpr(expr parser.Expression, rt *runtime.Runtime) (runtime.Value, *erro
 			switch op {
 
 			case "+":
-				return runtime.Value{Type: runtime.INTEGER, Int: left.Int + right.Int}, nil
+				return runtime.Value{Type: runtime.INTEGER, Int: left.Int + right.Int}, nil, nil
 			case "-":
-				return runtime.Value{Type: runtime.INTEGER, Int: left.Int - right.Int}, nil
+				return runtime.Value{Type: runtime.INTEGER, Int: left.Int - right.Int}, nil, nil
 			case "*":
-				return runtime.Value{Type: runtime.INTEGER, Int: left.Int * right.Int}, nil
+				return runtime.Value{Type: runtime.INTEGER, Int: left.Int * right.Int}, nil, nil
 			case "^":
-				return runtime.Value{Type: runtime.INTEGER, Int: int(math.Pow(float64(left.Int), float64(right.Int)))}, nil
+				return runtime.Value{Type: runtime.INTEGER, Int: int(math.Pow(float64(left.Int), float64(right.Int)))}, nil, nil
 			case "/":
 				// Applesoft : division entière → float
 				if right.Int == 0 {
@@ -180,43 +238,43 @@ func EvalExpr(expr parser.Expression, rt *runtime.Runtime) (runtime.Value, *erro
 						tok,
 						"DIVISION BY ZERO",
 					)
-					return runtime.Value{}, err
+					return runtime.Value{}, nil, err
 				}
 				return runtime.Value{
 					Type: runtime.NUMBER,
 					Num:  float64(left.Int) / float64(right.Int),
-				}, nil
+				}, nil, nil
 
 			case "<":
 				if left.Int < right.Int {
-					return runtime.Value{Type: runtime.NUMBER, Num: 1}, nil
+					return runtime.Value{Type: runtime.NUMBER, Num: 1}, nil, nil
 				}
-				return runtime.Value{Type: runtime.NUMBER, Num: 0}, nil
+				return runtime.Value{Type: runtime.NUMBER, Num: 0}, nil, nil
 			case ">":
 				if left.Int > right.Int {
-					return runtime.Value{Type: runtime.NUMBER, Num: 1}, nil
+					return runtime.Value{Type: runtime.NUMBER, Num: 1}, nil, nil
 				}
-				return runtime.Value{Type: runtime.NUMBER, Num: 0}, nil
+				return runtime.Value{Type: runtime.NUMBER, Num: 0}, nil, nil
 			case "<=":
 				if left.Int <= right.Int {
-					return runtime.Value{Type: runtime.NUMBER, Num: 1}, nil
+					return runtime.Value{Type: runtime.NUMBER, Num: 1}, nil, nil
 				}
-				return runtime.Value{Type: runtime.NUMBER, Num: 0}, nil
+				return runtime.Value{Type: runtime.NUMBER, Num: 0}, nil, nil
 			case ">=":
 				if left.Int >= right.Int {
-					return runtime.Value{Type: runtime.NUMBER, Num: 1}, nil
+					return runtime.Value{Type: runtime.NUMBER, Num: 1}, nil, nil
 				}
-				return runtime.Value{Type: runtime.NUMBER, Num: 0}, nil
+				return runtime.Value{Type: runtime.NUMBER, Num: 0}, nil, nil
 			case "=":
 				if left.Int == right.Int {
-					return runtime.Value{Type: runtime.NUMBER, Num: 1}, nil
+					return runtime.Value{Type: runtime.NUMBER, Num: 1}, nil, nil
 				}
-				return runtime.Value{Type: runtime.NUMBER, Num: 0}, nil
+				return runtime.Value{Type: runtime.NUMBER, Num: 0}, nil, nil
 			case "<>":
 				if left.Int != right.Int {
-					return runtime.Value{Type: runtime.NUMBER, Num: 1}, nil
+					return runtime.Value{Type: runtime.NUMBER, Num: 1}, nil, nil
 				}
-				return runtime.Value{Type: runtime.NUMBER, Num: 0}, nil
+				return runtime.Value{Type: runtime.NUMBER, Num: 0}, nil, nil
 			}
 
 			err = errors.NewSyntax(
@@ -225,7 +283,7 @@ func EvalExpr(expr parser.Expression, rt *runtime.Runtime) (runtime.Value, *erro
 				tok,
 				"SYNTAX ERROR",
 			)
-			return runtime.Value{}, err
+			return runtime.Value{}, nil, err
 		}
 
 		// =========================
@@ -246,13 +304,13 @@ func EvalExpr(expr parser.Expression, rt *runtime.Runtime) (runtime.Value, *erro
 		switch op {
 
 		case "+":
-			return runtime.Value{Type: runtime.NUMBER, Num: lf + rf}, nil
+			return runtime.Value{Type: runtime.NUMBER, Num: lf + rf}, nil, nil
 		case "-":
-			return runtime.Value{Type: runtime.NUMBER, Num: lf - rf}, nil
+			return runtime.Value{Type: runtime.NUMBER, Num: lf - rf}, nil, nil
 		case "*":
-			return runtime.Value{Type: runtime.NUMBER, Num: lf * rf}, nil
+			return runtime.Value{Type: runtime.NUMBER, Num: lf * rf}, nil, nil
 		case "^":
-			return runtime.Value{Type: runtime.NUMBER, Num: math.Pow(lf, rf)}, nil
+			return runtime.Value{Type: runtime.NUMBER, Num: math.Pow(lf, rf)}, nil, nil
 		case "/":
 			if rf == 0 {
 				err = errors.NewSyntax(
@@ -261,64 +319,64 @@ func EvalExpr(expr parser.Expression, rt *runtime.Runtime) (runtime.Value, *erro
 					tok,
 					"DIVISION BY ZERO",
 				)
-				return runtime.Value{}, err
+				return runtime.Value{}, nil, err
 			}
-			return runtime.Value{Type: runtime.NUMBER, Num: lf / rf}, nil
+			return runtime.Value{Type: runtime.NUMBER, Num: lf / rf}, nil, nil
 
 		case "<":
 			if lf < rf {
-				return runtime.Value{Type: runtime.NUMBER, Num: 1}, nil
+				return runtime.Value{Type: runtime.NUMBER, Num: 1}, nil, nil
 			}
-			return runtime.Value{Type: runtime.NUMBER, Num: 0}, nil
+			return runtime.Value{Type: runtime.NUMBER, Num: 0}, nil, nil
 		case ">":
 			if lf > rf {
-				return runtime.Value{Type: runtime.NUMBER, Num: 1}, nil
+				return runtime.Value{Type: runtime.NUMBER, Num: 1}, nil, nil
 			}
-			return runtime.Value{Type: runtime.NUMBER, Num: 0}, nil
+			return runtime.Value{Type: runtime.NUMBER, Num: 0}, nil, nil
 		case "<=":
 			if lf <= rf {
-				return runtime.Value{Type: runtime.NUMBER, Num: 1}, nil
+				return runtime.Value{Type: runtime.NUMBER, Num: 1}, nil, nil
 			}
-			return runtime.Value{Type: runtime.NUMBER, Num: 0}, nil
+			return runtime.Value{Type: runtime.NUMBER, Num: 0}, nil, nil
 		case ">=":
 			if lf >= rf {
-				return runtime.Value{Type: runtime.NUMBER, Num: 1}, nil
+				return runtime.Value{Type: runtime.NUMBER, Num: 1}, nil, nil
 			}
-			return runtime.Value{Type: runtime.NUMBER, Num: 0}, nil
+			return runtime.Value{Type: runtime.NUMBER, Num: 0}, nil, nil
 		case "<>":
 			if lf != rf {
-				return runtime.Value{Type: runtime.NUMBER, Num: 1}, nil
+				return runtime.Value{Type: runtime.NUMBER, Num: 1}, nil, nil
 			}
-			return runtime.Value{Type: runtime.NUMBER, Num: 0}, nil
+			return runtime.Value{Type: runtime.NUMBER, Num: 0}, nil, nil
 		case "=":
 			if lf == rf {
-				return runtime.Value{Type: runtime.NUMBER, Num: 1}, nil
+				return runtime.Value{Type: runtime.NUMBER, Num: 1}, nil, nil
 			}
-			return runtime.Value{Type: runtime.NUMBER, Num: 0}, nil
+			return runtime.Value{Type: runtime.NUMBER, Num: 0}, nil, nil
 		default:
-			return runtime.Value{}, errors.NewSyntax(
+			return runtime.Value{}, nil, errors.NewSyntax(
 				line, col, e.Op,
 				"UNKNOWN INFIX OPERATOR",
 			)
 		}
 
 	case *parser.IntExpr:
-		val, err := EvalExpr(e.Expr, rt)
+		val, _, err := EvalExpr(e.Expr, rt)
 		if err != nil {
-			return runtime.Value{}, err
+			return runtime.Value{}, nil, err
 		}
 
 		switch val.Type {
 
 		case runtime.STRING:
-			return runtime.Value{}, errors.NewSyntax(
+			return runtime.Value{}, nil, errors.NewSyntax(
 				line, col, tok,
 				"TYPE MISMATCH",
 			)
 
 		case runtime.INTEGER:
 			// INT(entier) → entier inchangé
-			return val, nil
+			return val, nil, nil
 
 		case runtime.NUMBER:
 			if val.Num >= 0 {
@@ -327,32 +385,32 @@ func EvalExpr(expr parser.Expression, rt *runtime.Runtime) (runtime.Value, *erro
 				return runtime.Value{
 					Type: runtime.INTEGER,
 					Int:  int(val.Num), // cast Go = floor pour positifs
-				}, nil
+				}, nil, nil
 			} else {
 				// Si négatif alors partie entière - 1
 				// INT (-1,75) -> -2
 				return runtime.Value{
 					Type: runtime.INTEGER,
 					Int:  int(val.Num) - 1,
-				}, nil
+				}, nil, nil
 			}
 		}
 
-		return runtime.Value{}, errors.NewSyntax(
+		return runtime.Value{}, nil, errors.NewSyntax(
 			line, col, tok,
 			"INVALID INT OPERAND",
 		)
 
 	case *parser.AbsExpr:
-		val, err := EvalExpr(e.Expr, rt)
+		val, _, err := EvalExpr(e.Expr, rt)
 		if err != nil {
-			return runtime.Value{}, err
+			return runtime.Value{}, nil, err
 		}
 
 		switch val.Type {
 
 		case runtime.STRING:
-			return runtime.Value{}, errors.NewSyntax(
+			return runtime.Value{}, nil, errors.NewSyntax(
 				line, col, tok,
 				"TYPE MISMATCH",
 			)
@@ -362,36 +420,36 @@ func EvalExpr(expr parser.Expression, rt *runtime.Runtime) (runtime.Value, *erro
 				return runtime.Value{
 					Type: runtime.INTEGER,
 					Int:  -val.Int,
-				}, nil
+				}, nil, nil
 			}
-			return val, nil
+			return val, nil, nil
 
 		case runtime.NUMBER:
 			if val.Num < 0 {
 				return runtime.Value{
 					Type: runtime.NUMBER,
 					Num:  -val.Num,
-				}, nil
+				}, nil, nil
 			}
-			return val, nil
+			return val, nil, nil
 		}
 
-		return runtime.Value{}, errors.NewSyntax(
+		return runtime.Value{}, nil, errors.NewSyntax(
 			line, col, tok,
 			"INVALID ABS OPERAND",
 		)
 
 	case *parser.SgnExpr:
-		val, err := EvalExpr(e.Expr, rt)
+		val, _, err := EvalExpr(e.Expr, rt)
 		if err != nil {
-			return runtime.Value{}, err
+			return runtime.Value{}, nil, err
 		}
 
 		var retVal float64
 		switch val.Type {
 
 		case runtime.STRING:
-			return runtime.Value{}, errors.NewSyntax(
+			return runtime.Value{}, nil, errors.NewSyntax(
 				line, col, tok,
 				"TYPE MISMATCH",
 			)
@@ -408,7 +466,7 @@ func EvalExpr(expr parser.Expression, rt *runtime.Runtime) (runtime.Value, *erro
 			return runtime.Value{
 				Type: runtime.INTEGER,
 				Int:  int(retVal),
-			}, nil
+			}, nil, nil
 
 		case runtime.NUMBER:
 			if val.Num < 0 {
@@ -422,10 +480,10 @@ func EvalExpr(expr parser.Expression, rt *runtime.Runtime) (runtime.Value, *erro
 			return runtime.Value{
 				Type: runtime.INTEGER,
 				Int:  int(retVal),
-			}, nil
+			}, nil, nil
 		}
 
-		return runtime.Value{}, errors.NewSyntax(
+		return runtime.Value{}, nil, errors.NewSyntax(
 			line, col, tok,
 			"INVALID ABS OPERAND",
 		)
@@ -435,7 +493,7 @@ func EvalExpr(expr parser.Expression, rt *runtime.Runtime) (runtime.Value, *erro
 	// =========================
 	// Expression inconnue
 	// =========================
-	return runtime.Value{}, errors.NewSyntax(
+	return runtime.Value{}, nil, errors.NewSyntax(
 		line,
 		col,
 		tok,

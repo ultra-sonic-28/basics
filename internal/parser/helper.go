@@ -64,11 +64,20 @@ func StmtArgs(s Statement) string {
 		}
 		return fmt.Sprintf(" -> %s", allVars)
 	case *PrintStmt:
-		return " ->"
+		var allVars strings.Builder
+		for _, e := range stmt.Exprs {
+			allVars.WriteString(StmtExprValue(e))
+		}
+		return fmt.Sprintf(" %s ->", allVars.String())
 	case *IfJumpStmt:
 		return " ->"
 	case *LetStmt:
-		return fmt.Sprintf(" %s ->", stmt.Name)
+		if stmt.Indices != nil {
+			sIndices := fmt.Sprint(FlattenIndices(stmt.Indices))
+			return fmt.Sprintf(" %s(%s) ->", stmt.Name, sIndices)
+		} else {
+			return fmt.Sprintf(" %s ->", stmt.Name)
+		}
 	case *GetStmt:
 		return fmt.Sprintf(" %s ->", stmt.Var.Name)
 	case *ForStmt:
@@ -106,6 +115,9 @@ func StmtExprValue(e Expression) string {
 		sLeft := StmtExprValue(expr.Left)
 		sRight := StmtExprValue(expr.Right)
 		return fmt.Sprintf("%s %s %s", sLeft, expr.Op, sRight)
+	case *IndexExpr:
+		sIndices := fmt.Sprint(FlattenIndices(expr.Indices))
+		return fmt.Sprintf("%s(%s) ", expr.Name, sIndices)
 	default:
 		return ""
 	}

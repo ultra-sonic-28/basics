@@ -236,47 +236,7 @@ func (i *Interpreter) Run(prog *parser.Program) {
 		// LET
 		// -----------------------
 		case *parser.LetStmt:
-			val, err := EvalExpr(s.Value, i.rt)
-			if err != nil {
-				i.rt.ExecError(err)
-				return
-			}
-
-			vType := common.VarType(s.Name)
-			switch vType {
-			case "int":
-				if val.Type == runtime.STRING || val.Num != float64(int(val.Num)) {
-					err := errors.NewSemantic(inst.LineNum, "TYPE MISMATCH: INTEGER EXPECTED")
-					i.rt.ExecError(err)
-					return
-				}
-				i.rt.Env.Set(s.Name, runtime.Value{
-					Type: runtime.INTEGER,
-					Int:  int(val.Num),
-				})
-				sExpr = fmt.Sprintf("%d", int(val.Num))
-
-			case "string":
-				if val.Type != runtime.STRING {
-					err := errors.NewSemantic(inst.LineNum, "TYPE MISMATCH: STRING EXPECTED")
-					i.rt.ExecError(err)
-					return
-				}
-				i.rt.Env.Set(s.Name, val)
-				sExpr = val.Str
-
-			case "float":
-				if val.Type == runtime.STRING {
-					err := errors.NewSemantic(inst.LineNum, "TYPE MISMATCH: FLOAT EXPECTED")
-					i.rt.ExecError(err)
-					return
-				}
-				i.rt.Env.Set(s.Name, runtime.Value{
-					Type: runtime.NUMBER,
-					Num:  val.Num,
-				})
-				sExpr = fmt.Sprintf("%g", val.Num)
-			}
+			sExpr = i.execLet(s, &inst)
 
 		// -----------------------
 		// INPUT
@@ -305,7 +265,7 @@ func (i *Interpreter) Run(prog *parser.Program) {
 			cursor := 0
 
 			for iExpr, expr := range s.Exprs {
-				val, err := EvalExpr(expr, i.rt)
+				val, _, err := EvalExpr(expr, i.rt)
 				if err != nil {
 					i.rt.ExecError(err)
 					return
@@ -329,6 +289,9 @@ func (i *Interpreter) Run(prog *parser.Program) {
 					}
 				}
 
+				/* if indices != nil {
+					sExpr += fmt.Sprint(common.Flatten(*indices))
+				} */
 				sExpr += str
 
 				i.rt.ExecPrint(str)
@@ -373,7 +336,7 @@ func (i *Interpreter) Run(prog *parser.Program) {
 		// HTAB / VTAB
 		// -----------------------
 		case *parser.HTabStmt:
-			val, err := EvalExpr(s.Expr, i.rt)
+			val, _, err := EvalExpr(s.Expr, i.rt)
 			if err != nil {
 				i.rt.ExecError(err)
 				return
@@ -383,7 +346,7 @@ func (i *Interpreter) Run(prog *parser.Program) {
 			i.rt.ExecHTab(int(val.Num))
 
 		case *parser.VTabStmt:
-			val, err := EvalExpr(s.Expr, i.rt)
+			val, _, err := EvalExpr(s.Expr, i.rt)
 			if err != nil {
 				i.rt.ExecError(err)
 				return
@@ -396,13 +359,13 @@ func (i *Interpreter) Run(prog *parser.Program) {
 		// FOR (Applesoft semantics)
 		// -----------------------
 		case *parser.ForStmt:
-			startVal, err := EvalExpr(s.Start, i.rt)
+			startVal, _, err := EvalExpr(s.Start, i.rt)
 			if err != nil {
 				i.rt.ExecError(err)
 				return
 			}
 
-			endVal, err := EvalExpr(s.End, i.rt)
+			endVal, _, err := EvalExpr(s.End, i.rt)
 			if err != nil {
 				i.rt.ExecError(err)
 				return
@@ -410,7 +373,7 @@ func (i *Interpreter) Run(prog *parser.Program) {
 
 			step := 1.0
 			if s.Step != nil {
-				stepVal, err := EvalExpr(s.Step, i.rt)
+				stepVal, _, err := EvalExpr(s.Step, i.rt)
 				if err != nil {
 					fmt.Println(err)
 					return
@@ -472,7 +435,7 @@ func (i *Interpreter) Run(prog *parser.Program) {
 		// GOTO
 		// -----------------------
 		case *parser.GotoStmt:
-			val, err := EvalExpr(s.Expr, i.rt)
+			val, _, err := EvalExpr(s.Expr, i.rt)
 			if err != nil {
 				i.rt.ExecError(err)
 				return
@@ -497,7 +460,7 @@ func (i *Interpreter) Run(prog *parser.Program) {
 		// GOSUB
 		// -----------------------
 		case *parser.GosubStmt:
-			val, err := EvalExpr(s.Expr, i.rt)
+			val, _, err := EvalExpr(s.Expr, i.rt)
 			if err != nil {
 				i.rt.ExecError(err)
 				return
@@ -536,7 +499,7 @@ func (i *Interpreter) Run(prog *parser.Program) {
 		// IF
 		// -----------------------
 		case *parser.IfStmt:
-			cond, err := EvalExpr(s.Cond, i.rt)
+			cond, _, err := EvalExpr(s.Cond, i.rt)
 			if err != nil {
 				i.rt.ExecError(err)
 				return
@@ -578,7 +541,7 @@ func (i *Interpreter) Run(prog *parser.Program) {
 		// IF (compiled jump)
 		// -----------------------
 		case *parser.IfJumpStmt:
-			cond, err := EvalExpr(s.Cond, i.rt)
+			cond, _, err := EvalExpr(s.Cond, i.rt)
 			if err != nil {
 				i.rt.ExecError(err)
 				return
@@ -619,7 +582,7 @@ func (i *Interpreter) execInline(line int, stmt parser.Statement, pc int) int {
 		return pc + 1
 
 	case *parser.GotoStmt:
-		val, err := EvalExpr(s.Expr, i.rt)
+		val, _, err := EvalExpr(s.Expr, i.rt)
 		if err != nil {
 			i.rt.ExecError(err)
 			return pc + 1
@@ -632,7 +595,7 @@ func (i *Interpreter) execInline(line int, stmt parser.Statement, pc int) int {
 		return target
 
 	case *parser.GosubStmt:
-		val, err := EvalExpr(s.Expr, i.rt)
+		val, _, err := EvalExpr(s.Expr, i.rt)
 		if err != nil {
 			i.rt.ExecError(err)
 			return pc + 1
@@ -657,7 +620,7 @@ func (i *Interpreter) execInline(line int, stmt parser.Statement, pc int) int {
 		return retPC
 
 	case *parser.LetStmt:
-		val, err := EvalExpr(s.Value, i.rt)
+		val, _, err := EvalExpr(s.Value, i.rt)
 		if err != nil {
 			i.rt.ExecError(err)
 			return pc + 1
@@ -677,7 +640,7 @@ func (i *Interpreter) execInline(line int, stmt parser.Statement, pc int) int {
 		//i.rt.ExecPrint(s.Exprs[0].(*parser.StringLiteral).Value)
 		//i.rt.ExecPrint("\n")
 		for iExpr, expr := range s.Exprs {
-			val, err := EvalExpr(expr, i.rt)
+			val, _, err := EvalExpr(expr, i.rt)
 			if err != nil {
 				i.rt.ExecError(err)
 				return pc
@@ -719,6 +682,127 @@ func (i *Interpreter) execInline(line int, stmt parser.Statement, pc int) int {
 	return pc + 1
 }
 
+func (i *Interpreter) execLet(s *parser.LetStmt, inst *Instruction) string {
+	sExpr := ""
+
+	val, _, err := EvalExpr(s.Value, i.rt)
+	if err != nil {
+		i.rt.ExecError(err)
+		return ""
+	}
+
+	// ======================================================
+	// CAS 1 : VARIABLE SIMPLE (comportement existant)
+	// ======================================================
+	if len(s.Indices) == 0 {
+
+		vType := common.VarType(s.Name)
+		switch vType {
+
+		case "int":
+			if val.Type == runtime.STRING || val.Num != float64(int(val.Num)) {
+				err := errors.NewSemantic(inst.LineNum, "TYPE MISMATCH: INTEGER EXPECTED")
+				i.rt.ExecError(err)
+				return ""
+			}
+			i.rt.Env.Set(s.Name, runtime.Value{
+				Type: runtime.INTEGER,
+				Int:  int(val.Num),
+			})
+			sExpr = fmt.Sprintf("%d", int(val.Num))
+
+		case "string":
+			if val.Type != runtime.STRING {
+				err := errors.NewSemantic(inst.LineNum, "TYPE MISMATCH: STRING EXPECTED")
+				i.rt.ExecError(err)
+				return ""
+			}
+			i.rt.Env.Set(s.Name, val)
+			sExpr = val.Str
+
+		case "float":
+			if val.Type == runtime.STRING {
+				err := errors.NewSemantic(inst.LineNum, "TYPE MISMATCH: FLOAT EXPECTED")
+				i.rt.ExecError(err)
+				return ""
+			}
+			i.rt.Env.Set(s.Name, runtime.Value{
+				Type: runtime.NUMBER,
+				Num:  val.Num,
+			})
+			sExpr = fmt.Sprintf("%g", val.Num)
+		}
+
+		return sExpr
+	}
+
+	// ======================================================
+	// CAS 2 : AFFECTATION DANS UN TABLEAU
+	// ======================================================
+	arrVal, ok := i.rt.Env.Get(s.Name)
+	if !ok || arrVal.Type != runtime.ARRAY {
+		err := errors.NewSemantic(inst.LineNum, "BAD SUBSCRIPT")
+		i.rt.ExecError(err)
+		return ""
+	}
+
+	arr := arrVal.Array
+
+	// --- évaluation des indices ---
+	var indices []int
+	for _, idxExpr := range s.Indices {
+		v, _, err := EvalExpr(idxExpr, i.rt)
+		if err != nil {
+			i.rt.ExecError(err)
+			return ""
+		}
+
+		if v.Type != runtime.NUMBER && v.Type != runtime.INTEGER {
+			err := errors.NewSemantic(inst.LineNum, "BAD SUBSCRIPT")
+			i.rt.ExecError(err)
+			return ""
+		}
+
+		indices = append(indices, int(v.Num))
+	}
+
+	// --- vérification du type stocké ---
+	switch arr.BaseType {
+
+	case runtime.INTEGER:
+		if val.Type == runtime.STRING || val.Num != float64(int(val.Num)) {
+			err := errors.NewSemantic(inst.LineNum, "TYPE MISMATCH: INTEGER EXPECTED")
+			i.rt.ExecError(err)
+			return ""
+		}
+		val = runtime.Value{Type: runtime.INTEGER, Int: int(val.Num)}
+
+	case runtime.STRING:
+		if val.Type != runtime.STRING {
+			err := errors.NewSemantic(inst.LineNum, "TYPE MISMATCH: STRING EXPECTED")
+			i.rt.ExecError(err)
+			return ""
+		}
+
+	case runtime.NUMBER:
+		if val.Type == runtime.STRING {
+			err := errors.NewSemantic(inst.LineNum, "TYPE MISMATCH: FLOAT EXPECTED")
+			i.rt.ExecError(err)
+			return ""
+		}
+		val = runtime.Value{Type: runtime.NUMBER, Num: val.Num}
+	}
+
+	// --- affectation ---
+	if err := arr.Set(indices, val); err != nil {
+		i.rt.ExecError(errors.NewSemantic(inst.LineNum, err.Error()))
+		return ""
+	}
+
+	sExpr = val.String()
+	return sExpr
+}
+
 func (i *Interpreter) execDim(s *parser.DimStmt) string {
 	var allVars strings.Builder
 	allVars.WriteString("-> (")
@@ -726,7 +810,7 @@ func (i *Interpreter) execDim(s *parser.DimStmt) string {
 
 		var dims []int
 		for j, expr := range decl.Dimensions {
-			v, err := EvalExpr(expr, i.rt)
+			v, _, err := EvalExpr(expr, i.rt)
 			if err != nil {
 				i.rt.ExecError(err)
 				return ""

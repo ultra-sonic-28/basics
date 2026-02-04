@@ -257,12 +257,12 @@ func (p *Parser) parseStatement(lineNum int) Statement {
 	}
 
 	if p.curr.Type == token.IDENT {
-		// IDENT doit être suivi de '='
+		/* // IDENT doit être suivi de '='
 		if p.peek.Literal != "=" {
 			p.syntaxError("EXPECTED '='")
 			p.next()
 			return nil
-		}
+		} */
 
 		return p.parseLet() // LET implicite (Applesoft)
 	}
@@ -448,22 +448,55 @@ func (p *Parser) parsePrint() Statement {
 }
 
 func (p *Parser) parseLet() Statement {
-	name := p.curr.Literal
-	p.expect(token.IDENT)
+	stmt := &LetStmt{
+		Line:   p.curr.Line,
+		Column: p.curr.Column,
+	}
 
-	if !p.expectLiteral("=") {
+	// Nom de la variable / tableau
+	stmt.Name = p.curr.Literal
+	p.next()
+
+	// --- Accès tableau ? ---
+	if p.curr.Literal == "(" {
+		p.next() // consommer '('
+
+		for {
+			expr := p.parseExpression(LOWEST)
+			if expr == nil {
+				p.syntaxError("EXPECTED INDEX EXPRESSION")
+				return nil
+			}
+			stmt.Indices = append(stmt.Indices, expr)
+
+			if p.curr.Literal == "," {
+				p.next()
+				continue
+			}
+			break
+		}
+
+		if p.curr.Literal != ")" {
+			p.syntaxError("EXPECTED ')'")
+			return nil
+		}
+		p.next() // consommer ')'
+	}
+
+	// '=' obligatoire
+	if p.curr.Literal != "=" {
+		p.syntaxError("EXPECTED '='")
+		return nil
+	}
+	p.next()
+
+	stmt.Value = p.parseExpression(LOWEST)
+	if stmt.Value == nil {
+		p.syntaxError("EXPECTED EXPRESSION")
 		return nil
 	}
 
-	value := p.parseExpression(LOWEST)
-	if value == nil {
-		return nil
-	}
-
-	return &LetStmt{
-		Name:  name,
-		Value: value,
-	}
+	return stmt
 }
 
 func (p *Parser) parseFor(lineNum int) Statement {
@@ -723,13 +756,20 @@ func (p *Parser) parseExpression(precedence int) Expression {
 		p.next()
 
 	case token.IDENT:
-		left = &Identifier{
+		ident := &Identifier{
 			Name:   p.curr.Literal,
 			Line:   p.curr.Line,
 			Column: p.curr.Column,
 			Token:  p.curr.Literal,
 		}
 		p.next()
+
+		// A(...)
+		if p.curr.Type == token.LPAREN {
+			left = p.parseIndexExpr(ident)
+		} else {
+			left = ident
+		}
 
 	case token.EQUAL, token.MINUS:
 		opTok := p.curr
@@ -786,6 +826,44 @@ func (p *Parser) parseExpression(precedence int) Expression {
 	}
 
 	return left
+}
+
+func (p *Parser) parseIndexExpr(ident *Identifier) Expression {
+	expr := &IndexExpr{
+		Name:   ident.Name,
+		Line:   ident.Line,
+		Column: ident.Column,
+		Token:  ident.Token,
+	}
+
+	// on est sur '('
+	p.next() // consommer '('
+
+	// A() interdit
+	if p.curr.Type == token.RPAREN {
+		p.syntaxError("EMPTY SUBSCRIPT")
+		return nil
+	}
+
+	for {
+		index := p.parseExpression(LOWEST)
+		if index == nil {
+			return nil
+		}
+		expr.Indices = append(expr.Indices, index)
+
+		if p.curr.Type == token.COMMA {
+			p.next() // consommer ','
+			continue
+		}
+		break
+	}
+
+	if !p.expect(token.RPAREN) {
+		return nil
+	}
+
+	return expr
 }
 
 func (p *Parser) expect(t token.TokenType) bool {

@@ -88,6 +88,76 @@ func TestInfixExpr_Pos(t *testing.T) {
 	testutils.Equal(t, "operator", expr.Op, "+")
 }
 
+func TestIndexExpr_Pos(t *testing.T) {
+	idx := &IndexExpr{
+		Name: "A",
+		Indices: []Expression{
+			&NumberLiteral{Value: 2},
+		},
+		Line:   10,
+		Column: 5,
+		Token:  "A",
+	}
+
+	line, col, tok := idx.Pos()
+	testutils.Equal(t, "line", line, 10)
+	testutils.Equal(t, "column", col, 5)
+	testutils.Equal(t, "token", tok, "A")
+	testutils.Equal(t, "name", idx.Name, "A")
+	testutils.Equal(t, "indices count", len(idx.Indices), 1)
+}
+
+func TestIndexExpr_SingleIndex(t *testing.T) {
+	idx := &IndexExpr{
+		Name: "A",
+		Indices: []Expression{
+			&NumberLiteral{Value: 3},
+		},
+	}
+
+	index := idx.Indices[0].(*NumberLiteral)
+	testutils.Equal(t, "index value", index.Value, 3.0)
+}
+
+func TestIndexExpr_MultipleIndices(t *testing.T) {
+	idx := &IndexExpr{
+		Name: "M",
+		Indices: []Expression{
+			&Identifier{Name: "I"},
+			&InfixExpr{
+				Left:  &Identifier{Name: "J"},
+				Op:    "+",
+				Right: &NumberLiteral{Value: 1},
+			},
+		},
+	}
+
+	testutils.Equal(t, "name", idx.Name, "M")
+	testutils.Equal(t, "indices count", len(idx.Indices), 2)
+
+	// Index 1 : Identifier
+	i0 := idx.Indices[0].(*Identifier)
+	testutils.Equal(t, "first index name", i0.Name, "I")
+
+	// Index 2 : InfixExpr
+	i1 := idx.Indices[1].(*InfixExpr)
+	testutils.Equal(t, "operator", i1.Op, "+")
+	testutils.Equal(t, "right value", i1.Right.(*NumberLiteral).Value, 1.0)
+}
+
+func TestIndexExpr_ExpressionType(t *testing.T) {
+	idx := &IndexExpr{
+		Name: "A",
+		Indices: []Expression{
+			&NumberLiteral{Value: 1},
+		},
+	}
+
+	var e Expression = idx
+	_, ok := e.(*IndexExpr)
+	testutils.True(t, "IndexExpr implements Expression", ok)
+}
+
 func TestProgramAndLines(t *testing.T) {
 	line1 := &Line{
 		Number: 10,

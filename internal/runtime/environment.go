@@ -94,7 +94,7 @@ func (e *Environment) Clear() {
 	}
 }
 
-func (a *ArrayValue) index(indices []int) (int, error) {
+func (a *ArrayValue) Index(indices []int) (int, error) {
 	if len(indices) != len(a.Dimensions) {
 		return 0, fmt.Errorf("BAD SUBSCRIPT")
 	}
@@ -111,6 +111,25 @@ func (a *ArrayValue) index(indices []int) (int, error) {
 	}
 
 	return idx, nil
+}
+
+func (a *ArrayValue) Set(indices []int, v Value) error {
+	idx, err := a.Index(indices)
+	if err != nil {
+		return err
+	}
+
+	// coercition basique (optionnel selon ta sémantique)
+	switch a.BaseType {
+	case INTEGER:
+		a.Data[idx] = Value{Type: INTEGER, Int: v.Int}
+	case STRING:
+		a.Data[idx] = Value{Type: STRING, Str: v.Str}
+	default:
+		a.Data[idx] = Value{Type: NUMBER, Num: v.Num}
+	}
+
+	return nil
 }
 
 func NewArray(baseType ValueType, dims []int) *ArrayValue {

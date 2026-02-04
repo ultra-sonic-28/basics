@@ -53,7 +53,7 @@ func TestStmtArgs(t *testing.T) {
 		{
 			name:     "PRINT",
 			stmt:     &PrintStmt{},
-			expected: " ->",
+			expected: "  ->",
 		},
 		{
 			name: "LET",
@@ -114,6 +114,66 @@ func TestStmtArgs(t *testing.T) {
 			},
 			expected: " -> A$",
 		},
+		{
+			name: "LET with single index identifier",
+			stmt: &LetStmt{
+				Name: "A",
+				Indices: []Expression{
+					&Identifier{Name: "I"},
+				},
+			},
+			expected: " A(I) ->",
+		},
+		{
+			name: "LET with single numeric index",
+			stmt: &LetStmt{
+				Name: "A",
+				Indices: []Expression{
+					&NumberLiteral{Value: 3, Token: "3"},
+				},
+			},
+			expected: " A(3) ->",
+		},
+		{
+			name: "LET with infix index",
+			stmt: &LetStmt{
+				Name: "A",
+				Indices: []Expression{
+					&InfixExpr{
+						Left:  &Identifier{Name: "I", Token: "I"},
+						Op:    "+",
+						Right: &NumberLiteral{Value: 1, Token: "1"},
+					},
+				},
+			},
+			expected: " A(I + 1) ->",
+		},
+		{
+			name: "LET with multiple indices",
+			stmt: &LetStmt{
+				Name: "A",
+				Indices: []Expression{
+					&Identifier{Name: "I", Token: "I"},
+					&Identifier{Name: "J", Token: "J"},
+				},
+			},
+			expected: " A(I,J) ->",
+		},
+		{
+			name: "LET with mixed indices expressions",
+			stmt: &LetStmt{
+				Name: "A",
+				Indices: []Expression{
+					&Identifier{Name: "I", Token: "I"},
+					&InfixExpr{
+						Left:  &Identifier{Name: "J", Token: "J"},
+						Op:    "+",
+						Right: &NumberLiteral{Value: 2, Token: "2"},
+					},
+				},
+			},
+			expected: " A(I,J + 2) ->",
+		},
 
 		// Statements without args
 		{
@@ -161,7 +221,7 @@ func TestStmtArgs(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := StmtArgs(tt.stmt)
-			testutils.True(t, fmt.Sprintf("StmtArgs(%T) = %q, expected %q", tt.stmt, got, tt.expected), got == tt.expected)
+			testutils.True(t, fmt.Sprintf("StmtArgs(%T): got %q, expected %q", tt.stmt, got, tt.expected), got == tt.expected)
 		})
 	}
 }
@@ -201,6 +261,67 @@ func TestStmtExprValue(t *testing.T) {
 			expected: "A$",
 		},
 		{
+			name: "IndexExpr with single numeric index",
+			expr: &IndexExpr{
+				Name: "A",
+				Indices: []Expression{
+					&NumberLiteral{Value: 1},
+				},
+			},
+			expected: "A(1) ",
+		},
+		{
+			name: "IndexExpr with identifier index",
+			expr: &IndexExpr{
+				Name: "TAB",
+				Indices: []Expression{
+					&Identifier{Name: "I"},
+				},
+			},
+			expected: "TAB(I) ",
+		},
+		{
+			name: "IndexExpr with infix index",
+			expr: &IndexExpr{
+				Name: "ARR",
+				Indices: []Expression{
+					&InfixExpr{
+						Left:  &Identifier{Name: "I"},
+						Op:    "+",
+						Right: &NumberLiteral{Value: 1},
+					},
+				},
+			},
+			expected: "ARR(I + 1) ",
+		},
+		{
+			name: "IndexExpr with multiple indices",
+			expr: &IndexExpr{
+				Name: "M",
+				Indices: []Expression{
+					&Identifier{Name: "I"},
+					&Identifier{Name: "J"},
+				},
+			},
+			expected: "M(I,J) ",
+		},
+		{
+			name: "IndexExpr with mixed indices",
+			expr: &IndexExpr{
+				Name: "GRID",
+				Indices: []Expression{
+					&Identifier{Name: "X"},
+					&InfixExpr{
+						Left:  &Identifier{Name: "Y"},
+						Op:    "*",
+						Right: &NumberLiteral{Value: 2},
+					},
+					&NumberLiteral{Value: 3},
+				},
+			},
+			expected: "GRID(X,Y * 2,3) ",
+		},
+		{
 			name:     "Nil expression",
 			expr:     nil,
 			expected: "",
@@ -212,7 +333,7 @@ func TestStmtExprValue(t *testing.T) {
 			got := StmtExprValue(tt.expr)
 			testutils.True(
 				t,
-				fmt.Sprintf("StmtExprValue(%T) = %q, expected %q", tt.expr, got, tt.expected),
+				fmt.Sprintf("StmtExprValue(%T): got %q, expected %q", tt.expr, got, tt.expected),
 				got == tt.expected,
 			)
 		})

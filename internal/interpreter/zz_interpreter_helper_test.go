@@ -54,7 +54,7 @@ func TestLogTrace_TableDriven(t *testing.T) {
 			pc:       2,
 			nextPC:   3,
 			sExpr:    "\"HELLO\"",
-			expected: "Executing line: 30, pc: 2, nextPC: 3 - [PRINT] -> \"HELLO\"",
+			expected: "Executing line: 30, pc: 2, nextPC: 3 - [PRINT] \"HELLO\" -> \"HELLO\"",
 		},
 		{
 			name: "FOR",

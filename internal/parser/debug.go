@@ -3,6 +3,8 @@ package parser
 import (
 	"basics/internal/logger"
 	"fmt"
+	"strconv"
+	"strings"
 )
 
 type Emitter func(line string)
@@ -48,8 +50,14 @@ func dumpStatement(s Statement, indent string, emit Emitter) {
 		}
 
 	case *LetStmt:
-		emit(fmt.Sprintf("%sLET %s", indent, stmt.Name))
-		dumpExpr(stmt.Value, indent+"  ", emit)
+		if stmt.Indices != nil {
+			sIndices := fmt.Sprint(FlattenIndices(stmt.Indices))
+			emit(fmt.Sprintf("%sLET %s(%s)", indent, stmt.Name, sIndices))
+			dumpExpr(stmt.Value, indent+"  ", emit)
+		} else {
+			emit(fmt.Sprintf("%sLET %s", indent, stmt.Name))
+			dumpExpr(stmt.Value, indent+"  ", emit)
+		}
 
 	case *DimStmt:
 		emit("DIM")
@@ -174,7 +182,35 @@ func dumpExpr(e Expression, indent string, emit Emitter) {
 		emit(indent + "SGN")
 		dumpExpr(n.Expr, indent+"  ", emit)
 
+	case *IndexExpr:
+		sIndices := fmt.Sprint(FlattenIndices(n.Indices))
+		emit(fmt.Sprintf("%s%s(%s)", indent, n.Name, sIndices))
+
 	default:
 		emit(indent + "UNKNOWN EXPR")
 	}
+}
+
+func FlattenIndices(indices []Expression) string {
+	parts := make([]string, 0, len(indices))
+
+	for _, e := range indices {
+		switch v := e.(type) {
+		case *Identifier:
+			parts = append(parts, StmtExprValue(v))
+
+		case *NumberLiteral:
+			parts = append(parts, strconv.FormatFloat(v.Value, 'f', -1, 64))
+
+		case *InfixExpr:
+			sLeft := StmtExprValue(v.Left)
+			sRight := StmtExprValue(v.Right)
+			parts = append(parts, fmt.Sprintf("%s %s %s", sLeft, v.Op, sRight))
+
+		default:
+			// ignorer ou gérer l'erreur selon ton besoin
+		}
+	}
+
+	return strings.Join(parts, ",")
 }

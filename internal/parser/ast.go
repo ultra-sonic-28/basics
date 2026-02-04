@@ -46,13 +46,22 @@ type GetStmt struct {
 
 func (*GetStmt) stmtNode() {}
 
+// =======================
 // LET
+// =======================
 type LetStmt struct {
-	Name  string
-	Value Expression
+	Name    string
+	Indices []Expression // nil si variable simple, sinon indices du tableau
+	Value   Expression
+	Line    int
+	Column  int
 }
 
 func (*LetStmt) stmtNode() {}
+
+func (s *LetStmt) Pos() (int, int, string) {
+	return s.Line, s.Column, "LET"
+}
 
 // FOR ... TO ... STEP ... NEXT
 type ForStmt struct {
@@ -290,6 +299,21 @@ type StringLiteral struct {
 func (*StringLiteral) exprNode() {}
 
 func (s *StringLiteral) Pos() (int, int, string) {
+	return s.Line, s.Column, s.Token
+}
+
+// Index pour les accès tableaux
+type IndexExpr struct {
+	Name    string
+	Indices []Expression
+	Line    int
+	Column  int
+	Token   string
+}
+
+func (*IndexExpr) exprNode() {}
+
+func (s *IndexExpr) Pos() (int, int, string) {
 	return s.Line, s.Column, s.Token
 }
 
