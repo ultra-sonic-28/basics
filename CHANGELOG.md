@@ -12,6 +12,7 @@ The format is based on Keep a Changelog (https://keepachangelog.com), and this p
 - Add missing unit tests for parser debug (DimStmt).
 - Add missing unit tests for parser helper (DimStmt).
 - Add new test example for flow control (`FOR ... TO ... STEP ... NEXT`).
+- Add unit tests for `Flatten(...)` in `common` package.
 
 ## [Unreleased] - 2026-02-02
 ### Added
