@@ -56,6 +56,71 @@ func TestStmtArgs(t *testing.T) {
 			expected: "  ->",
 		},
 		{
+			name: "PRINT with identifier",
+			stmt: &PrintStmt{
+				Exprs: []Expression{
+					&Identifier{Name: "A", Token: "A"},
+				},
+			},
+			expected: " A ->",
+		},
+		{
+			name: "PRINT with number literal",
+			stmt: &PrintStmt{
+				Exprs: []Expression{
+					&NumberLiteral{Value: 42, Token: "42"},
+				},
+			},
+			expected: " 42 ->",
+		},
+		{
+			name: "PRINT with string literal",
+			stmt: &PrintStmt{
+				Exprs: []Expression{
+					&StringLiteral{Value: "HELLO", Token: "\"HELLO\""},
+				},
+			},
+			expected: " \"HELLO\" ->",
+		},
+		{
+			name: "PRINT with infix expression",
+			stmt: &PrintStmt{
+				Exprs: []Expression{
+					&InfixExpr{
+						Left:  &Identifier{Name: "A", Token: "A"},
+						Op:    "+",
+						Right: &NumberLiteral{Value: 1, Token: "1"},
+					},
+				},
+			},
+			expected: " A + 1 ->",
+		},
+		{
+			name: "PRINT with multiple expressions",
+			stmt: &PrintStmt{
+				Exprs: []Expression{
+					&Identifier{Name: "A", Token: "A"},
+					&Identifier{Name: "B", Token: "B"},
+				},
+			},
+			expected: " AB ->",
+		},
+		{
+			name: "PRINT with mixed expressions",
+			stmt: &PrintStmt{
+				Exprs: []Expression{
+					&Identifier{Name: "A", Token: "A"},
+					&InfixExpr{
+						Left:  &Identifier{Name: "B", Token: "B"},
+						Op:    "*",
+						Right: &NumberLiteral{Value: 2, Token: "2"},
+					},
+					&StringLiteral{Value: "OK", Token: "\"OK\""},
+				},
+			},
+			expected: " AB * 2\"OK\" ->",
+		},
+		{
 			name: "LET",
 			stmt: &LetStmt{
 				Name: "A",
