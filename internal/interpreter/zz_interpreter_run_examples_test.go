@@ -457,6 +457,17 @@ A=10, B=10, A*B=100
 `,
 		},
 		{
+			name:   "For-09",
+			file:   "flow_control/for-09-example.bas",
+			errors: 0,
+			expected: `1
+3
+5
+7
+9
+`,
+		},
+		{
 			name:   "Gosub-01",
 			file:   "flow_control/gosub-01-example.bas",
 			errors: 0,
