@@ -9,6 +9,7 @@ The format is based on Keep a Changelog (https://keepachangelog.com), and this p
 
 ### Fixed
 - Add missing unit tests for parser helper (PrintStmt).
+- Add missing unit tests for parser helper (DimStmt).
 
 ## [Unreleased] - 2026-02-02
 ### Added

@@ -510,6 +510,99 @@ func TestDumpStatement(t *testing.T) {
 				"    Ident X\n" +
 				"    Number 3\n",
 		},
+		{
+			name: "DimStmt single array single dimension",
+			stmt: &DimStmt{
+				Arrays: []DimDecl{
+					{
+						Name: "A",
+						Dimensions: []Expression{
+							&NumberLiteral{Value: 10, Token: "10"},
+						},
+					},
+				},
+			},
+			expected: "" +
+				"DIM\n" +
+				"  VAR 0: A\n" +
+				"  EXPR 0:\n" +
+				"    Number 10\n",
+		},
+		{
+			name: "DimStmt single array multiple numeric dimensions",
+			stmt: &DimStmt{
+				Arrays: []DimDecl{
+					{
+						Name: "B",
+						Dimensions: []Expression{
+							&NumberLiteral{Value: 10, Token: "10"},
+							&NumberLiteral{Value: 20, Token: "20"},
+						},
+					},
+				},
+			},
+			expected: "" +
+				"DIM\n" +
+				"  VAR 0: B\n" +
+				"  EXPR 0:\n" +
+				"    Number 10\n" +
+				"  EXPR 1:\n" +
+				"    Number 20\n",
+		},
+		{
+			name: "DimStmt with infix expression dimensions",
+			stmt: &DimStmt{
+				Arrays: []DimDecl{
+					{
+						Name: "C",
+						Dimensions: []Expression{
+							&InfixExpr{
+								Left:  &Identifier{Name: "N", Token: "N"},
+								Op:    "*",
+								Right: &NumberLiteral{Value: 2, Token: "2"},
+							},
+						},
+					},
+				},
+			},
+			expected: "" +
+				"DIM\n" +
+				"  VAR 0: C\n" +
+				"  EXPR 0:\n" +
+				"    Infix *\n" +
+				"      Ident N\n" +
+				"      Number 2\n",
+		},
+		{
+			name: "DimStmt multiple arrays",
+			stmt: &DimStmt{
+				Arrays: []DimDecl{
+					{
+						Name: "A",
+						Dimensions: []Expression{
+							&NumberLiteral{Value: 10, Token: "10"},
+						},
+					},
+					{
+						Name: "B$",
+						Dimensions: []Expression{
+							&Identifier{Name: "SIZE", Token: "SIZE"},
+							&NumberLiteral{Value: 5, Token: "5"},
+						},
+					},
+				},
+			},
+			expected: "" +
+				"DIM\n" +
+				"  VAR 0: A\n" +
+				"  EXPR 0:\n" +
+				"    Number 10\n" +
+				"  VAR 1: B$\n" +
+				"  EXPR 0:\n" +
+				"    Ident SIZE\n" +
+				"  EXPR 1:\n" +
+				"    Number 5\n",
+		},
 	}
 
 	for _, tt := range tests {
