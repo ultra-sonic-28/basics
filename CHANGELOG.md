@@ -7,6 +7,7 @@ The format is based on Keep a Changelog (https://keepachangelog.com), and this p
 ### Fixed
 - Fix misuse of assertions in `StripANSI` unit tests.
 - Add unit tests for `VarType` and `VarTypeAsInt`.
+- Add unit tests for `<`, `<=`, `<>`, `>` and `>=` operators.
 
 ## [Unreleased] - 2026-02-04
 ### Added

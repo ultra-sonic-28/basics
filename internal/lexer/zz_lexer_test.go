@@ -267,3 +267,96 @@ func TestLexer_EOLandEOF(t *testing.T) {
 		testutils.True(t, msg, tok.Column == tt.expectedColumn)
 	}
 }
+
+// TestLexer_LessThanOperators teste les opérateurs <, <= et <>
+func TestLexer_LessThanOperators(t *testing.T) {
+	input := "< <= <>"
+
+	tests := []struct {
+		expectedType    token.TokenType
+		expectedLiteral string
+		expectedLine    int
+		expectedColumn  int
+	}{
+		{token.LT, "<", 1, 1},
+		{token.LTE, "<=", 1, 3},
+		{token.NEQ, "<>", 1, 6},
+		{token.EOF, "", 1, 8},
+	}
+
+	l := New(input)
+
+	for i, tt := range tests {
+		tok := l.NextToken()
+
+		msg := fmt.Sprintf(
+			"tests[%d] - token type wrong. got=%q, want=%q",
+			i, tok.Type, tt.expectedType,
+		)
+		testutils.True(t, msg, tok.Type == tt.expectedType)
+
+		msg = fmt.Sprintf(
+			"tests[%d] - literal wrong. got=%q, want=%q",
+			i, tok.Literal, tt.expectedLiteral,
+		)
+		testutils.Equal(t, msg, tok.Literal, tt.expectedLiteral)
+
+		msg = fmt.Sprintf(
+			"tests[%d] - line wrong. got=%d, want=%d",
+			i, tok.Line, tt.expectedLine,
+		)
+		testutils.True(t, msg, tok.Line == tt.expectedLine)
+
+		msg = fmt.Sprintf(
+			"tests[%d] - column wrong. got=%d, want=%d",
+			i, tok.Column, tt.expectedColumn,
+		)
+		testutils.True(t, msg, tok.Column == tt.expectedColumn)
+	}
+}
+
+// TestLexer_GreaterThanOperators teste les opérateurs > et >=
+func TestLexer_GreaterThanOperators(t *testing.T) {
+	input := "> >="
+
+	tests := []struct {
+		expectedType    token.TokenType
+		expectedLiteral string
+		expectedLine    int
+		expectedColumn  int
+	}{
+		{token.GT, ">", 1, 1},
+		{token.GTE, ">=", 1, 3},
+		{token.EOF, "", 1, 5},
+	}
+
+	l := New(input)
+
+	for i, tt := range tests {
+		tok := l.NextToken()
+
+		msg := fmt.Sprintf(
+			"tests[%d] - token type wrong. got=%q, want=%q",
+			i, tok.Type, tt.expectedType,
+		)
+		testutils.True(t, msg, tok.Type == tt.expectedType)
+
+		msg = fmt.Sprintf(
+			"tests[%d] - literal wrong. got=%q, want=%q",
+			i, tok.Literal, tt.expectedLiteral,
+		)
+		testutils.Equal(t, msg, tok.Literal, tt.expectedLiteral)
+
+		msg = fmt.Sprintf(
+			"tests[%d] - line wrong. got=%d, want=%d",
+			i, tok.Line, tt.expectedLine,
+		)
+		testutils.True(t, msg, tok.Line == tt.expectedLine)
+
+		msg = fmt.Sprintf(
+			"tests[%d] - column wrong. got=%d, want=%d",
+			i, tok.Column, tt.expectedColumn,
+		)
+		testutils.True(t, msg, tok.Column == tt.expectedColumn)
+	}
+}
