@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog (https://keepachangelog.com), and this project adheres to Semantic Versioning (https://semver.org).
 
+## [Unreleased] - 2026-02-05
+### Fixed
+- Fix misuse of assertions in `StripANSI` unit tests.
+
 ## [Unreleased] - 2026-02-04
 ### Added
 - Set and Get values to/from arrays. Add relevant unit tests.

@@ -1,6 +1,10 @@
 package common
 
-import "testing"
+import (
+	"basics/testutils"
+	"fmt"
+	"testing"
+)
 
 func TestStripANSI(t *testing.T) {
 	tests := []struct {
@@ -43,9 +47,13 @@ func TestStripANSI(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := StripANSI(tt.input)
-			if got != tt.want {
-				t.Errorf("StripANSI(%q) = %q, want %q", tt.input, got, tt.want)
-			}
+			str := fmt.Sprintf(
+				"StripANSI(%q): got %q, want %q",
+				tt.input,
+				got,
+				tt.want,
+			)
+			testutils.True(t, str, got == tt.want)
 		})
 	}
 }
