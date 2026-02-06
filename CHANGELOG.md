@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog (https://keepachangelog.com), and this project adheres to Semantic Versioning (https://semver.org).
 
+## [Unreleased] - 2026-02-06
+### Added
+- Use `Mage` as development toolchain.
+
+### Changed
+- Renamed `./cmd/basic` directory to `./cmd/basics`
+
 ## [Unreleased] - 2026-02-05
 ### Fixed
 - Fix misuse of assertions in `StripANSI` unit tests.

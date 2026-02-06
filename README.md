@@ -22,6 +22,27 @@ The project is currently primarily focused on APPLE II computers, with an archit
 ## Version control system
 * **Jujutsu (jj) + Git**
 
+## Development toolchain
+Basics use `Mage` as its toolchain for developping purpose.
+
+### `Mage` installation
+```bash
+go install github.com/magefile/mage@latest
+```
+
+No need to run `mage -init` as `Basics` already have its own `magefile.go`.
+
+### Running `Mage`
+Running `Mage` without any arguments will display all available targets.
+```
+mage
+
+Targets:
+  build    basics binary to /bin directory
+  clean    Delete all .exe files under basics/ except in folders starting with "."
+  test     Run unit tests with coverage support
+```
+
 ## Supported computers
 
 ### APPLE II
