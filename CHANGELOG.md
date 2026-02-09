@@ -9,7 +9,8 @@ The format is based on Keep a Changelog (https://keepachangelog.com), and this p
 - Add `tools` target for `Mage`.
 - Add application icons.
 - Generate Windows binary.
-- Add `stats` target for `Mage`. Compute project code statistics.
+- Add `stats` target for `Mage`. Compute project code statistics using [cloc](https://github.com/AlDanial/cloc).
+- Update build version number before each build.
 
 ## [Unreleased] - 2026-02-06
 ### Added

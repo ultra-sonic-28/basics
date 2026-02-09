@@ -11,6 +11,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"regexp"
+	"strconv"
 	"strings"
 	"unicode"
 )
@@ -26,13 +27,14 @@ const (
 
 // Build basics binary to /bin directory
 func Build() error {
-	// Build version
-	versionBytes, err := os.ReadFile("VERSION")
+	// Incrémenter le numéro de build AVANT toute lecture
+	fmt.Println("Updating build number")
+	versionBytes, err := incrementBuildNumber("VERSION")
 	if err != nil {
 		return err
 	}
-	version := strings.TrimSpace(string(versionBytes))
 
+	version := strings.TrimSpace(string(versionBytes))
 	parts := strings.Split(version, ".")
 
 	if len(parts) != 4 {
@@ -344,4 +346,32 @@ func formatStatsFile() {
 		panic(err)
 	}
 	writer.Flush()
+}
+
+func incrementBuildNumber(path string) (string, error) {
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return "", err
+	}
+
+	version := strings.TrimSpace(string(data))
+	parts := strings.Split(version, ".")
+	if len(parts) != 4 {
+		return "", fmt.Errorf("invalid version string: %q", version)
+	}
+
+	build, err := strconv.Atoi(parts[3])
+	if err != nil {
+		return "", fmt.Errorf("invalid build number %q: %w", parts[3], err)
+	}
+	build++
+
+	parts[3] = strconv.Itoa(build)
+	newVersion := strings.Join(parts, ".")
+
+	if err := os.WriteFile(path, []byte(newVersion+"\n"), 0644); err != nil {
+		return "", err
+	}
+
+	return newVersion, nil
 }
