@@ -32,6 +32,13 @@ go install github.com/magefile/mage@latest
 
 No need to run `mage -init` as `Basics` already have its own `magefile.go`.
 
+### Install tools:
+```bash
+mage tools
+```
+
+The ```tools``` target will install all necessary tools for the building toolchain.
+
 ### Running `Mage`
 Running `Mage` without any arguments will display all available targets.
 ```
@@ -41,6 +48,7 @@ Targets:
   build    basics binary to /bin directory
   clean    Delete all .exe files under basics/ except in folders starting with "."
   test     Run unit tests with coverage support
+  tools    Installing tools : winres
 ```
 
 ## Supported computers

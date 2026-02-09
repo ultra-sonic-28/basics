@@ -78,3 +78,5 @@ temp/
 coverage.*
 examples/*.bin
 TODO.md
+*.syso
+winres.json

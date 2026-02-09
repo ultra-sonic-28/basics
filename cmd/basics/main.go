@@ -18,6 +18,11 @@ import (
 	"basics/internal/parser"
 )
 
+var (
+	Version   = "dev"
+	BuildDate = "unknown"
+)
+
 func main() {
 	closeLogger, err := logger.InitLogger("basics.log", "basics", logger.LevelInfo)
 	if err != nil {
@@ -27,6 +32,7 @@ func main() {
 
 	logger.Info("Logging initialized")
 	logger.Info("Application starting...")
+	logger.Info(fmt.Sprintf("BASICS v%s, built on %s", Version, BuildDate))
 
 	// -------------------------
 	// Options CLI

@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog (https://keepachangelog.com), and this project adheres to Semantic Versioning (https://semver.org).
 
+## [Unreleased] - 2026-02-09
+### Added
+- Add `build` target for `Mage`.
+- Add `tools` target for `Mage`.
+- Add application icons.
+- Generate Windows binary.
+
 ## [Unreleased] - 2026-02-06
 ### Added
 - Use `Mage` as development toolchain.
