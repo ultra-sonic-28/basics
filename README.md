@@ -47,6 +47,7 @@ mage
 Targets:
   build    basics binary to /bin directory
   clean    Delete all .exe files under basics/ except in folders starting with "."
+  stats    Running sources analysis and statistics generation
   test     Run unit tests with coverage support
   tools    Installing tools : winres
 ```

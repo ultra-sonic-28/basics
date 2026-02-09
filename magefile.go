@@ -4,12 +4,15 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
+	"regexp"
 	"strings"
+	"unicode"
 )
 
 const (
@@ -183,6 +186,47 @@ func Tools() error {
 	return cmd.Run()
 }
 
+// Running sources analysis and statistics generation
+func Stats() error {
+	cloc_executable := "./.bintools/cloc-2.06.exe"
+	report_file := "./.tmp/cloc_output_raw.md"
+
+	cmd := exec.Command(
+		cloc_executable,
+		"--skip-uniqueness",
+		"--quiet",
+		"--skip-archive=(zip|tar(.(gz|Z|bz2|xz|7z))?)",
+		"--skip-win-hidden",
+		//"--thousands-delimiter=_",
+		//"--fmt=2",
+		"--md",
+		"--report-file="+report_file,
+		"--found=./.tmp/found.txt",
+		"--ignored=./.tmp/ignored.txt",
+		"./cmd/",
+		"./examples/",
+		"./internal/",
+		"./testutils/",
+		"./winres/",
+		"./architecture.md",
+		"./CHANGELOG.md",
+		"./README.md",
+		"./*.go",
+	)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
+	fmt.Println("Running stats...")
+	err := cmd.Run()
+
+	fmt.Println("Formating stats...")
+	formatStatsFile()
+
+	return err
+}
+
+// Utility functions
+
 func moveFile(srcDir, dstDir, name string) error {
 	srcPath := filepath.Join(srcDir, name)
 	dstPath := filepath.Join(dstDir, name)
@@ -193,4 +237,111 @@ func moveFile(srcDir, dstDir, name string) error {
 	}
 
 	return os.Rename(srcPath, dstPath)
+}
+
+// formatThousands insère _ tous les trois chiffres à partir de la droite.
+func formatThousands(s string) string {
+	n := len(s)
+	if n <= 3 {
+		return s
+	}
+	out := []byte{}
+	count := 0
+	for i := n - 1; i >= 0; i-- {
+		out = append(out, s[i])
+		count++
+		if count%3 == 0 && i != 0 {
+			out = append(out, '_')
+		}
+	}
+	// reverse
+	for i, j := 0, len(out)-1; i < j; i, j = i+1, j-1 {
+		out[i], out[j] = out[j], out[i]
+	}
+	return string(out)
+}
+
+// Capitalise le premier caractère de chaque "mot" entre les pipes.
+func capitalizeHeader(line string) string {
+	parts := strings.Split(line, "|")
+	for i, p := range parts {
+		p = strings.TrimSpace(p)
+		if len(p) > 0 {
+			runes := []rune(p)
+			runes[0] = unicode.ToUpper(runes[0])
+			parts[i] = string(runes)
+		}
+	}
+	return strings.Join(parts, "|")
+}
+
+func formatStatsFile() {
+	input := "./.tmp/cloc_output_raw.md"
+	output := "./.tmp/cloc_output_clean.md"
+
+	in, err := os.Open(input)
+	if err != nil {
+		panic(err)
+	}
+	defer in.Close()
+
+	out, err := os.Create(output)
+	if err != nil {
+		panic(err)
+	}
+	defer out.Close()
+
+	scanner := bufio.NewScanner(in)
+	writer := bufio.NewWriter(out)
+
+	lineNum := 0
+	reNumber := regexp.MustCompile(`\b\d{1,3}(\d{3})*\b`)
+
+	for scanner.Scan() {
+		line := scanner.Text()
+		lineNum++
+
+		// Ignore les trois premières lignes du fichier
+		if lineNum <= 3 {
+			continue
+		}
+
+		// Supprime la ligne de tirets "--------|--------|..."
+		if strings.HasPrefix(line, "--------|") {
+			continue
+		}
+
+		// Capitaliser l'en-tête Language|files|blank|comment|code
+		if strings.HasPrefix(line, "Language|") {
+			line = capitalizeHeader(line)
+		}
+
+		// Substitutions de texte
+		line = strings.ReplaceAll(line, "Visual Basic", "Basic")
+		line = strings.ReplaceAll(line, "SUM:", "TOTAL:")
+
+		// Formattage des nombres avec _
+		line = reNumber.ReplaceAllStringFunc(line, func(num string) string {
+			return formatThousands(num)
+		})
+
+		// Si la ligne contient "TOTAL:", mettre chaque cellule de TOTAL en gras
+		if strings.HasPrefix(line, "TOTAL:|") || strings.HasPrefix(line, "**TOTAL:**|") {
+			parts := strings.Split(line, "|")
+			for i := range parts {
+				parts[i] = strings.TrimSpace(parts[i])
+				if parts[i] != "" {
+					parts[i] = fmt.Sprintf("**%s**", parts[i])
+				}
+			}
+			line = strings.Join(parts, "|")
+		}
+
+		fmt.Fprintln(writer, line)
+	}
+
+	if err := scanner.Err(); err != nil {
+		panic(err)
+	}
+	writer.Flush()
 }

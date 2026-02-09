@@ -68,6 +68,7 @@ desktop.ini
 *.log
 tmp/
 temp/
+.tmp/
 
 # =====================================
 # Project files and directories
