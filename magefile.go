@@ -6,6 +6,8 @@ package main
 import (
 	"archive/zip"
 	"bufio"
+	"crypto/sha256"
+	"encoding/hex"
 	"fmt"
 	"io"
 	"log"
@@ -209,7 +211,13 @@ func Release() error {
 		return err
 	}
 
+	fmt.Println("Computing SHA256...")
+	if err := writeSHA256(finalZip); err != nil {
+		return err
+	}
+
 	fmt.Println("Release created:", finalZip)
+
 	return nil
 }
 
@@ -564,4 +572,22 @@ func zipBinDir(binDir, zipFile string) error {
 		_, err = io.Copy(out, in)
 		return err
 	})
+}
+
+func writeSHA256(filePath string) error {
+	f, err := os.Open(filePath)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	h := sha256.New()
+	if _, err := io.Copy(h, f); err != nil {
+		return err
+	}
+
+	sum := hex.EncodeToString(h.Sum(nil))
+	out := fmt.Sprintf("%s  %s\n", sum, filepath.Base(filePath))
+
+	return os.WriteFile(filePath+".sha256", []byte(out), 0644)
 }

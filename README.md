@@ -22,6 +22,17 @@ The project is currently primarily focused on APPLE II computers, with an archit
 ## Version control system
 * **Jujutsu (jj) + Git**
 
+## Get a release
+Releases are published on Github. You can get the release version you wanted under [Releases](https://github.com/ultra-sonic-28/rpg-companion/releases).
+Be sure to verifiy SHA256 cheksum by running (ex: for v0.1.0.12 release):
+- Windows
+    ```powershell
+    Get-FileHash basics-win-x64-v0.1.0.12.zip -Algorithm SHA256
+    ```
+- Linux / MacOS
+    ```bash
+    sha256sum -c basics-win-x64-v0.1.0.12.zip.sha256
+    ```
 ## Development toolchain
 Basics use `Mage` as its toolchain for developping purpose.
 Dependencies are tracked via Go modules.
