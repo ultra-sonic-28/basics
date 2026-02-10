@@ -4,16 +4,21 @@
 package main
 
 import (
+	"archive/zip"
 	"bufio"
 	"fmt"
+	"io"
 	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"regexp"
+	"runtime"
 	"strconv"
 	"strings"
 	"unicode"
+
+	"github.com/magefile/mage/mg" // mg contains helpful utility functions, like Deps
 )
 
 const (
@@ -21,11 +26,15 @@ const (
 	basicsDir = "basics"
 )
 
+// ///////////////////////////////////////////////////////////////////////////
+// Target definition
+// ///////////////////////////////////////////////////////////////////////////
+
 // Default target to run when none is specified
 // If not set, running mage will list available targets
 // var Default = Run
 
-// Build basics binary to /bin directory
+// Configure and build BASICS binary to /bin directory
 func Build() error {
 	// Incrémenter le numéro de build AVANT toute lecture
 	fmt.Println("Updating build number")
@@ -150,6 +159,60 @@ func Build() error {
 	return cmd.Run()
 }
 
+// Build release archive for github
+func Release() error {
+	fmt.Println("Building release...")
+	mg.Deps(Build)
+
+	version, err := os.ReadFile("VERSION")
+	if err != nil {
+		return fmt.Errorf("cannot read VERSION file: %w", err)
+	}
+	ver := strings.TrimSpace(string(version))
+
+	osName := mapOS(runtime.GOOS)
+	archName := mapArch(runtime.GOARCH)
+
+	zipName := fmt.Sprintf(
+		"basics-%s-%s-v%s.zip",
+		osName,
+		archName,
+		ver,
+	)
+
+	// -------------------------------------------------
+	// Copy examples
+	// -------------------------------------------------
+	fmt.Println("Copying examples files...")
+	srcExamples := "./examples/release"
+	dstExamples := "./bin/examples"
+
+	if err := copyDirFiltered(srcExamples, dstExamples); err != nil {
+		return err
+	}
+
+	// -------------------------------------------------
+	// Create zip
+	// -------------------------------------------------
+	fmt.Println("Creating zip archive...")
+	if err := os.MkdirAll("release", 0755); err != nil {
+		return err
+	}
+
+	tmpZip := filepath.Join(os.TempDir(), zipName)
+	if err := zipBinDir("./bin", tmpZip); err != nil {
+		return err
+	}
+
+	finalZip := filepath.Join("release", zipName)
+	if err := os.Rename(tmpZip, finalZip); err != nil {
+		return err
+	}
+
+	fmt.Println("Release created:", finalZip)
+	return nil
+}
+
 // Run unit tests with coverage support
 func Test() error {
 	cmd := exec.Command("go", "run", ".\\test_summary.go")
@@ -233,7 +296,9 @@ func Stats() error {
 	return err
 }
 
+// ///////////////////////////////////////////////////////////////////////////
 // Utility functions
+// ///////////////////////////////////////////////////////////////////////////
 
 func moveFile(srcDir, dstDir, name string) error {
 	srcPath := filepath.Join(srcDir, name)
@@ -380,4 +445,123 @@ func incrementBuildNumber(path string) (string, error) {
 	}
 
 	return newVersion, nil
+}
+
+func mapOS(goos string) string {
+	switch goos {
+	case "windows":
+		return "win"
+	case "linux":
+		return "linux"
+	case "darwin":
+		return "mac"
+	default:
+		return goos
+	}
+}
+
+func mapArch(goarch string) string {
+	switch goarch {
+	case "amd64":
+		return "x64"
+	case "arm64":
+		return "arm64"
+	default:
+		return goarch
+	}
+}
+
+func copyDirFiltered(src, dst string) error {
+	return filepath.Walk(src, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
+		rel, err := filepath.Rel(src, path)
+		if err != nil {
+			return err
+		}
+
+		if info.Name() == "_do_not_delete_.txt" {
+			return nil
+		}
+
+		target := filepath.Join(dst, rel)
+
+		if info.IsDir() {
+			return os.MkdirAll(target, info.Mode())
+		}
+
+		return copyFile(path, target, info.Mode())
+	})
+}
+
+func copyFile(src, dst string, mode os.FileMode) error {
+	if err := os.MkdirAll(filepath.Dir(dst), 0755); err != nil {
+		return err
+	}
+
+	in, err := os.Open(src)
+	if err != nil {
+		return err
+	}
+	defer in.Close()
+
+	out, err := os.OpenFile(dst, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, mode)
+	if err != nil {
+		return err
+	}
+	defer out.Close()
+
+	_, err = io.Copy(out, in)
+	return err
+}
+
+func zipBinDir(binDir, zipFile string) error {
+	zf, err := os.Create(zipFile)
+	if err != nil {
+		return err
+	}
+	defer zf.Close()
+
+	w := zip.NewWriter(zf)
+	defer w.Close()
+
+	return filepath.Walk(binDir, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
+		if info.IsDir() {
+			return nil
+		}
+
+		// Chemin relatif à ./bin
+		rel, err := filepath.Rel(binDir, path)
+		if err != nil {
+			return err
+		}
+
+		fh, err := zip.FileInfoHeader(info)
+		if err != nil {
+			return err
+		}
+
+		fh.Name = filepath.ToSlash(rel)
+		fh.Method = zip.Deflate
+
+		out, err := w.CreateHeader(fh)
+		if err != nil {
+			return err
+		}
+
+		in, err := os.Open(path)
+		if err != nil {
+			return err
+		}
+		defer in.Close()
+
+		_, err = io.Copy(out, in)
+		return err
+	})
 }

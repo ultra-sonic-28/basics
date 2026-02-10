@@ -24,6 +24,7 @@ The project is currently primarily focused on APPLE II computers, with an archit
 
 ## Development toolchain
 Basics use `Mage` as its toolchain for developping purpose.
+Dependencies are tracked via Go modules.
 
 ### `Mage` installation
 ```bash
@@ -31,6 +32,11 @@ go install github.com/magefile/mage@latest
 ```
 
 No need to run `mage -init` as `Basics` already have its own `magefile.go`.
+
+For resolving dependencies
+```bash
+go mod tidy
+```
 
 ### Install tools:
 ```bash
@@ -45,11 +51,12 @@ Running `Mage` without any arguments will display all available targets.
 mage
 
 Targets:
-  build    basics binary to /bin directory
-  clean    Delete all .exe files under basics/ except in folders starting with "."
-  stats    Running sources analysis and statistics generation
-  test     Run unit tests with coverage support
-  tools    Installing tools : winres
+  build      Configure and build BASICS binary to /bin directory
+  clean      Delete all .exe files under basics/ except in folders starting with "."
+  release    Build release archive for github
+  stats      Running sources analysis and statistics generation
+  test       Run unit tests with coverage support
+  tools      Installing tools : winres
 ```
 
 ## Supported computers
@@ -248,6 +255,16 @@ Contributions are welcome:
 * Branch
 * Commit with clear messages
 * Pull Request
+
+## Current release statistics
+Language|Files|Blank|Comment|Code
+:-------|-------:|-------:|-------:|-------:
+Go|179|2_847|918|17_031
+Basic|112|0|0|594
+Markdown|3|109|0|454
+JSON|1|0|0|66
+Text|1|0|0|2
+**TOTAL:**|**296**|**2_956**|**918**|**18_147**
 
 ## Author
 

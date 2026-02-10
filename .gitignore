@@ -81,3 +81,5 @@ examples/*.bin
 TODO.md
 *.syso
 winres.json
+/release/
+bin/
