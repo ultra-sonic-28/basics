@@ -44,12 +44,18 @@ func Build() error {
 
 	fmt.Println("Building BASICS resource files for version", version)
 
+	// 16x16: Menus, title bar, notification area, lists in "details" view.
+	// 24x24: Interfaces with 125% scaling or some modern controls in Windows 10/11.
+	// 32x32: Standard "icons" view in File Explorer, some shortcuts.
+	// 48x48: Large icons in File Explorer or on the Desktop.
+	// 256x256: Display with very large icons, high-resolution screens; Windows then scales down if necessary.
 	tpl := `{
 		"RT_GROUP_ICON": {
 		  "APP": {
 			"0000": [
 			  "icon.png",
 			  "icon16.png",
+			  "icon24.png",
 			  "icon32.png",
 			  "icon48.png",
 			  "icon64.png",

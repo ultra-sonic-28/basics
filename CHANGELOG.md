@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog (https://keepachangelog.com), and this project adheres to Semantic Versioning (https://semver.org).
 
+## [Unreleased] - 2026-02-10
+### Fixed
+- Add icon in 24x24 for interfaces with 125% scaling or some modern controls in Windows 10/11.
+
 ## [Unreleased] - 2026-02-09
 ### Added
 - Add `build` target for `Mage`.
