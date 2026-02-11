@@ -174,7 +174,9 @@ func main() {
 	// =========================
 	// Interpreter
 	// =========================
-	fmt.Println("\n=== PROGRAM RESULTS ===")
+	if tty {
+		fmt.Println("\n=== PROGRAM RESULTS ===")
+	}
 	rt, err := machines.NewRuntime(basicType)
 	if err != nil {
 		fmt.Println(err)

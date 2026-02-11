@@ -7,6 +7,7 @@ The format is based on Keep a Changelog (https://keepachangelog.com), and this p
 ### Fixed
 - Fix mirorred accentued letters.
 - Complete redesign of the 7x8 font.
+- Display "=== PROGRAM RESULTS ===" in TTY mode only.
 
 ## [Unreleased] - 2026-02-10
 ### Added
