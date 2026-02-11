@@ -15,7 +15,7 @@ func TestDefaultFontForMode(t *testing.T) {
 		{
 			name:      "APPLE BASIC uses Font7x8",
 			basicType: constants.BASIC_APPLE,
-			want:      Font7x8,
+			want:      Font7x8Apple,
 		},
 		{
 			name:      "Other BASIC uses Font8x8",

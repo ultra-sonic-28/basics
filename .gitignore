@@ -69,6 +69,7 @@ desktop.ini
 tmp/
 temp/
 .tmp/
+~*
 
 # =====================================
 # Project files and directories

@@ -240,11 +240,23 @@ An integer or string variable must be followed by a `%` or `$` at each use of th
 
 ### Differences with old computers
 #### Extended charset
+* Bitmap fonts are handcoded using `MakeBitmapFont.xlsx`. File is located under `./.bintools`.
 * BASICS support extended charset, such as:
     * Uppercase letters
+        * `ABCDEFGHIJKLMNOPQRSTUVWXYZ`
     * Lowercase letters
+        * `abcdefghijklmnopqrstuvwxyz`
     * Accented letters
-    * Box drawing: simple, double and mixed
+        * `aàáâä eèéêë iîï oôö uùûü ÿ nñ cç µ`
+    * Symbols
+        * `[] () {} \/`
+        * `!?¡¿ '#&@ $£¥€ %‰ *+-^÷±= .:,; <>«» _~ ²°§¤©¶`
+        * `← → ↑ ↓`
+    * Box drawing: some blocs, simple, double and mixed lines
+        * `░ ▒ ▓`
+        * `─│ ┌┐ └┘ ┼ ├┤ ┬┴`
+        * `═║ ╔╗ ╚╝ ╬ ╠╣ ╦╩`
+        * `╞╡ ╥╨ ╪ ╟╢ ╙╜ ╓╖ ╫ ╒╕ ╘╛ ╧╤`
 
 #### Supported display device
 * Results display in program execution could be in `terminal mode` (usefull for debug or test sessions) or in `graphic mode`

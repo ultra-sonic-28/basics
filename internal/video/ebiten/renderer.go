@@ -76,10 +76,11 @@ func (r *Renderer) DrawGlyph(x, y int, glyph rune, fg, bg int) {
 				continue
 			}
 
-			mask := byte(1 << col)
+			// lecture LSB -> MSB (col 0 = bit 0)
+			//mask := byte(1 << col)
 			// lecture MSB -> LSB
-			//shift := (r.font.Width - 1) - col
-			//mask := byte(1 << shift)
+			shift := (r.font.Width - 1) - col
+			mask := byte(1 << shift)
 			if bits&mask != 0 {
 				r.framebuffer.SetRGBA(px, py, r.palette[fg])
 			} else {

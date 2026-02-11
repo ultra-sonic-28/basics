@@ -1,0 +1,11 @@
+10 REM Print ascii and accentued letters
+20 PRINT "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+30 PRINT "abcdefghijklmnopqrstuvwxyz"
+40 PRINT "0123456789"
+50 PRINT "aàáâä eèéêë iîï oôö uùûü ÿ nñ cç µ"
+60 PRINT "The quick brown fox jumps over the lazy dog"
+70 PRINT "Portez ce vieux whisky au juge blond qui fume"
+80 PRINT "N° adhérent : zéro à gauche"
+90 PRINT "Résultat, Insère, l'écosystème"
+100 PRINT "Caractères à l’écran là où..."
+110 PRINT "Chaîne mémorisée déçue"
