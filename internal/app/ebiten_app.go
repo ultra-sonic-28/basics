@@ -78,17 +78,19 @@ func (a *EbitenApp) handleInput() {
 		}
 	} */
 	for _, r := range ebiten.InputChars() {
-		if r < 32 || r > 126 {
+		// Autoriser [32–126] et [161–255]
+		// De SPACE (32) à ~ (126) ou de ¡ (161) à ÿ (255)
+		if !((r >= 32 && r <= 126) || (r >= 161 && r <= 255)) {
 			continue
 		}
 
-		// 🔴 MODE GET
+		// MODE GET
 		if t.IsGetActive() {
 			t.PushGetRune(r)
 			return // 👈 STOP : 1 touche suffit
 		}
 
-		// 🟢 MODE INPUT
+		// MODE INPUT
 		t.InputRune(r)
 	}
 
