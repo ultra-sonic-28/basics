@@ -12,8 +12,8 @@ var Keywords = map[string]bool{
 	"REM": true, "CLEAR": true,
 
 	// I/O
-	"PRINT": true, "INPUT": true,
-	"GET": true,
+	"PRINT": true,
+	"INPUT": true, "GET": true,
 
 	// Math
 	"SIN": true, "COS": true, "TAN": true,

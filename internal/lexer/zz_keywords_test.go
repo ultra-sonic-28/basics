@@ -16,14 +16,16 @@ func TestKeywords_ContainsExpectedKeywords(t *testing.T) {
 
 		// Variables & logique
 		"LET", "DIM",
-		"REM",
+		"REM", "CLEAR",
 
 		// I/O
-		"PRINT", "INPUT", "GET",
+		"PRINT",
+		"INPUT", "GET",
 
 		// Math
 		"SIN", "COS", "TAN",
 		"INT", "ABS", "RND",
+		"SGN", "SQR",
 
 		// Graphique / écran
 		"GR", "HGR", "TEXT",
