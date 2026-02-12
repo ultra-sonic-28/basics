@@ -11,12 +11,13 @@ The format is based on Keep a Changelog (https://keepachangelog.com), and this p
 - Add a small basic game `literature-quizz.bas`.
 
 ## Changed
-- Add more documentation details regarding HTAB and VTAB statements, and TAB instruction.
+- Add more documentation details regarding `HTAB` and `VTAB` statements, and `TAB` instruction.
 
 ### Fixed
 - Fix of accented letter input with Ebiten.
 - Add missing keyword unit tests.
 - Add missing expression dump unit tests.
+- Add unit test for string expression when using `TAB`.
 
 ## [Unreleased] - 2026-02-11
 ### Fixed

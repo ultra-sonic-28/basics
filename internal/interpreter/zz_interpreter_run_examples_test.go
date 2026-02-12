@@ -1075,6 +1075,13 @@ Line 3
 `,
 		},
 		{
+			name:   "Tab-03",
+			file:   "tabs/tab-03-example.bas",
+			errors: 0,
+			expected: `⚠️ EXPECTED NUMBER IN 2 ()
+`,
+		},
+		{
 			name:   "Vars-01",
 			file:   "variables/vars-01-example.bas",
 			errors: 0,
