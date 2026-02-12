@@ -10,6 +10,7 @@ The format is based on Keep a Changelog (https://keepachangelog.com), and this p
 ### Fixed
 - Fix of accented letter input with Ebiten.
 - Add missing keyword unit tests.
+- Add missing expression dump unit tests.
 
 ## [Unreleased] - 2026-02-11
 ### Fixed

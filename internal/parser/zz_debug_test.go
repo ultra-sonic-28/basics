@@ -41,9 +41,54 @@ func TestDumpExpr(t *testing.T) {
 				},
 				Line:   1,
 				Column: 1,
-				Token:  "4",
+				Token:  "16",
 			},
 			expected: "SQR\n  Number 16\n",
+		},
+		{
+			name: "AbsExpr",
+			expr: &AbsExpr{
+				Expr: &NumberLiteral{
+					Value:  16,
+					Line:   4,
+					Column: 2,
+					Token:  "16",
+				},
+				Line:   1,
+				Column: 1,
+				Token:  "16",
+			},
+			expected: "ABS\n  Number 16\n",
+		},
+		{
+			name: "SgnExpr",
+			expr: &SgnExpr{
+				Expr: &NumberLiteral{
+					Value:  16,
+					Line:   4,
+					Column: 2,
+					Token:  "16",
+				},
+				Line:   1,
+				Column: 1,
+				Token:  "4",
+			},
+			expected: "SGN\n  Number 16\n",
+		},
+		{
+			name: "IntExpr",
+			expr: &IntExpr{
+				Expr: &NumberLiteral{
+					Value:  16,
+					Line:   4,
+					Column: 2,
+					Token:  "16",
+				},
+				Line:   1,
+				Column: 1,
+				Token:  "4",
+			},
+			expected: "INT\n  Number 16\n",
 		},
 		{
 			name: "PrefixExpr",
