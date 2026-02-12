@@ -10,6 +10,9 @@ The format is based on Keep a Changelog (https://keepachangelog.com), and this p
 - Add `TAB()` support in Apple II Basic. Add relevant unit tests.
 - Add a small basic game `literature-quizz.bas`.
 
+## Changed
+- Add more documentation details regarding HTAB and VTAB statements, and TAB instruction.
+
 ### Fixed
 - Fix of accented letter input with Ebiten.
 - Add missing keyword unit tests.
