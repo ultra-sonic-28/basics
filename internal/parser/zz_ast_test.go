@@ -430,3 +430,17 @@ func TestSgnExpr_Pos(t *testing.T) {
 	testutils.Equal(t, "column", col, 4)
 	testutils.Equal(t, "token", tok, "SGN")
 }
+
+func TestSqrExpr_Pos(t *testing.T) {
+	expr := &SqrExpr{
+		Expr:   &NumberLiteral{Value: 10},
+		Line:   12,
+		Column: 4,
+		Token:  "SQR",
+	}
+
+	line, col, tok := expr.Pos()
+	testutils.Equal(t, "line", line, 12)
+	testutils.Equal(t, "column", col, 4)
+	testutils.Equal(t, "token", tok, "SQR")
+}

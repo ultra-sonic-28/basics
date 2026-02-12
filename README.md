@@ -192,6 +192,9 @@ An integer or string variable must be followed by a `%` or `$` at each use of th
         > `0` if `aexpr` = 0
 
         > `-1` if `aexpr` < 0
+* `SQR`
+    * Returns the square root of `aexpr`.
+    * `aexpr` must be positive or null.
 
 #### Differences with Applesoft BASIC
 ##### Variable names

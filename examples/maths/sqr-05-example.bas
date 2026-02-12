@@ -1,0 +1,3 @@
+10 REM SQR Function
+20 A=4
+30 PRINT SQR(-A)

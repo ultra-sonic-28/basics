@@ -1,0 +1,3 @@
+10 REM SQR Function
+20 I%=49
+30 PRINT SQR(-I%)

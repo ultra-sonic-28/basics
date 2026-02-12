@@ -439,6 +439,54 @@ func EvalExpr(expr parser.Expression, rt *runtime.Runtime) (runtime.Value, *[]in
 			"INVALID ABS OPERAND",
 		)
 
+	case *parser.SqrExpr:
+		val, _, err := EvalExpr(e.Expr, rt)
+		if err != nil {
+			return runtime.Value{}, nil, err
+		}
+
+		switch val.Type {
+
+		case runtime.STRING:
+			return runtime.Value{}, nil, errors.NewSyntax(
+				line, col, tok,
+				"TYPE MISMATCH",
+			)
+
+		case runtime.INTEGER:
+			if val.Int < 0 {
+				return runtime.Value{}, nil, errors.NewSyntax(
+					line, col, tok,
+					"EXPRESSION VALUE MUST BE POSITIVE OR NULL",
+				)
+			}
+
+			result := math.Sqrt(float64(val.Int))
+			return runtime.Value{
+				Type: runtime.NUMBER,
+				Num:  result,
+			}, nil, nil
+
+		case runtime.NUMBER:
+			if val.Num < 0 {
+				return runtime.Value{}, nil, errors.NewSyntax(
+					line, col, tok,
+					"EXPRESSION VALUE MUST BE POSITIVE OR NULL",
+				)
+			}
+
+			result := math.Sqrt(val.Num)
+			return runtime.Value{
+				Type: runtime.NUMBER,
+				Num:  result,
+			}, nil, nil
+		}
+
+		return runtime.Value{}, nil, errors.NewSyntax(
+			line, col, tok,
+			"INVALID SQR OPERAND",
+		)
+
 	case *parser.SgnExpr:
 		val, _, err := EvalExpr(e.Expr, rt)
 		if err != nil {

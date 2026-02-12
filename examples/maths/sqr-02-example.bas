@@ -1,0 +1,2 @@
+10 REM SQR Function
+20 PRINT SQR("1.75")

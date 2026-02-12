@@ -972,6 +972,66 @@ Line 3
 `,
 		},
 		{
+			name:   "Sqr-01",
+			file:   "maths/sqr-01-example.bas",
+			errors: 0,
+			expected: `1.3228756555322954
+2
+3.867815921162743
+7
+14
+`,
+		},
+		{
+			name:   "Sqr-02",
+			file:   "maths/sqr-02-example.bas",
+			errors: 0,
+			expected: `⚠️ TYPE MISMATCH IN 2 (SQR)
+`,
+		},
+		{
+			name:   "Sqr-03",
+			file:   "maths/sqr-03-example.bas",
+			errors: 0,
+			expected: `⚠️ TYPE MISMATCH IN 3 (SQR)
+`,
+		},
+		{
+			name:   "Sqr-04",
+			file:   "maths/sqr-04-example.bas",
+			errors: 0,
+			expected: `⚠️ EXPRESSION VALUE MUST BE POSITIVE OR NULL IN 2 (SQR)
+`,
+		},
+		{
+			name:   "Sqr-05",
+			file:   "maths/sqr-05-example.bas",
+			errors: 0,
+			expected: `⚠️ EXPRESSION VALUE MUST BE POSITIVE OR NULL IN 3 (SQR)
+`,
+		},
+		{
+			name:   "Sqr-06",
+			file:   "maths/sqr-06-example.bas",
+			errors: 0,
+			expected: `⚠️ EXPRESSION VALUE MUST BE POSITIVE OR NULL IN 3 (SQR)
+`,
+		},
+		{
+			name:   "Sqr-07",
+			file:   "maths/sqr-07-example.bas",
+			errors: 0,
+			expected: `⚠️ EXPRESSION VALUE MUST BE POSITIVE OR NULL IN 3 (SQR)
+`,
+		},
+		{
+			name:   "Sqr-08",
+			file:   "maths/sqr-08-example.bas",
+			errors: 0,
+			expected: `⚠️ EXPRESSION VALUE MUST BE POSITIVE OR NULL IN 4 (SQR)
+`,
+		},
+		{
 			name:   "Square",
 			file:   "programs/maths/square-example.bas",
 			errors: 0,
@@ -1070,6 +1130,7 @@ A$=A String Another one
 
 			// --- Lexer ---
 			tokens := lexer.Lex(source)
+			testutils.True(t, "tokenization ok", len(tokens) > 0)
 
 			// --- Parser ---
 			p := parser.New(tokens)
