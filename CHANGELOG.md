@@ -6,6 +6,7 @@ The format is based on Keep a Changelog (https://keepachangelog.com), and this p
 ## [Unreleased] - 2026-02-12
 ### Added
 - Add `SQR()` support in Apple II Basic. Add relevant unit tests.
+- Add `TAB()` support in Apple II Basic. Add relevant unit tests.
 
 ### Fixed
 - Fix of accented letter input with Ebiten.

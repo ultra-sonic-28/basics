@@ -115,6 +115,11 @@ An integer or string variable must be followed by a `%` or `$` at each use of th
     * Moves the cursor to the position that is `aexpr` positions from the left edge of the current screen line.
 * `VTAB`
     * Moves the cursor to the line that is `aexpr` lines down on the screen. The top line is line l; the bottom line is line 24. This statement may involve moving the cursor either up or down, but never to the right or left.
+* `TAB`
+    * TAB must be used in a PRINT statement, and `aexpr` must be enclosed in parentheses.
+    * TAB moves the cursor to the position that is `aexpr` printing positions from the left margin of the text window if `aexpr` is greater than the value of the current cursor position relative to the left margin.
+    * If `aexpr` is less than the value of the current cursor position, then the cursor is not moved.
+    * TAB never moves the cursor to the left (use HTAB for this).
 * `NORMAL`
     * Sets the mode to the usual white letters on a black background.
 * `INVERSE`

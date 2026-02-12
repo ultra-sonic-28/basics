@@ -190,6 +190,10 @@ func dumpExpr(e Expression, indent string, emit Emitter) {
 		sIndices := fmt.Sprint(FlattenIndices(n.Indices))
 		emit(fmt.Sprintf("%s%s(%s)", indent, n.Name, sIndices))
 
+	case *TabExpr:
+		emit(indent + "TAB")
+		dumpExpr(n.Expr, indent+"  ", emit)
+
 	default:
 		emit(indent + "UNKNOWN EXPR")
 	}

@@ -1049,6 +1049,32 @@ Line 3
 `,
 		},
 		{
+			name:   "Tab-01",
+			file:   "tabs/tab-01-example.bas",
+			errors: 0,
+			expected: `     TAB(5)
+`,
+		},
+		{
+			name:   "Tab-02",
+			file:   "tabs/tab-02-example.bas",
+			errors: 0,
+			expected: `                         TAB Testing
+
+
+   TAB(3) mais curseur en 10!!
+
+               TAB(15)
+
+
+                    TAB(20)
+
+          TAB(10)   TAB(20)   TAB(30)
+
+        TAB(8)  TAB(16)
+`,
+		},
+		{
 			name:   "Vars-01",
 			file:   "variables/vars-01-example.bas",
 			errors: 0,

@@ -760,6 +760,30 @@ func (p *Parser) parseExpression(precedence int) Expression {
 				Token:  tok,
 			}
 
+		case "TAB":
+			tok := p.curr
+			p.next()
+
+			if !p.expect(token.LPAREN) {
+				return nil
+			}
+
+			expr := p.parseExpression(LOWEST)
+			if expr == nil {
+				return nil
+			}
+
+			if !p.expect(token.RPAREN) {
+				return nil
+			}
+
+			left = &TabExpr{
+				Expr:   expr,
+				Line:   tok.Line,
+				Column: tok.Column,
+				Token:  tok.Literal,
+			}
+
 		default:
 			p.syntaxError("UNEXPECTED KEYWORD")
 			return nil

@@ -265,6 +265,47 @@ func (i *Interpreter) Run(prog *parser.Program) {
 			cursor := 0
 
 			for iExpr, expr := range s.Exprs {
+				// ==========================
+				// GESTION DE TAB
+				// ==========================
+				if tabExpr, ok := expr.(*parser.TabExpr); ok {
+
+					val, _, err := EvalExpr(tabExpr.Expr, i.rt)
+					if err != nil {
+						fmt.Println(err)
+						return
+					}
+
+					if val.Type == runtime.STRING {
+						i.rt.ExecError(errors.NewSemantic(
+							tabExpr.Line,
+							"EXPECTED NUMBER",
+						))
+						return
+					}
+
+					var target int
+
+					switch val.Type {
+					case runtime.INTEGER:
+						target = val.Int
+					case runtime.NUMBER:
+						target = int(val.Num)
+					}
+
+					// BASIC est 1-based
+					currentX := cursor
+
+					if target > currentX {
+						spaces := target - currentX
+						padding := strings.Repeat(" ", spaces)
+						i.rt.ExecPrint(padding)
+						cursor += spaces
+					}
+
+					continue
+				}
+
 				val, _, err := EvalExpr(expr, i.rt)
 				if err != nil {
 					i.rt.ExecError(err)

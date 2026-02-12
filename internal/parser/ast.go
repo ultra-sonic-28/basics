@@ -318,6 +318,22 @@ func (s *IndexExpr) Pos() (int, int, string) {
 }
 
 // =========================
+// TAB(expr)
+// =========================
+type TabExpr struct {
+	Expr   Expression
+	Line   int
+	Column int
+	Token  string
+}
+
+func (*TabExpr) exprNode() {}
+
+func (t *TabExpr) Pos() (int, int, string) {
+	return t.Line, t.Column, t.Token
+}
+
+// =========================
 // Maths functions
 // =========================
 // =========================
