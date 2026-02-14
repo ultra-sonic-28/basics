@@ -10,22 +10,29 @@ import (
 	"basics/internal/token"
 )
 
+type unaryBuiltinFactory func(expr Expression, line, col int, tok string) Expression
+
 type Parser struct {
-	tokens   []token.Token
-	pos      int
-	curr     token.Token
-	peek     token.Token
-	errors   []*errors.Error
-	forStack []*ForStmt
+	tokens        []token.Token
+	pos           int
+	curr          token.Token
+	peek          token.Token
+	errors        []*errors.Error
+	forStack      []*ForStmt
+	unaryBuiltins map[string]unaryBuiltinFactory
 }
 
 func New(tokens []token.Token) *Parser {
 	logger.Info("Instanciate new parser")
+
 	p := &Parser{tokens: tokens}
 	p.curr = tokens[0]
+
 	if len(tokens) > 1 {
 		p.peek = tokens[1]
 	}
+
+	p.initBuiltins()
 	return p
 }
 
@@ -660,134 +667,13 @@ func (p *Parser) parseExpression(precedence int) Expression {
 	switch p.curr.Type {
 
 	case token.KEYWORD:
-		switch p.curr.Literal {
-		case "INT":
-			tok := p.curr
-			p.next() // consommer INT
-
-			if !p.expect(token.LPAREN) {
-				return nil
-			}
-
-			expr := p.parseExpression(LOWEST)
-			if expr == nil {
-				return nil
-			}
-
-			if !p.expect(token.RPAREN) {
-				return nil
-			}
-
-			left = &IntExpr{
-				Expr:   expr,
-				Line:   tok.Line,
-				Column: tok.Column,
-				Token:  tok.Literal,
-			}
-
-		case "ABS":
-			tok := p.curr
-			p.next()
-
-			if !p.expect(token.LPAREN) {
-				return nil
-			}
-
-			expr := p.parseExpression(LOWEST)
-			if expr == nil {
-				return nil
-			}
-
-			if !p.expect(token.RPAREN) {
-				return nil
-			}
-
-			left = &AbsExpr{
-				Expr:   expr,
-				Line:   tok.Line,
-				Column: tok.Column,
-				Token:  tok.Literal,
-			}
-
-		case "SQR":
-			tok := p.curr
-			p.next()
-
-			if !p.expect(token.LPAREN) {
-				return nil
-			}
-
-			expr := p.parseExpression(LOWEST)
-			if expr == nil {
-				return nil
-			}
-
-			if !p.expect(token.RPAREN) {
-				return nil
-			}
-
-			left = &SqrExpr{
-				Expr:   expr,
-				Line:   tok.Line,
-				Column: tok.Column,
-				Token:  tok.Literal,
-			}
-
-		case "SGN":
-			line := p.curr.Line
-			col := p.curr.Column
-			tok := p.curr.Literal
-
-			p.next() // SGN
-
-			if !p.expect(token.LPAREN) {
-				return nil
-			}
-
-			expr := p.parseExpression(LOWEST)
-			if expr == nil {
-				return nil
-			}
-
-			if !p.expect(token.RPAREN) {
-				return nil
-			}
-
-			return &SgnExpr{
-				Expr:   expr,
-				Line:   line,
-				Column: col,
-				Token:  tok,
-			}
-
-		case "TAB":
-			tok := p.curr
-			p.next()
-
-			if !p.expect(token.LPAREN) {
-				return nil
-			}
-
-			expr := p.parseExpression(LOWEST)
-			if expr == nil {
-				return nil
-			}
-
-			if !p.expect(token.RPAREN) {
-				return nil
-			}
-
-			left = &TabExpr{
-				Expr:   expr,
-				Line:   tok.Line,
-				Column: tok.Column,
-				Token:  tok.Literal,
-			}
-
-		default:
+		factory, ok := p.unaryBuiltins[p.curr.Literal]
+		if !ok {
 			p.syntaxError("UNEXPECTED KEYWORD")
 			return nil
 		}
+
+		left = p.parseUnaryBuiltin(factory)
 
 	case token.NUMBER:
 		val, err := strconv.ParseFloat(p.curr.Literal, 64)
@@ -987,4 +873,54 @@ func (p *Parser) expectIdent() string {
 	name := p.curr.Literal
 	p.next()
 	return name
+}
+
+func (p *Parser) initBuiltins() {
+	p.unaryBuiltins = map[string]unaryBuiltinFactory{
+
+		"INT": func(expr Expression, line, col int, tok string) Expression {
+			return &IntExpr{Expr: expr, Line: line, Column: col, Token: tok}
+		},
+
+		"ABS": func(expr Expression, line, col int, tok string) Expression {
+			return &AbsExpr{Expr: expr, Line: line, Column: col, Token: tok}
+		},
+
+		"SQR": func(expr Expression, line, col int, tok string) Expression {
+			return &SqrExpr{Expr: expr, Line: line, Column: col, Token: tok}
+		},
+
+		"SGN": func(expr Expression, line, col int, tok string) Expression {
+			return &SgnExpr{Expr: expr, Line: line, Column: col, Token: tok}
+		},
+
+		"TAB": func(expr Expression, line, col int, tok string) Expression {
+			return &TabExpr{Expr: expr, Line: line, Column: col, Token: tok}
+		},
+	}
+}
+
+func (p *Parser) parseUnaryBuiltin(factory unaryBuiltinFactory) Expression {
+
+	tok := p.curr
+	line := tok.Line
+	col := tok.Column
+	lit := tok.Literal
+
+	p.next() // consume keyword
+
+	if !p.expect(token.LPAREN) {
+		return nil
+	}
+
+	expr := p.parseExpression(LOWEST)
+	if expr == nil {
+		return nil
+	}
+
+	if !p.expect(token.RPAREN) {
+		return nil
+	}
+
+	return factory(expr, line, col, lit)
 }
