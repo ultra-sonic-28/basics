@@ -93,11 +93,11 @@ func TestEvalExpr_AbsExpr(t *testing.T) {
 			},
 			setupEnv: func(rt *runtime.Runtime) {
 				rt.Env.Set("A", runtime.Value{
-					Type: runtime.INTEGER,
+					Type: runtime.NUMBER,
 					Int:  3,
 				})
 			},
-			expectType: runtime.INTEGER,
+			expectType: runtime.NUMBER,
 			expectInt:  6,
 		},
 		{

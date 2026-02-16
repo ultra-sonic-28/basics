@@ -9,6 +9,7 @@ The format is based on Keep a Changelog (https://keepachangelog.com), and this p
 
 ### Fixed
 - Add missing unit test for `Abs` in `EvalExpr`.
+- Fix error in unit test for `Abs` in `EvalExpr`.
 
 ## [Unreleased] - 2026-02-14
 ### Changed
