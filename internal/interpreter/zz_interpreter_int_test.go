@@ -57,7 +57,7 @@ func TestEvalExpr_IntExpr(t *testing.T) {
 			expr: &parser.IntExpr{
 				Expr: &parser.NumberLiteral{Value: -2.0},
 			},
-			expectInt: -3, // selon ton implémentation actuelle
+			expectInt: -2,
 		},
 		{
 			name: "Integer variable",

@@ -12,6 +12,7 @@ The format is based on Keep a Changelog (https://keepachangelog.com), and this p
 - Fix error in unit test for `Abs` in `EvalExpr`.
 - Add missing unit test for `Sgn` in `EvalExpr`.
 - Add missing unit test for `Int` in `EvalExpr`.
+- Fix error in `Int` when negative value is already an int.
 
 ## [Unreleased] - 2026-02-14
 ### Changed

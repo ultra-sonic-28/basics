@@ -758,6 +758,13 @@ All done!
 `,
 		},
 		{
+			name:   "Int-04",
+			file:   "maths/int-04-example.bas",
+			errors: 0,
+			expected: `-21
+`,
+		},
+		{
 			name:     "LinenumWithoutInst-01",
 			file:     "others/linenum-without-inst-01-example.bas",
 			errors:   0,

@@ -391,7 +391,7 @@ func EvalExpr(expr parser.Expression, rt *runtime.Runtime) (runtime.Value, *[]in
 				// INT (-1,75) -> -2
 				return runtime.Value{
 					Type: runtime.INTEGER,
-					Int:  int(val.Num) - 1,
+					Int:  int(math.Floor(val.Num)),
 				}, nil, nil
 			}
 		}
