@@ -204,6 +204,13 @@ An integer or string variable must be followed by a `%` or `$` at each use of th
     * Returns the square root of `aexpr`.
     * `aexpr` must be positive or null.
 
+##### String functions
+* `LEFT$(sexpr, aexpr)`
+    * This function returns the first (leftmost) `aexpr` characters of `sexpr`.
+    * If `aexpr` < 1 the message `?ILLEGAL QUANTITY ERROR` is displayed.
+    * If `aexpr` is a real, it is converted to an integer.
+    * If `aexpr` > `LEN(sexpr)`, only the characters which constitute the string are returned. Any extra positions are ignored.
+
 #### Differences with Applesoft BASIC
 ##### Variable names
 1. In Applesoft BASIC, a variable name may be up to 238 characters long, but APPLESOFT uses only the first two characters to distinguish one name from another. Thus, the names `GOOD4NOUGHT` and `GOLDRUSH` refer to the same variable.

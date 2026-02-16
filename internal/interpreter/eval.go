@@ -536,6 +536,57 @@ func EvalExpr(expr parser.Expression, rt *runtime.Runtime) (runtime.Value, *[]in
 			"INVALID ABS OPERAND",
 		)
 
+	case *parser.LeftExpr:
+
+		strVal, _, err := EvalExpr(e.StrExpr, rt)
+		if err != nil {
+			return runtime.Value{}, nil, err
+		}
+		if strVal.Type != runtime.STRING {
+			return runtime.Value{}, nil, errors.NewSyntax(
+				line, col, tok,
+				"EXPECTED STRING",
+			)
+		}
+
+		lenVal, _, err := EvalExpr(e.LenExpr, rt)
+		if err != nil {
+			return runtime.Value{}, nil, err
+		}
+		if lenVal.Type != runtime.INTEGER && lenVal.Type != runtime.NUMBER {
+			return runtime.Value{}, nil, errors.NewSyntax(
+				line, col, tok,
+				"EXPECTED NUMBER",
+			)
+		}
+
+		var length int
+
+		switch lenVal.Type {
+		case runtime.INTEGER:
+			length = lenVal.Int
+		case runtime.NUMBER:
+			length = int(lenVal.Num) // partie entière
+		}
+
+		if length < 1 {
+			return runtime.Value{}, nil, errors.NewSyntax(
+				line, col, tok,
+				"ILLEGAL QUANTITY ERROR",
+			)
+		}
+
+		str := strVal.Str
+
+		if length > len(str) {
+			length = len(str)
+		}
+
+		return runtime.Value{
+			Type: runtime.STRING,
+			Str:  str[:length],
+		}, nil, nil
+
 	}
 
 	// =========================

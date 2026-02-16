@@ -194,6 +194,11 @@ func dumpExpr(e Expression, indent string, emit Emitter) {
 		emit(indent + "TAB")
 		dumpExpr(n.Expr, indent+"  ", emit)
 
+	case *LeftExpr:
+		emit(indent + "LEFT")
+		dumpExpr(n.StrExpr, indent+"  ", emit)
+		dumpExpr(n.LenExpr, indent+"  ", emit)
+
 	default:
 		emit(indent + "UNKNOWN EXPR")
 	}

@@ -776,6 +776,62 @@ All done!
 			expected: ``,
 		},
 		{
+			name:   "Left-01",
+			file:   "strings/left-01-example.bas",
+			errors: 0,
+			expected: `APPLE
+`,
+		},
+		{
+			name:   "Left-02",
+			file:   "strings/left-02-example.bas",
+			errors: 0,
+			expected: `APPLE
+`,
+		},
+		{
+			name:   "Left-03",
+			file:   "strings/left-03-example.bas",
+			errors: 0,
+			expected: `APPLESOFT
+`,
+		},
+		{
+			name:   "Left-04",
+			file:   "strings/left-04-example.bas",
+			errors: 0,
+			expected: `APPLE
+`,
+		},
+		{
+			name:   "Left-05",
+			file:   "strings/left-05-example.bas",
+			errors: 0,
+			expected: `⚠️ EXPECTED NUMBER IN 2 (LEFT$)
+`,
+		},
+		{
+			name:   "Left-06",
+			file:   "strings/left-06-example.bas",
+			errors: 0,
+			expected: `⚠️ EXPECTED STRING IN 3 (LEFT$)
+`,
+		},
+		{
+			name:   "Left-07",
+			file:   "strings/left-07-example.bas",
+			errors: 1,
+			expected: `
+`,
+		},
+		{
+			name:   "Left-08",
+			file:   "strings/left-08-example.bas",
+			errors: 0,
+			expected: `⚠️ ILLEGAL QUANTITY ERROR IN 2 (LEFT$)
+`,
+		},
+		{
 			name:   "MultipleOf4",
 			file:   "programs/maths/multpile-of-4-example.bas",
 			errors: 0,

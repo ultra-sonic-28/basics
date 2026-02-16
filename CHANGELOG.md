@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog (https://keepachangelog.com), and this project adheres to Semantic Versioning (https://semver.org).
 
+## [Unreleased] - 2026-02-16
+### Added
+- Add `LEFT$()` support in Apple II Basic. Add relevant unit tests.
+
 ## [Unreleased] - 2026-02-14
 ### Changed
 - Some refactorization for future proof parser.

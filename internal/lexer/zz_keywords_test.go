@@ -22,6 +22,9 @@ func TestKeywords_ContainsExpectedKeywords(t *testing.T) {
 		"PRINT",
 		"INPUT", "GET",
 
+		// Opérations sur les chaines de caractères
+		"LEFT$",
+
 		// Math
 		"SIN", "COS", "TAN",
 		"INT", "ABS", "RND",

@@ -334,6 +334,23 @@ func (t *TabExpr) Pos() (int, int, string) {
 }
 
 // =========================
+// LEFT$(sexpr, aexpr)
+// =========================
+type LeftExpr struct {
+	StrExpr Expression
+	LenExpr Expression
+	Line    int
+	Column  int
+	Token   string
+}
+
+func (*LeftExpr) exprNode() {}
+
+func (l *LeftExpr) Pos() (int, int, string) {
+	return l.Line, l.Column, l.Token
+}
+
+// =========================
 // Maths functions
 // =========================
 // =========================

@@ -1,0 +1,4 @@
+10 REM LEFT Example
+20 A=2
+30 A$ = LEFT$("APPLESOFT", A*2 + 1)
+40 PRINT A$

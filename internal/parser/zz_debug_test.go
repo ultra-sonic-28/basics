@@ -31,6 +31,40 @@ func TestDumpExpr(t *testing.T) {
 			expected: "Ident X\n",
 		},
 		{
+			name: "LeftExpr",
+			expr: &LeftExpr{
+				StrExpr: &StringLiteral{
+					Value:  "APPLESOFT",
+					Line:   4,
+					Column: 2,
+					Token:  "APPLESOFT",
+				},
+				LenExpr: &NumberLiteral{
+					Value:  5,
+					Line:   4,
+					Column: 15,
+					Token:  "5",
+				},
+				Line:   1,
+				Column: 1,
+				Token:  "LEFT$",
+			},
+			expected: "LEFT\n  String \"APPLESOFT\"\n  Number 5\n",
+		},
+		{
+			name: "LeftExpr with expression length",
+			expr: &LeftExpr{
+				StrExpr: &Identifier{Name: "A$"},
+				LenExpr: &InfixExpr{
+					Left:  &Identifier{Name: "A"},
+					Op:    "*",
+					Right: &NumberLiteral{Value: 2},
+				},
+				Token: "LEFT$",
+			},
+			expected: "LEFT\n  Ident A$\n  Infix *\n    Ident A\n    Number 2\n",
+		},
+		{
 			name: "TabExpr",
 			expr: &TabExpr{
 				Expr: &NumberLiteral{

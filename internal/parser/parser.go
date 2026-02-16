@@ -11,6 +11,7 @@ import (
 )
 
 type unaryBuiltinFactory func(expr Expression, line, col int, tok string) Expression
+type multiArgBuiltinFactory func(args []Expression, line, col int, tok string) Expression
 
 type Parser struct {
 	tokens        []token.Token
@@ -20,6 +21,7 @@ type Parser struct {
 	errors        []*errors.Error
 	forStack      []*ForStmt
 	unaryBuiltins map[string]unaryBuiltinFactory
+	multiBuiltins map[string]multiArgBuiltinFactory
 }
 
 func New(tokens []token.Token) *Parser {
@@ -667,13 +669,22 @@ func (p *Parser) parseExpression(precedence int) Expression {
 	switch p.curr.Type {
 
 	case token.KEYWORD:
-		factory, ok := p.unaryBuiltins[p.curr.Literal]
-		if !ok {
-			p.syntaxError("UNEXPECTED KEYWORD")
-			return nil
+
+		// Unary builtins
+		if factory, ok := p.unaryBuiltins[p.curr.Literal]; ok {
+			left = p.parseUnaryBuiltin(factory)
+			break
 		}
 
-		left = p.parseUnaryBuiltin(factory)
+		// Multi-arg builtins
+		if factory, ok := p.multiBuiltins[p.curr.Literal]; ok {
+			left = p.parseBuiltinCall(factory)
+			break
+		}
+
+		// Sinon erreur
+		p.syntaxError("UNEXPECTED KEYWORD")
+		return nil
 
 	case token.NUMBER:
 		val, err := strconv.ParseFloat(p.curr.Literal, 64)
@@ -898,6 +909,23 @@ func (p *Parser) initBuiltins() {
 			return &TabExpr{Expr: expr, Line: line, Column: col, Token: tok}
 		},
 	}
+
+	p.multiBuiltins = map[string]multiArgBuiltinFactory{
+		"LEFT$": func(args []Expression, line, col int, tok string) Expression {
+			if len(args) != 2 {
+				p.syntaxError("LEFT$ EXPECTS 2 ARGUMENTS")
+				return nil
+			}
+			return &LeftExpr{
+				StrExpr: args[0],
+				LenExpr: args[1],
+				Line:    line,
+				Column:  col,
+				Token:   tok,
+			}
+		},
+	}
+
 }
 
 func (p *Parser) parseUnaryBuiltin(factory unaryBuiltinFactory) Expression {
@@ -923,4 +951,40 @@ func (p *Parser) parseUnaryBuiltin(factory unaryBuiltinFactory) Expression {
 	}
 
 	return factory(expr, line, col, lit)
+}
+
+func (p *Parser) parseBuiltinCall(factory multiArgBuiltinFactory) Expression {
+	tok := p.curr
+
+	p.next() // consomme le keyword
+
+	if !p.expect(token.LPAREN) {
+		return nil
+	}
+
+	var args []Expression
+
+	if p.curr.Type != token.RPAREN {
+		for {
+			expr := p.parseExpression(LOWEST)
+			if expr == nil {
+				return nil
+			}
+			args = append(args, expr)
+
+			if p.curr.Type == token.RPAREN {
+				break
+			}
+
+			if !p.expect(token.COMMA) {
+				return nil
+			}
+		}
+	}
+
+	if !p.expect(token.RPAREN) {
+		return nil
+	}
+
+	return factory(args, tok.Line, tok.Column, tok.Literal)
 }
