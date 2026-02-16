@@ -7,6 +7,9 @@ The format is based on Keep a Changelog (https://keepachangelog.com), and this p
 ### Added
 - Add `LEFT$()` support in Apple II Basic. Add relevant unit tests.
 
+### Fixed
+- Add missing unit test for `Abs` in `EvalExpr`.
+
 ## [Unreleased] - 2026-02-14
 ### Changed
 - Some refactorization for future proof parser.
