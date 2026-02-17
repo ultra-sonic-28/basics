@@ -386,6 +386,22 @@ func (m *MidExpr) Pos() (int, int, string) {
 }
 
 // =========================
+// LEN(sexpr)
+// =========================
+type LenExpr struct {
+	Expr   Expression
+	Line   int
+	Column int
+	Token  string
+}
+
+func (*LenExpr) exprNode() {}
+
+func (l *LenExpr) Pos() (int, int, string) {
+	return l.Line, l.Column, l.Token
+}
+
+// =========================
 // Maths functions
 // =========================
 // =========================

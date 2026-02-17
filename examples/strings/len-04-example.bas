@@ -1,0 +1,2 @@
+10 REM LEN Example
+20 PRINT LEN("APPLESOFT" + "WARE")

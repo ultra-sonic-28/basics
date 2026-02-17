@@ -733,6 +733,26 @@ func EvalExpr(expr parser.Expression, rt *runtime.Runtime) (runtime.Value, *[]in
 			Str:  str[startIndex:endIndex],
 		}, nil, nil
 
+	case *parser.LenExpr:
+
+		val, _, err := EvalExpr(e.Expr, rt)
+		if err != nil {
+			return runtime.Value{}, nil, err
+		}
+
+		if val.Type != runtime.STRING {
+			return runtime.Value{}, nil, errors.NewSyntax(
+				line, col, tok,
+				"TYPE MISMATCH",
+			)
+		}
+
+		return runtime.Value{
+			Type: runtime.INTEGER,
+			Int:  len(val.Str),
+			Num:  float64(len(val.Str)),
+		}, nil, nil
+
 	}
 
 	// =========================

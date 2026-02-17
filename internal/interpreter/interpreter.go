@@ -746,6 +746,7 @@ func (i *Interpreter) execLet(s *parser.LetStmt, inst *Instruction) string {
 				i.rt.ExecError(err)
 				return ""
 			}
+
 			i.rt.Env.Set(s.Name, runtime.Value{
 				Type: runtime.INTEGER,
 				Int:  int(val.Num),
@@ -762,16 +763,26 @@ func (i *Interpreter) execLet(s *parser.LetStmt, inst *Instruction) string {
 			sExpr = val.Str
 
 		case "float":
+			var v float64
+
 			if val.Type == runtime.STRING {
 				err := errors.NewSemantic(inst.LineNum, "TYPE MISMATCH: FLOAT EXPECTED")
 				i.rt.ExecError(err)
 				return ""
 			}
+
+			if val.Type == runtime.INTEGER {
+				v = float64(val.Int)
+			} else if val.Type == runtime.NUMBER {
+				v = val.Num
+			}
+
 			i.rt.Env.Set(s.Name, runtime.Value{
 				Type: runtime.NUMBER,
-				Num:  val.Num,
+				Num:  v,
 			})
-			sExpr = fmt.Sprintf("%g", val.Num)
+			sExpr = fmt.Sprintf("%g", v)
+
 		}
 
 		return sExpr

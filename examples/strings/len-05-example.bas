@@ -1,0 +1,3 @@
+10 REM LEN Example
+20 A$ = "APPLESOFT" : B$ = "WARE"
+30 PRINT LEN(A$+B$)

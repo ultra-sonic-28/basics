@@ -890,23 +890,57 @@ func (p *Parser) initBuiltins() {
 	p.unaryBuiltins = map[string]unaryBuiltinFactory{
 
 		"INT": func(expr Expression, line, col int, tok string) Expression {
-			return &IntExpr{Expr: expr, Line: line, Column: col, Token: tok}
+			return &IntExpr{
+				Expr:   expr,
+				Line:   line,
+				Column: col,
+				Token:  tok,
+			}
 		},
 
 		"ABS": func(expr Expression, line, col int, tok string) Expression {
-			return &AbsExpr{Expr: expr, Line: line, Column: col, Token: tok}
+			return &AbsExpr{
+				Expr:   expr,
+				Line:   line,
+				Column: col,
+				Token:  tok,
+			}
 		},
 
 		"SQR": func(expr Expression, line, col int, tok string) Expression {
-			return &SqrExpr{Expr: expr, Line: line, Column: col, Token: tok}
+			return &SqrExpr{
+				Expr:   expr,
+				Line:   line,
+				Column: col,
+				Token:  tok,
+			}
 		},
 
 		"SGN": func(expr Expression, line, col int, tok string) Expression {
-			return &SgnExpr{Expr: expr, Line: line, Column: col, Token: tok}
+			return &SgnExpr{
+				Expr:   expr,
+				Line:   line,
+				Column: col,
+				Token:  tok,
+			}
 		},
 
 		"TAB": func(expr Expression, line, col int, tok string) Expression {
-			return &TabExpr{Expr: expr, Line: line, Column: col, Token: tok}
+			return &TabExpr{
+				Expr:   expr,
+				Line:   line,
+				Column: col,
+				Token:  tok,
+			}
+		},
+
+		"LEN": func(expr Expression, line, col int, tok string) Expression {
+			return &LenExpr{
+				Expr:   expr,
+				Line:   line,
+				Column: col,
+				Token:  tok,
+			}
 		},
 	}
 

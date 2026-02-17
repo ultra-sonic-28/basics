@@ -24,6 +24,7 @@ func TestKeywords_ContainsExpectedKeywords(t *testing.T) {
 
 		// Opérations sur les chaines de caractères
 		"LEFT$", "RIGHT$", "MID$",
+		"LEN",
 
 		// Math
 		"SIN", "COS", "TAN",

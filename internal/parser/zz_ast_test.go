@@ -523,3 +523,18 @@ func TestMidExpr_3Args_Pos(t *testing.T) {
 	testutils.Equal(t, "column", col, 8)
 	testutils.Equal(t, "token", tok, "MID$")
 }
+
+func TestLenExpr_Pos(t *testing.T) {
+	expr := &LenExpr{
+		Expr:   &StringLiteral{Value: "HELLO"},
+		Line:   20,
+		Column: 8,
+		Token:  "LEN",
+	}
+
+	line, col, tok := expr.Pos()
+
+	testutils.Equal(t, "line", line, 20)
+	testutils.Equal(t, "column", col, 8)
+	testutils.Equal(t, "token", tok, "LEN")
+}

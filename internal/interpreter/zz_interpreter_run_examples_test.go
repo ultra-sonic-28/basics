@@ -765,6 +765,48 @@ All done!
 `,
 		},
 		{
+			name:   "Len-01",
+			file:   "strings/len-01-example.bas",
+			errors: 0,
+			expected: `9
+`,
+		},
+		{
+			name:   "Len-02",
+			file:   "strings/len-02-example.bas",
+			errors: 0,
+			expected: `9
+`,
+		},
+		{
+			name:   "Len-03",
+			file:   "strings/len-03-example.bas",
+			errors: 0,
+			expected: `9
+`,
+		},
+		{
+			name:   "Len-04",
+			file:   "strings/len-04-example.bas",
+			errors: 0,
+			expected: `13
+`,
+		},
+		{
+			name:   "Len-05",
+			file:   "strings/len-05-example.bas",
+			errors: 0,
+			expected: `13
+`,
+		},
+		{
+			name:   "Len-06",
+			file:   "strings/len-06-example.bas",
+			errors: 0,
+			expected: `0
+`,
+		},
+		{
 			name:     "LinenumWithoutInst-01",
 			file:     "others/linenum-without-inst-01-example.bas",
 			errors:   0,

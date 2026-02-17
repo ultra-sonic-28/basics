@@ -227,6 +227,8 @@ An integer or string variable must be followed by a `%` or `$` at each use of th
         * This function returns `bexpr` characters from the string `sexpr` starting at `aexpr`.
         * If `aexpr >= len(sexpr)` then `MID$` returns the empty string
         * If `aexpr + bexpr >= len(sexpr)` then `MID$` returns the substring of `sexpr` starting from `axpr` pos. Any extra positions are ignored.
+* `LEN(sexpr)`
+    * This function returns the number of characters in `sexpr`.
 
 #### Differences with Applesoft BASIC
 ##### Variable names
