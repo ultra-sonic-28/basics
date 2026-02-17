@@ -242,6 +242,11 @@ An integer or string variable must be followed by a `%` or `$` at each use of th
 
     > With BASICS `END` is illegal as a variable name, as `FEND` is totally legal.
 
+##### String support
+1. In Applesoft BASIC, string length are limited to 255 characters.
+
+    > With BASICS, there isn't any size limitation of strings. Strings may contains as many characters as you like.
+    
 ##### Extended instructions set
 * GOTO support use of identifier and complex expressions. You can write:
 ```

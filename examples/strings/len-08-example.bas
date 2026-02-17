@@ -1,0 +1,4 @@
+10 REM LEN Example
+20 A$ = "01234567890" : B$=""
+30 FOR I=1 TO 50:B$=B$+A$:NEXT I
+40 PRINT LEN(B$)

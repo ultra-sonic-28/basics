@@ -807,6 +807,20 @@ All done!
 `,
 		},
 		{
+			name:   "Len-07",
+			file:   "strings/len-07-example.bas",
+			errors: 0,
+			expected: `260
+`,
+		},
+		{
+			name:   "Len-08",
+			file:   "strings/len-08-example.bas",
+			errors: 0,
+			expected: `550
+`,
+		},
+		{
 			name:     "LinenumWithoutInst-01",
 			file:     "others/linenum-without-inst-01-example.bas",
 			errors:   0,

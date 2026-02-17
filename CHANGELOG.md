@@ -9,6 +9,9 @@ The format is based on Keep a Changelog (https://keepachangelog.com), and this p
 - Add `MID$()` support in Apple II Basic. Add relevant unit tests.
 - Add `LEN()` support in Apple II Basic. Add relevant unit tests.
 
+### Fixed
+- Add example programs for handling strings length over 255 characters. Update README.
+
 ## [Unreleased] - 2026-02-16
 ### Added
 - Add `LEFT$()` support in Apple II Basic. Add relevant unit tests.
