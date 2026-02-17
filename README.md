@@ -215,6 +215,18 @@ An integer or string variable must be followed by a `%` or `$` at each use of th
     * If `aexpr` < 1 the message `?ILLEGAL QUANTITY ERROR` is displayed.
     * If `aexpr` is a real, it is converted to an integer.
     * If `aexpr` > `LEN(sexpr)`, then the entire string is returned.
+* `MID$(sexpr, aexpr [, bexpr])`
+    * This function returns a substring of `bexpr` length from the string `sexpr` starting from `axpr` pos.
+    * If `aexpr` < 1 the message `?ILLEGAL QUANTITY ERROR` is displayed.
+    * If `aexpr` or `bexpr` are real numbers, they are converted to an integer.
+    * `bexpr` is optional.
+    * If `MID$` is called with 2 parameters (`sexpr` and `aexpr`)
+        * This function returns the string starting at `aexpr` and ending at the end of the expression `sexpr`.
+        * If `aexpr >= len(sexpr)` then `MID$` returns the empty string
+    * Si `MID$` est appelée avec 3 paramètres (`sexpr`, `aexpr` et `bexpr`)
+        * This function returns `bexpr` characters from the string `sexpr` starting at `aexpr`.
+        * If `aexpr >= len(sexpr)` then `MID$` returns the empty string
+        * If `aexpr + bexpr >= len(sexpr)` then `MID$` returns the substring of `sexpr` starting from `axpr` pos. Any extra positions are ignored.
 
 #### Differences with Applesoft BASIC
 ##### Variable names

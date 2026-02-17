@@ -99,6 +99,85 @@ func TestDumpExpr(t *testing.T) {
 			expected: "RIGHT\n  Ident A$\n  Infix *\n    Ident A\n    Number 2\n",
 		},
 		{
+			name: "MidExpr",
+			expr: &MidExpr{
+				StrExpr: &StringLiteral{
+					Value:  "APPLESOFT",
+					Line:   4,
+					Column: 2,
+					Token:  "APPLESOFT",
+				},
+				Start: &NumberLiteral{
+					Value:  5,
+					Line:   4,
+					Column: 15,
+					Token:  "5",
+				},
+				Line:   1,
+				Column: 1,
+				Token:  "MID$",
+			},
+			expected: "MID\n  String \"APPLESOFT\"\n  Number 5\n",
+		},
+		{
+			name: "MidExpr with len",
+			expr: &MidExpr{
+				StrExpr: &StringLiteral{
+					Value:  "APPLESOFT",
+					Line:   4,
+					Column: 2,
+					Token:  "APPLESOFT",
+				},
+				Start: &NumberLiteral{
+					Value:  5,
+					Line:   4,
+					Column: 15,
+					Token:  "5",
+				},
+				Len: &NumberLiteral{
+					Value:  1,
+					Line:   4,
+					Column: 15,
+					Token:  "1",
+				},
+				Line:   1,
+				Column: 1,
+				Token:  "MID$",
+			},
+			expected: "MID\n  String \"APPLESOFT\"\n  Number 5\n  Number 1\n",
+		},
+		{
+			name: "MidExpr with start expression",
+			expr: &MidExpr{
+				StrExpr: &Identifier{Name: "A$"},
+				Start: &InfixExpr{
+					Left:  &Identifier{Name: "A"},
+					Op:    "*",
+					Right: &NumberLiteral{Value: 2},
+				},
+				Token: "MID$",
+			},
+			expected: "MID\n  Ident A$\n  Infix *\n    Ident A\n    Number 2\n",
+		},
+		{
+			name: "MidExpr with start and len expression",
+			expr: &MidExpr{
+				StrExpr: &Identifier{Name: "A$"},
+				Start: &InfixExpr{
+					Left:  &Identifier{Name: "A"},
+					Op:    "*",
+					Right: &NumberLiteral{Value: 3},
+				},
+				Len: &InfixExpr{
+					Left:  &Identifier{Name: "B"},
+					Op:    "*",
+					Right: &NumberLiteral{Value: 2},
+				},
+				Token: "MID$",
+			},
+			expected: "MID\n  Ident A$\n  Infix *\n    Ident A\n    Number 3\n  Infix *\n    Ident B\n    Number 2\n",
+		},
+		{
 			name: "TabExpr",
 			expr: &TabExpr{
 				Expr: &NumberLiteral{

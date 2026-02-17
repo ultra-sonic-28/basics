@@ -23,7 +23,7 @@ func TestKeywords_ContainsExpectedKeywords(t *testing.T) {
 		"INPUT", "GET",
 
 		// Opérations sur les chaines de caractères
-		"LEFT$", "RIGHT$",
+		"LEFT$", "RIGHT$", "MID$",
 
 		// Math
 		"SIN", "COS", "TAN",

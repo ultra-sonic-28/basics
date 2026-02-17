@@ -368,6 +368,24 @@ func (r *RightExpr) Pos() (int, int, string) {
 }
 
 // =========================
+// MID$(sexpr, aexpr [, bexpr])
+// =========================
+type MidExpr struct {
+	StrExpr Expression
+	Start   Expression
+	Len     Expression // peut être nil
+	Line    int
+	Column  int
+	Token   string
+}
+
+func (*MidExpr) exprNode() {}
+
+func (m *MidExpr) Pos() (int, int, string) {
+	return m.Line, m.Column, m.Token
+}
+
+// =========================
 // Maths functions
 // =========================
 // =========================

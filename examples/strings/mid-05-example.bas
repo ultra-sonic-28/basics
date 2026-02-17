@@ -1,0 +1,2 @@
+10 REM MID Example
+20 PRINT MID$("APPLESOFT", "5")

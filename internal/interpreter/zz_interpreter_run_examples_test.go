@@ -839,6 +839,97 @@ All done!
 `,
 		},
 		{
+			name:   "Mid-01",
+			file:   "strings/mid-01-example.bas",
+			errors: 0,
+			expected: `ESOFT
+`,
+		},
+		{
+			name:   "Mid-02",
+			file:   "strings/mid-02-example.bas",
+			errors: 0,
+			expected: `ESOFT
+`,
+		},
+		{
+			name:   "Mid-03",
+			file:   "strings/mid-03-example.bas",
+			errors: 0,
+			expected: `
+`,
+		},
+		{
+			name:   "Mid-04",
+			file:   "strings/mid-04-example.bas",
+			errors: 0,
+			expected: `ESOFT
+`,
+		},
+		{
+			name:   "Mid-05",
+			file:   "strings/mid-05-example.bas",
+			errors: 0,
+			expected: `⚠️ EXPECTED NUMBER IN 2 (MID$)
+`,
+		},
+		{
+			name:   "Mid-06",
+			file:   "strings/mid-06-example.bas",
+			errors: 0,
+			expected: `⚠️ EXPECTED STRING IN 3 (MID$)
+`,
+		},
+		{
+			name:   "Mid-07",
+			file:   "strings/mid-07-example.bas",
+			errors: 1,
+			expected: `
+`,
+		},
+		{
+			name:   "Mid-08",
+			file:   "strings/mid-08-example.bas",
+			errors: 0,
+			expected: `⚠️ ILLEGAL QUANTITY ERROR IN 2 (MID$)
+`,
+		},
+		{
+			name:   "Mid-09",
+			file:   "strings/mid-09-example.bas",
+			errors: 0,
+			expected: `LE
+`,
+		},
+		{
+			name:   "Mid-10",
+			file:   "strings/mid-10-example.bas",
+			errors: 0,
+			expected: `O
+`,
+		},
+		{
+			name:   "Mid-11",
+			file:   "strings/mid-11-example.bas",
+			errors: 0,
+			expected: `⚠️ EXPECTED NUMBER IN 2 (MID$)
+`,
+		},
+		{
+			name:   "Mid-12",
+			file:   "strings/mid-12-example.bas",
+			errors: 1,
+			expected: `
+`,
+		},
+		{
+			name:   "Mid-13",
+			file:   "strings/mid-13-example.bas",
+			errors: 0,
+			expected: `⚠️ ILLEGAL QUANTITY ERROR IN 2 (MID$)
+`,
+		},
+		{
 			name:   "MultipleOf4",
 			file:   "programs/maths/multpile-of-4-example.bas",
 			errors: 0,

@@ -16,7 +16,7 @@ var Keywords = map[string]bool{
 	"INPUT": true, "GET": true,
 
 	// Opérations sur les chaines de caractères
-	"LEFT$": true, "RIGHT$": true,
+	"LEFT$": true, "RIGHT$": true, "MID$": true,
 
 	// Math
 	"SIN": true, "COS": true, "TAN": true,

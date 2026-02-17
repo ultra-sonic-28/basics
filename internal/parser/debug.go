@@ -204,6 +204,14 @@ func dumpExpr(e Expression, indent string, emit Emitter) {
 		dumpExpr(n.StrExpr, indent+"  ", emit)
 		dumpExpr(n.LenExpr, indent+"  ", emit)
 
+	case *MidExpr:
+		emit(indent + "MID")
+		dumpExpr(n.StrExpr, indent+"  ", emit)
+		dumpExpr(n.Start, indent+"  ", emit)
+		if n.Len != nil {
+			dumpExpr(n.Len, indent+"  ", emit)
+		}
+
 	default:
 		emit(indent + "UNKNOWN EXPR")
 	}

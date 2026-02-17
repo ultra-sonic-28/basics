@@ -1,0 +1,4 @@
+10 REM MID Example
+20 A=2
+30 A$ = MID$("APPLESOFT", A*2 + 3, 1)
+40 PRINT A$

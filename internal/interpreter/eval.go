@@ -640,6 +640,99 @@ func EvalExpr(expr parser.Expression, rt *runtime.Runtime) (runtime.Value, *[]in
 			Str:  str[len(str)-length:],
 		}, nil, nil
 
+	case *parser.MidExpr:
+
+		strVal, _, err := EvalExpr(e.StrExpr, rt)
+		if err != nil {
+			return runtime.Value{}, nil, err
+		}
+		if strVal.Type != runtime.STRING {
+			return runtime.Value{}, nil, errors.NewSyntax(
+				line, col, tok,
+				"EXPECTED STRING",
+			)
+		}
+
+		startVal, _, err := EvalExpr(e.Start, rt)
+		if err != nil {
+			return runtime.Value{}, nil, err
+		}
+		if startVal.Type != runtime.INTEGER && startVal.Type != runtime.NUMBER {
+			return runtime.Value{}, nil, errors.NewSyntax(
+				line, col, tok,
+				"EXPECTED NUMBER",
+			)
+		}
+
+		var start int
+		switch startVal.Type {
+		case runtime.INTEGER:
+			start = startVal.Int
+		case runtime.NUMBER:
+			start = int(startVal.Num)
+		}
+
+		if start < 1 {
+			return runtime.Value{}, nil, errors.NewSyntax(
+				line, col, tok,
+				"ILLEGAL QUANTITY ERROR",
+			)
+		}
+
+		str := strVal.Str
+
+		// BASIC est 1-based
+		startIndex := start - 1
+
+		if startIndex >= len(str) {
+			return runtime.Value{
+				Type: runtime.STRING,
+				Str:  "",
+			}, nil, nil
+		}
+
+		// CAS 2 paramètres
+		if e.Len == nil {
+			return runtime.Value{
+				Type: runtime.STRING,
+				Str:  str[startIndex:],
+			}, nil, nil
+		}
+
+		// CAS 3 paramètres
+		lenVal, _, err := EvalExpr(e.Len, rt)
+		if err != nil {
+			return runtime.Value{}, nil, err
+		}
+		if lenVal.Type != runtime.INTEGER && lenVal.Type != runtime.NUMBER {
+			return runtime.Value{}, nil, errors.NewSyntax(
+				line, col, tok,
+				"EXPECTED NUMBER",
+			)
+		}
+
+		var length int
+		switch lenVal.Type {
+		case runtime.INTEGER:
+			length = lenVal.Int
+		case runtime.NUMBER:
+			length = int(lenVal.Num)
+		}
+
+		if length < 1 {
+			return runtime.Value{}, nil, errors.NewSyntax(
+				line, col, tok,
+				"ILLEGAL QUANTITY ERROR",
+			)
+		}
+
+		endIndex := min(startIndex+length, len(str))
+
+		return runtime.Value{
+			Type: runtime.STRING,
+			Str:  str[startIndex:endIndex],
+		}, nil, nil
+
 	}
 
 	// =========================

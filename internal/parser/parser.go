@@ -937,6 +937,27 @@ func (p *Parser) initBuiltins() {
 				Token:   tok,
 			}
 		},
+		"MID$": func(args []Expression, line, col int, tok string) Expression {
+
+			if len(args) != 2 && len(args) != 3 {
+				p.syntaxError("MID$ EXPECTS 2 OR 3 ARGUMENTS")
+				return nil
+			}
+
+			expr := &MidExpr{
+				StrExpr: args[0],
+				Start:   args[1],
+				Line:    line,
+				Column:  col,
+				Token:   tok,
+			}
+
+			if len(args) == 3 {
+				expr.Len = args[2]
+			}
+
+			return expr
+		},
 	}
 
 }
