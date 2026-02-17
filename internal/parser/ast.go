@@ -351,6 +351,23 @@ func (l *LeftExpr) Pos() (int, int, string) {
 }
 
 // =========================
+// RIGHT$(sexpr, aexpr)
+// =========================
+type RightExpr struct {
+	StrExpr Expression
+	LenExpr Expression
+	Line    int
+	Column  int
+	Token   string
+}
+
+func (*RightExpr) exprNode() {}
+
+func (r *RightExpr) Pos() (int, int, string) {
+	return r.Line, r.Column, r.Token
+}
+
+// =========================
 // Maths functions
 // =========================
 // =========================

@@ -210,6 +210,11 @@ An integer or string variable must be followed by a `%` or `$` at each use of th
     * If `aexpr` < 1 the message `?ILLEGAL QUANTITY ERROR` is displayed.
     * If `aexpr` is a real, it is converted to an integer.
     * If `aexpr` > `LEN(sexpr)`, only the characters which constitute the string are returned. Any extra positions are ignored.
+* `RIGHT$(sexpr, aexpr)`
+    * This function returns the last (rightmost) `aexpr` characters of `sexpr`.
+    * If `aexpr` < 1 the message `?ILLEGAL QUANTITY ERROR` is displayed.
+    * If `aexpr` is a real, it is converted to an integer.
+    * If `aexpr` > `LEN(sexpr)`, then the entire string is returned.
 
 #### Differences with Applesoft BASIC
 ##### Variable names

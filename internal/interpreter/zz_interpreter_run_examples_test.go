@@ -1005,6 +1005,62 @@ Line 3
 `,
 		},
 		{
+			name:   "Right-01",
+			file:   "strings/right-01-example.bas",
+			errors: 0,
+			expected: `SOFT
+`,
+		},
+		{
+			name:   "Right-02",
+			file:   "strings/right-02-example.bas",
+			errors: 0,
+			expected: `ESOFT
+`,
+		},
+		{
+			name:   "Right-03",
+			file:   "strings/right-03-example.bas",
+			errors: 0,
+			expected: `APPLESOFT
+`,
+		},
+		{
+			name:   "Right-04",
+			file:   "strings/right-04-example.bas",
+			errors: 0,
+			expected: `ESOFT
+`,
+		},
+		{
+			name:   "Right-05",
+			file:   "strings/right-05-example.bas",
+			errors: 0,
+			expected: `⚠️ EXPECTED NUMBER IN 2 (RIGHT$)
+`,
+		},
+		{
+			name:   "Right-06",
+			file:   "strings/right-06-example.bas",
+			errors: 0,
+			expected: `⚠️ EXPECTED STRING IN 3 (RIGHT$)
+`,
+		},
+		{
+			name:   "Right-07",
+			file:   "strings/right-07-example.bas",
+			errors: 1,
+			expected: `
+`,
+		},
+		{
+			name:   "Right-08",
+			file:   "strings/right-08-example.bas",
+			errors: 0,
+			expected: `⚠️ ILLEGAL QUANTITY ERROR IN 2 (RIGHT$)
+`,
+		},
+		{
 			name:   "Sgn-01",
 			file:   "maths/sgn-01-example.bas",
 			errors: 0,

@@ -924,6 +924,19 @@ func (p *Parser) initBuiltins() {
 				Token:   tok,
 			}
 		},
+		"RIGHT$": func(args []Expression, line, col int, tok string) Expression {
+			if len(args) != 2 {
+				p.syntaxError("RIGHT$ EXPECTS 2 ARGUMENTS")
+				return nil
+			}
+			return &RightExpr{
+				StrExpr: args[0],
+				LenExpr: args[1],
+				Line:    line,
+				Column:  col,
+				Token:   tok,
+			}
+		},
 	}
 
 }

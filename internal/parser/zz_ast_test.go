@@ -474,3 +474,19 @@ func TestLeftExpr_Pos(t *testing.T) {
 	testutils.Equal(t, "column", col, 8)
 	testutils.Equal(t, "token", tok, "LEFT$")
 }
+
+func TestRightExpr_Pos(t *testing.T) {
+	expr := &RightExpr{
+		StrExpr: &StringLiteral{Value: "HELLO"},
+		LenExpr: &NumberLiteral{Value: 5},
+		Line:    20,
+		Column:  8,
+		Token:   "RIGHT$",
+	}
+
+	line, col, tok := expr.Pos()
+
+	testutils.Equal(t, "line", line, 20)
+	testutils.Equal(t, "column", col, 8)
+	testutils.Equal(t, "token", tok, "RIGHT$")
+}
