@@ -73,6 +73,7 @@ func TestLexer_GOTO_Identifier(t *testing.T) {
 	}{
 		{token.LINENUM, "10"},
 		{token.KEYWORD, "REM"},
+		{token.COMMENT, "GOTO Example"},
 		{token.EOL, "\n"},
 
 		{token.LINENUM, "15"},
@@ -137,6 +138,7 @@ func TestLexer_GOTO_Expression(t *testing.T) {
 	}{
 		{token.LINENUM, "10"},
 		{token.KEYWORD, "REM"},
+		{token.COMMENT, "GOTO Example"},
 		{token.EOL, "\n"},
 
 		{token.LINENUM, "15"},

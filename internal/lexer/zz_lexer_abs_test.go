@@ -31,6 +31,7 @@ func TestLexer_ABS_Function(t *testing.T) {
 		// 10 REM ABS Function
 		{token.LINENUM, "10"},
 		{token.KEYWORD, "REM"},
+		{token.COMMENT, "ABS Function"},
 		{token.EOL, "\n"},
 
 		// 20 PRINT ABS(1.75)

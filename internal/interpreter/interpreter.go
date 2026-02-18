@@ -219,6 +219,12 @@ func (i *Interpreter) Run(prog *parser.Program) {
 		switch s := inst.Stmt.(type) {
 
 		// -----------------------
+		// REM
+		// -----------------------
+		case *parser.RemStmt:
+			sExpr = s.Text
+
+		// -----------------------
 		// HOME
 		// -----------------------
 		case *parser.HomeStmt:

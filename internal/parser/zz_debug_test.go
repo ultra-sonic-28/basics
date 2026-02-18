@@ -379,6 +379,11 @@ func TestDumpStatement(t *testing.T) {
 		expected string
 	}{
 		{
+			name:     "RemStmt",
+			stmt:     &RemStmt{},
+			expected: "REM\n",
+		},
+		{
 			name:     "HomeStmt",
 			stmt:     &HomeStmt{},
 			expected: "HOME\n",

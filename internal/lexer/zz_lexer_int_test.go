@@ -29,6 +29,7 @@ func TestLexer_INT_Function(t *testing.T) {
 		// 10 REM INT Function
 		{token.LINENUM, "10"},
 		{token.KEYWORD, "REM"},
+		{token.COMMENT, "INT Function"},
 		{token.EOL, "\n"},
 
 		// 20 PRINT INT(1.75)

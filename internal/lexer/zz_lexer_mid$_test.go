@@ -26,6 +26,7 @@ func TestLexer_MID_Function(t *testing.T) {
 		// 10 REM MID$ Function
 		{token.LINENUM, "10"},
 		{token.KEYWORD, "REM"},
+		{token.COMMENT, "MID$ Function"},
 		{token.EOL, "\n"},
 
 		// 20 PRINT MID$("APPLESOFT",5)

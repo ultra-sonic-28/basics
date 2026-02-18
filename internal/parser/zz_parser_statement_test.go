@@ -136,9 +136,12 @@ func TestParser_parseStatement(t *testing.T) {
 			name: "REM statement",
 			tokens: []token.Token{
 				{Type: token.KEYWORD, Literal: "REM", Line: 1, Column: 1},
+				{Type: token.COMMENT, Literal: "This is a comment", Line: 1, Column: 1},
 			},
 			check: func(t *testing.T, stmt Statement, p *Parser) {
-				testutils.Equal(t, "", stmt, nil)
+				remStmt, ok := stmt.(*RemStmt)
+				testutils.Equal(t, "", ok, true)
+				testutils.Equal(t, "", remStmt.Text, "This is a comment")
 			},
 		},
 		{

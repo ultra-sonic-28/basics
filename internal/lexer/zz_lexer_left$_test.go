@@ -23,6 +23,7 @@ func TestLexer_LEFT_Function(t *testing.T) {
 		// 10 REM LEFT$ Function
 		{token.LINENUM, "10"},
 		{token.KEYWORD, "REM"},
+		{token.COMMENT, "LEFT$ Function"},
 		{token.EOL, "\n"},
 
 		// 20 PRINT LEFT$("APPLESOFT",5)

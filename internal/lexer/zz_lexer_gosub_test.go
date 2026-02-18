@@ -114,6 +114,7 @@ func TestLexer_GOSUB_RETURN_WithLoop(t *testing.T) {
 	}{
 		{token.LINENUM, "5"},
 		{token.KEYWORD, "REM"},
+		{token.COMMENT, "**** Ce programme affiche la table de 4 ****"},
 		{token.EOL, "\n"},
 
 		{token.LINENUM, "10"},

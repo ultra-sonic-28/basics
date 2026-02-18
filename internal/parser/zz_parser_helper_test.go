@@ -12,6 +12,7 @@ func TestStmtName(t *testing.T) {
 		stmt     Statement
 		expected string
 	}{
+		{"REM", &RemStmt{}, "REM"},
 		{"HOME", &HomeStmt{}, "HOME"},
 		{"PRINT", &PrintStmt{}, "PRINT"},
 		{"LET", &LetStmt{}, "LET"},
@@ -52,6 +53,13 @@ func TestStmtArgs(t *testing.T) {
 		expected string
 	}{
 		// Statements with args
+		{
+			name: "REM",
+			stmt: &RemStmt{
+				Text: "This is a comment",
+			},
+			expected: " -> This is a comment",
+		},
 		{
 			name:     "PRINT",
 			stmt:     &PrintStmt{},

@@ -30,7 +30,8 @@ func TestNextToken_MainCases(t *testing.T) {
 		// Ligne 20 (REM)
 		{token.LINENUM, "20", 2, 1},
 		{token.KEYWORD, "REM", 2, 4},
-		{token.EOL, "\n", 3, 0}, // le reste de la ligne est ignoré
+		{token.COMMENT, "This is a comment", 2, 8},
+		{token.EOL, "\n", 3, 0},
 
 		// Ligne 30
 		{token.LINENUM, "30", 3, 1},

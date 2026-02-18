@@ -23,6 +23,7 @@ func TestLexer_RIGHT_Function(t *testing.T) {
 		// 10 REM RIGHT$ Function
 		{token.LINENUM, "10"},
 		{token.KEYWORD, "REM"},
+		{token.COMMENT, "RIGHT$ Function"},
 		{token.EOL, "\n"},
 
 		// 20 PRINT RIGHT$("APPLESOFT",5)

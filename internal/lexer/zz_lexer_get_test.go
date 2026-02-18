@@ -66,6 +66,7 @@ func TestLexer_GET_InProgram(t *testing.T) {
 		// Line 1
 		{token.LINENUM, "1", 1, 1},
 		{token.KEYWORD, "REM", 1, 3},
+		{token.COMMENT, "***** Exemple de sous-routine *****", 1, 7},
 		{token.EOL, "\n", 2, 0},
 
 		// Line 10

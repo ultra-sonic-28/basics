@@ -15,6 +15,7 @@ const (
 	NUMBER
 	STRING
 	IDENT
+	COMMENT
 
 	// Opérateurs
 	PLUS
@@ -57,9 +58,10 @@ var TokenTypeNames = map[TokenType]string{
 	LINENUM: "LINENUM",
 
 	// Littéraux
-	NUMBER: "NUMBER",
-	STRING: "STRING",
-	IDENT:  "IDENT",
+	NUMBER:  "NUMBER",
+	STRING:  "STRING",
+	IDENT:   "IDENT",
+	COMMENT: "COMMENT",
 
 	// Opérateurs
 	PLUS:     "+",

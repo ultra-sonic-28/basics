@@ -22,6 +22,7 @@ func TestLexer_LEN_Function(t *testing.T) {
 		// 10 REM LEN Function
 		{token.LINENUM, "10"},
 		{token.KEYWORD, "REM"},
+		{token.COMMENT, "LEN Function"},
 		{token.EOL, "\n"},
 
 		// 20 PRINT LEN("APPLESOFT")

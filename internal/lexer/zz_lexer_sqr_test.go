@@ -26,6 +26,7 @@ func TestLexer_SQR_Function(t *testing.T) {
 		// 10 REM SQR Function
 		{token.LINENUM, "10"},
 		{token.KEYWORD, "REM"},
+		{token.COMMENT, "SQR Function"},
 		{token.EOL, "\n"},
 
 		// 20 PRINT SQR(1.75)

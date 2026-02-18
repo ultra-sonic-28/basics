@@ -178,9 +178,24 @@ func (p *Parser) parseStatement(lineNum int) Statement {
 			return p.parseLet()
 
 		case "REM":
-			// REM = instruction vide
-			p.next()
-			return nil
+
+			line := p.curr.Line
+			col := p.curr.Column
+
+			p.next() // consommer REM
+
+			comment := ""
+
+			if p.curr.Type == token.COMMENT {
+				comment = p.curr.Literal
+				p.next()
+			}
+
+			return &RemStmt{
+				Text:   comment,
+				Line:   line,
+				Column: col,
+			}
 
 		case "GOTO":
 			p.next()

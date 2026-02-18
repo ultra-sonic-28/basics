@@ -7,6 +7,8 @@ import (
 
 func StmtName(s Statement) string {
 	switch s.(type) {
+	case *RemStmt:
+		return "REM"
 	case *HomeStmt:
 		return "HOME"
 	case *InputStmt:
@@ -54,6 +56,8 @@ func StmtName(s Statement) string {
 
 func StmtArgs(s Statement) string {
 	switch stmt := s.(type) {
+	case *RemStmt:
+		return " -> " + stmt.Text
 	case *InputStmt:
 		var allVars string
 		for _, v := range stmt.Vars {

@@ -6,8 +6,9 @@ The format is based on Keep a Changelog (https://keepachangelog.com), and this p
 ## [Unreleased] - 2026-02-18
 ### Fixed
 - Fix a bug when testing strings for equality.
-- Add a small basic game `nicomas.bas`.
+- Add a small basic game `nicoma.bas`.
 - Add operator unit tests.
+- `REM` statement will no longer stripped during lexing
 
 ## [Unreleased] - 2026-02-17
 ### Added

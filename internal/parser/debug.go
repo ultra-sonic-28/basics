@@ -29,6 +29,12 @@ func DumpProgram(p *Program, emit Emitter) {
 func dumpStatement(s Statement, indent string, emit Emitter) {
 	switch stmt := s.(type) {
 
+	case *RemStmt:
+		emit(indent + "REM")
+		if len(stmt.Text) > 0 {
+			emit(indent + "  " + stmt.Text)
+		}
+
 	case *InputStmt:
 		emit("INPUT")
 		if stmt.Prompt != nil {

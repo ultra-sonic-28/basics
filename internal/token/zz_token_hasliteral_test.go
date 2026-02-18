@@ -23,6 +23,7 @@ func TestToken_HasLiteral(t *testing.T) {
 		{Token{Type: NUMBER}, true},
 		{Token{Type: STRING}, true},
 		{Token{Type: IDENT}, true},
+		{Token{Type: COMMENT}, true},
 
 		// Opérateurs
 		{Token{Type: PLUS}, true},

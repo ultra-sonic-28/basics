@@ -23,6 +23,7 @@ func TestToken_TypeName(t *testing.T) {
 		{Token{Type: NUMBER}, "NUMBER"},
 		{Token{Type: STRING}, "STRING"},
 		{Token{Type: IDENT}, "IDENT"},
+		{Token{Type: COMMENT}, "COMMENT"},
 
 		// Opérateurs
 		{Token{Type: PLUS}, "+"},

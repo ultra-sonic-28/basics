@@ -22,6 +22,21 @@ type Statement interface {
 	stmtNode()
 }
 
+// =========================
+// REM comment
+// =========================
+type RemStmt struct {
+	Text   string
+	Line   int
+	Column int
+}
+
+func (*RemStmt) stmtNode() {}
+
+func (r *RemStmt) Pos() (int, int) {
+	return r.Line, r.Column
+}
+
 // PRINT
 type PrintStmt struct {
 	Exprs      []Expression

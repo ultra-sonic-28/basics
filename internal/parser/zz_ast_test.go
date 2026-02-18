@@ -351,6 +351,14 @@ func TestReturnStmt(t *testing.T) {
 	testutils.True(t, "ReturnStmt type", ok)
 }
 
+func TestRemStmt(t *testing.T) {
+	stmt := &RemStmt{}
+	var s Statement = stmt
+
+	_, ok := s.(*RemStmt)
+	testutils.True(t, "RemStmt type", ok)
+}
+
 // ////////////////////////////////////
 // IF / IFJUMP
 // ////////////////////////////////////

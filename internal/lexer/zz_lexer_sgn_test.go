@@ -31,6 +31,7 @@ func TestLexer_SGN_Function(t *testing.T) {
 		// 10 REM SGN Function
 		{token.LINENUM, "10"},
 		{token.KEYWORD, "REM"},
+		{token.COMMENT, "SGN Function"},
 		{token.EOL, "\n"},
 
 		// 20 PRINT SGN(1.75)

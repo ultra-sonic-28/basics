@@ -1,6 +1,7 @@
 package lexer
 
 import (
+	"strings"
 	"unicode"
 
 	"basics/internal/logger"
@@ -17,6 +18,11 @@ type Lexer struct {
 	column int
 
 	expectLineNumber bool
+
+	// Stockage temporaire du commentaire avant injection dans le token COMMENT correspondant
+	pendingComment string
+	pendingColumn  int
+	pendingLine    int
 }
 
 func New(input string) *Lexer {
@@ -49,6 +55,18 @@ func (l *Lexer) readChar() {
 }
 
 func (l *Lexer) NextToken() token.Token {
+	// On récupère le commentaire et on crée le token correspondant
+	if l.pendingComment != "" {
+		tok := token.Token{
+			Type:    token.COMMENT,
+			Literal: l.pendingComment,
+			Line:    l.pendingLine,
+			Column:  l.pendingColumn,
+		}
+		l.pendingComment = ""
+		return tok
+	}
+
 	l.skipWhitespace()
 
 	tok := token.Token{
@@ -146,11 +164,23 @@ func (l *Lexer) NextToken() token.Token {
 			if Keywords[lit] {
 				tok.Type = token.KEYWORD
 
-				// ✅ REM : ignorer le reste de la ligne
 				if lit == "REM" {
+					// Retourner REM d'abord
+					// Le parser lira ensuite un token COMMENT
+					l.skipWhitespace()
+
+					comment := ""
+					l.pendingLine = l.line
+					l.pendingColumn = l.column
+
 					for l.ch != '\n' && l.ch != 0 {
+						comment += string(l.ch)
 						l.readChar()
 					}
+
+					// On stocke le commentaire pour le prochain appel
+					comment = strings.TrimRight(comment, "\r")
+					l.pendingComment = comment
 				}
 
 			} else {
