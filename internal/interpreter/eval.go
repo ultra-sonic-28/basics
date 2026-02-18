@@ -176,7 +176,7 @@ func EvalExpr(expr parser.Expression, rt *runtime.Runtime) (runtime.Value, *[]in
 		if left.Type == runtime.STRING || right.Type == runtime.STRING {
 
 			// Applesoft : seul "+" est autorisé pour les chaînes
-			if op != "+" {
+			if op != "+" && op != "=" {
 				err = errors.NewSyntax(
 					line,
 					col,
@@ -186,32 +186,43 @@ func EvalExpr(expr parser.Expression, rt *runtime.Runtime) (runtime.Value, *[]in
 				return runtime.Value{}, nil, err
 			}
 
-			// conversion implicite nombre → string
-			ls := ""
-			rs := ""
+			switch op {
+			// Concaténation de chaines de caractères
+			case "+":
+				// conversion implicite nombre → string
+				ls := ""
+				rs := ""
 
-			switch left.Type {
-			case runtime.STRING:
-				ls = left.Str
-			case runtime.INTEGER:
-				ls = strconv.Itoa(left.Int)
-			default:
-				ls = formatNumber(left.Num)
+				switch left.Type {
+				case runtime.STRING:
+					ls = left.Str
+				case runtime.INTEGER:
+					ls = strconv.Itoa(left.Int)
+				default:
+					ls = formatNumber(left.Num)
+				}
+
+				switch right.Type {
+				case runtime.STRING:
+					rs = right.Str
+				case runtime.INTEGER:
+					rs = strconv.Itoa(right.Int)
+				default:
+					rs = formatNumber(right.Num)
+				}
+
+				return runtime.Value{
+					Type: runtime.STRING,
+					Str:  ls + rs,
+				}, nil, nil
+
+			// Test d'égalité de chaines de caractères
+			case "=":
+				if left.Str == right.Str {
+					return runtime.Value{Type: runtime.NUMBER, Num: 1}, nil, nil
+				}
+				return runtime.Value{Type: runtime.NUMBER, Num: 0}, nil, nil
 			}
-
-			switch right.Type {
-			case runtime.STRING:
-				rs = right.Str
-			case runtime.INTEGER:
-				rs = strconv.Itoa(right.Int)
-			default:
-				rs = formatNumber(right.Num)
-			}
-
-			return runtime.Value{
-				Type: runtime.STRING,
-				Str:  ls + rs,
-			}, nil, nil
 		}
 
 		// =========================
