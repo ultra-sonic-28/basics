@@ -233,9 +233,11 @@ func Test() error {
 
 // Delete all .exe files under basics/ except in folders starting with "."
 func Clean() error {
+	root, _ := os.Getwd()
+
 	fmt.Println("Cleaning executables in", basicsDir)
 
-	return filepath.Walk(basicsDir, func(path string, info os.FileInfo, err error) error {
+	return filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}

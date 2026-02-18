@@ -9,6 +9,7 @@ The format is based on Keep a Changelog (https://keepachangelog.com), and this p
 - Add a small basic game `nicoma.bas`.
 - Add operator unit tests.
 - `REM` statement will no longer stripped during lexing
+- Fix a bug in magefile as `Clean` target doesn't clean anything.
 
 ## [Unreleased] - 2026-02-17
 ### Added
