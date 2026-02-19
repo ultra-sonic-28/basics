@@ -248,7 +248,7 @@ func Clean() error {
 		}
 
 		// Supprime les .exe
-		if !info.IsDir() && strings.HasSuffix(strings.ToLower(info.Name()), ".exe") {
+		if !info.IsDir() && (strings.HasSuffix(strings.ToLower(info.Name()), ".exe") || strings.HasPrefix(strings.ToLower(info.Name()), "__debug_bin")) {
 			fmt.Println("Removing:", path)
 			return os.Remove(path)
 		}

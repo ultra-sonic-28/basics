@@ -9,6 +9,7 @@ The format is based on Keep a Changelog (https://keepachangelog.com), and this p
 
 ### Fixed
 - Done some cleansing.
+- Fix a bug in magefile as `Clean` target missed some debug files for deletion.
 
 ## [Unreleased] - 2026-02-18
 ### Fixed
