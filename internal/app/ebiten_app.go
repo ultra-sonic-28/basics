@@ -32,11 +32,6 @@ func (a *EbitenApp) Run() error {
 		return errors.New("video device does not support Ebiten")
 	}
 
-	/* if dev, ok := a.Runtime.Video.(video.EbitenDevice); ok {
-		logger.Debug(fmt.Sprintf("Width: %d", dev.Width()))
-		ebiten.SetWindowSize(dev.Width(), dev.Height())
-	} */
-
 	if dev, ok := a.Runtime.Video.(interface {
 		Width() int
 		Height() int
@@ -78,17 +73,6 @@ func (a *EbitenApp) handleInput() {
 		return
 	}
 
-	// caractères imprimables
-	/* for _, r := range ebiten.InputChars() {
-		if r == '\r' || r == '\n' {
-			continue
-		}
-		if r >= 32 && r <= 126 {
-			t.InputRune(r)
-		} else {
-			continue
-		}
-	} */
 	for _, r := range ebiten.InputChars() {
 		// Autoriser [32–126] et [161–255]
 		// De SPACE (32) à ~ (126) ou de ¡ (161) à ÿ (255)

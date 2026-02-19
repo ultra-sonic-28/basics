@@ -647,7 +647,7 @@ func (p *Parser) parseIf(lineNum int) Statement {
 
 	thenBlock := p.parseIfBlock(lineNum)
 
-	// ✅ CONSOMMER ':' AVANT ELSE SI PRÉSENT
+	// CONSOMMER ':' AVANT ELSE SI PRÉSENT
 	if p.curr.Type == token.COLON {
 		p.next()
 	}

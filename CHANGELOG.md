@@ -7,6 +7,9 @@ The format is based on Keep a Changelog (https://keepachangelog.com), and this p
 ### Added
 - Add `PR#3` support in Apple II Basic to switch to 80 columns mode.
 
+### Fixed
+- Done some cleansing.
+
 ## [Unreleased] - 2026-02-18
 ### Fixed
 - Fix a bug when testing strings for equality.
