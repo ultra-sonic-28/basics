@@ -35,6 +35,10 @@ func dumpStatement(s Statement, indent string, emit Emitter) {
 			emit(indent + "  " + stmt.Text)
 		}
 
+	case *PrStmt:
+		emit(fmt.Sprintf("%sPR#", indent))
+		dumpExpr(stmt.Slot, indent+"  ", emit)
+
 	case *InputStmt:
 		emit("INPUT")
 		if stmt.Prompt != nil {

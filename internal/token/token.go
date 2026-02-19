@@ -7,6 +7,7 @@ const (
 	ILLEGAL TokenType = iota
 	EOF
 	EOL
+	HASH
 
 	// Spéciaux BASIC
 	LINENUM
@@ -53,6 +54,7 @@ var TokenTypeNames = map[TokenType]string{
 	ILLEGAL: "ILLEGAL",
 	EOF:     "EOF",
 	EOL:     "EOL",
+	HASH:    "#",
 
 	// Spéciaux BASIC
 	LINENUM: "LINENUM",

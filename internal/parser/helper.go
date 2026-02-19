@@ -49,6 +49,8 @@ func StmtName(s Statement) string {
 		return "CLEAR"
 	case *DimStmt:
 		return "DIM"
+	case *PrStmt:
+		return "PR"
 	default:
 		return "UNKNOWN"
 	}

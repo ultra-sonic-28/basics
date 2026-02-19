@@ -13,20 +13,36 @@ import (
 	"basics/internal/video/font"
 )
 
-func NewRuntime(basicType byte) (*runtime.Runtime, error) {
+func NewRuntime(basicType byte, mode bool) (*runtime.Runtime, error) {
+	var x, y int
+	var video *apple2.Text40
+	scale := 2
 
 	switch basicType {
 
 	case constants.BASIC_APPLE:
-		// --- Apple II Text 40 ---
+		if mode {
+			// --- Apple II Text 80 ---
+			x = 560
+			y = 192
+		} else {
+			// --- Apple II Text 40 ---
+			x = 280 // résolution Apple II en mode HGR2
+			y = 192
+		}
+
 		renderer := ebitenrenderer.New(
-			280, 192, // résolution Apple II en mode HGR2
-			2, // scale
+			scale*x, scale*y,
+			scale, // scale
 			apple2.Palette(),
 			font.DefaultFontForMode(basicType),
 		)
 
-		video := apple2.NewText40(renderer)
+		if mode {
+			video = apple2.NewText80(renderer)
+		} else {
+			video = apple2.NewText40(renderer)
+		}
 		logger.Info("Instanciate Ebiten renderer")
 
 		return runtime.New(video), nil

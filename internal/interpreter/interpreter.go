@@ -219,6 +219,17 @@ func (i *Interpreter) Run(prog *parser.Program) {
 		switch s := inst.Stmt.(type) {
 
 		// -----------------------
+		// PR
+		// -----------------------
+		case *parser.PrStmt:
+			val, _, err := EvalExpr(s.Slot, i.rt)
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+			sExpr = fmt.Sprintf("-> %g", val.Num)
+
+		// -----------------------
 		// REM
 		// -----------------------
 		case *parser.RemStmt:

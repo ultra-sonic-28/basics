@@ -1443,7 +1443,7 @@ A$=A String Another one
 			os.Stdout = w */
 
 			// --- Interpreter ---
-			rt, err := machines.NewRuntime(constants.BASIC_TTY)
+			rt, err := machines.NewRuntime(constants.BASIC_TTY, false)
 			testutils.True(t, "runtime ok", err == nil)
 
 			out := &bytes.Buffer{}

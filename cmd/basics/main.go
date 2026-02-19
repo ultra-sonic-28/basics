@@ -91,7 +91,7 @@ func main() {
 
 		// Exécution
 		fmt.Println("\n=== PROGRAM RESULTS ===")
-		rt, err := machines.NewRuntime(basicType)
+		rt, err := machines.NewRuntime(basicType, false)
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
@@ -177,7 +177,15 @@ func main() {
 	if tty {
 		fmt.Println("\n=== PROGRAM RESULTS ===")
 	}
-	rt, err := machines.NewRuntime(basicType)
+
+	mode := prog.Requires80Columns()
+	if mode {
+		logger.Info("Switch to 80 columns mode")
+	} else {
+		logger.Info("Switch to 40 columns mode")
+	}
+
+	rt, err := machines.NewRuntime(basicType, mode)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)

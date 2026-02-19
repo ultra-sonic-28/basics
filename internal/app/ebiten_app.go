@@ -32,6 +32,18 @@ func (a *EbitenApp) Run() error {
 		return errors.New("video device does not support Ebiten")
 	}
 
+	/* if dev, ok := a.Runtime.Video.(video.EbitenDevice); ok {
+		logger.Debug(fmt.Sprintf("Width: %d", dev.Width()))
+		ebiten.SetWindowSize(dev.Width(), dev.Height())
+	} */
+
+	if dev, ok := a.Runtime.Video.(interface {
+		Width() int
+		Height() int
+	}); ok {
+		ebiten.SetWindowSize(dev.Width(), dev.Height())
+	}
+
 	ebiten.SetWindowTitle("BASIC – Apple II")
 	ebiten.SetWindowResizingMode(ebiten.WindowResizingModeEnabled)
 

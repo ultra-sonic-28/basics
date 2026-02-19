@@ -15,6 +15,7 @@ func TestToken_TypeName(t *testing.T) {
 		{Token{Type: ILLEGAL}, "ILLEGAL"},
 		{Token{Type: EOF}, "EOF"},
 		{Token{Type: EOL}, "EOL"},
+		{Token{Type: HASH}, "HASH"},
 
 		// Spéciaux BASIC
 		{Token{Type: LINENUM}, "LINENUM"},

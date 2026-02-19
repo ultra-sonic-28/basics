@@ -197,6 +197,31 @@ func (p *Parser) parseStatement(lineNum int) Statement {
 				Column: col,
 			}
 
+		case "PR":
+			line := p.curr.Line
+			col := p.curr.Column
+
+			p.next()
+
+			if p.curr.Type != token.HASH {
+				p.syntaxError("EXPECTED # AFTER PR")
+				return nil
+			}
+
+			p.next()
+
+			expr := p.parseExpression(LOWEST)
+			if expr == nil {
+				p.syntaxError("EXPECTED SLOT NUMBER AFTER PR#")
+				return nil
+			}
+
+			return &PrStmt{
+				Slot:   expr,
+				Line:   line,
+				Column: col,
+			}
+
 		case "GOTO":
 			p.next()
 			target := p.parseExpression(LOWEST)

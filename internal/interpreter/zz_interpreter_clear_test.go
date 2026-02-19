@@ -68,7 +68,7 @@ func TestCLEAR_TableDriven(t *testing.T) {
 		},
 	}
 
-	rt, _ := machines.NewRuntime(constants.BASIC_TTY)
+	rt, _ := machines.NewRuntime(constants.BASIC_TTY, false)
 
 	for tIndex, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {

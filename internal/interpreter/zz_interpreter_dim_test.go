@@ -113,7 +113,7 @@ func TestInterpreter_DIM(t *testing.T) {
 		},
 	}
 
-	rt, _ := machines.NewRuntime(constants.BASIC_TTY)
+	rt, _ := machines.NewRuntime(constants.BASIC_TTY, false)
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

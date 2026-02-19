@@ -15,6 +15,7 @@ func TestToken_HasLiteral(t *testing.T) {
 		{Token{Type: ILLEGAL}, true},
 		{Token{Type: EOF}, false},
 		{Token{Type: EOL}, false},
+		{Token{Type: HASH}, true},
 
 		// Spéciaux BASIC
 		{Token{Type: LINENUM}, true},

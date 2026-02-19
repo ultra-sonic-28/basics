@@ -17,6 +17,8 @@ import (
 type ebitenRenderer interface {
 	Draw(screen *ebiten.Image)
 	Layout(w, h int) (int, int)
+	Width() int
+	Height() int
 }
 
 type Text40 struct {
@@ -73,6 +75,13 @@ func NewText40(renderer video.Renderer) *Text40 {
 // --------------------
 // video.Device
 // --------------------
+func (t *Text40) Width() int {
+	return t.renderer.Width()
+}
+
+func (t *Text40) Height() int {
+	return t.renderer.Height()
+}
 
 func (t *Text40) Clear() {
 	t.Mode.Home()

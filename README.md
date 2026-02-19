@@ -164,6 +164,8 @@ An integer or string variable must be followed by a `%` or `$` at each use of th
 ##### System and Utilities
 * `END`
     * Exit the program.
+* `PR#3`
+    * Switch screen to 80 columns mode.
 
 #### Supported operators
 * `=`
@@ -246,7 +248,7 @@ An integer or string variable must be followed by a `%` or `$` at each use of th
 1. In Applesoft BASIC, string length are limited to 255 characters.
 
     > With BASICS, there isn't any size limitation of strings. Strings may contains as many characters as you like.
-    
+
 ##### Extended instructions set
 * GOTO support use of identifier and complex expressions. You can write:
 ```

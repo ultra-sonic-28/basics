@@ -35,6 +35,7 @@ var Keywords = map[string]bool{
 
 	// Autres
 	"POKE": true, "PEEK": true, "CALL": true,
+	"PR":  true,
 	"TAB": true, "VTAB": true, "HTAB": true,
 	"INVERSE": true, "NORMAL": true, "FLASH": true,
 

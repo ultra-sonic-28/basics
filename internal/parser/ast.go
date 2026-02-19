@@ -37,6 +37,21 @@ func (r *RemStmt) Pos() (int, int) {
 	return r.Line, r.Column
 }
 
+// =========================
+// PR#n
+// =========================
+type PrStmt struct {
+	Slot   Expression
+	Line   int
+	Column int
+}
+
+func (*PrStmt) stmtNode() {}
+
+func (p *PrStmt) Pos() (int, int) {
+	return p.Line, p.Column
+}
+
 // PRINT
 type PrintStmt struct {
 	Exprs      []Expression

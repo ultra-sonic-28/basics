@@ -83,6 +83,8 @@ func (l *Lexer) NextToken() token.Token {
 	switch l.ch {
 	case 0:
 		tok.Type = token.EOF
+	case '#':
+		tok = l.simpleToken(token.HASH, "#")
 	case '\n':
 		tok.Type = token.EOL
 		tok.Literal = "\n"

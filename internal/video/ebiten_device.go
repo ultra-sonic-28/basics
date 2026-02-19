@@ -6,4 +6,6 @@ type EbitenDevice interface {
 	Device
 	Draw(screen *ebiten.Image)
 	Layout(w, h int) (int, int)
+	Width() int
+	Height() int
 }
