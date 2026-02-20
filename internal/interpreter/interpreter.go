@@ -228,6 +228,7 @@ func (i *Interpreter) Run(prog *parser.Program) {
 				return
 			}
 			sExpr = fmt.Sprintf("-> %g", val.Num)
+			i.rt.ExecPr(int(val.Num))
 
 		// -----------------------
 		// REM

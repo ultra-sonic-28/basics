@@ -8,4 +8,5 @@ type EbitenDevice interface {
 	Layout(w, h int) (int, int)
 	Width() int
 	Height() int
+	Scale() int
 }

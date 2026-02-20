@@ -2,6 +2,7 @@ package machines
 
 import (
 	"bufio"
+	"fmt"
 	"os"
 
 	"basics/internal/constants"
@@ -9,43 +10,23 @@ import (
 	"basics/internal/machines/apple2"
 	"basics/internal/machines/tty"
 	"basics/internal/runtime"
-	ebitenrenderer "basics/internal/video/ebiten"
-	"basics/internal/video/font"
+	"basics/internal/video"
 )
 
 func NewRuntime(basicType byte, mode bool) (*runtime.Runtime, error) {
-	var x, y int
-	var video *apple2.Text40
-	scale := 2
+	var defaultMode video.ModeID
 
 	switch basicType {
 
 	case constants.BASIC_APPLE:
-		if mode {
-			// --- Apple II Text 80 ---
-			x = 560
-			y = 192
-		} else {
-			// --- Apple II Text 40 ---
-			x = 280 // résolution Apple II en mode HGR2
-			y = 192
-		}
 
-		renderer := ebitenrenderer.New(
-			scale*x, scale*y,
-			scale, // scale
-			apple2.Palette(),
-			font.DefaultFontForMode(basicType),
-		)
+		defaultMode = apple2.ModeAppleText40
 
-		if mode {
-			video = apple2.NewText80(renderer)
-		} else {
-			video = apple2.NewText40(renderer)
-		}
-		logger.Info("Instanciate Ebiten renderer")
+		display := apple2.NewAppleDisplay(2, defaultMode)
+		mode, _ := display.ModeInfo(display.DefaultMode())
+		logger.Info(fmt.Sprintf("Instanciate Ebiten renderer using %s mode (%s)", mode.Name, defaultMode))
 
-		return runtime.New(video), nil
+		return runtime.New(display), nil
 
 	case constants.BASIC_TTY:
 		in := bufio.NewReader(os.Stdin)

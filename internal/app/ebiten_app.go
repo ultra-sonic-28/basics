@@ -1,9 +1,8 @@
 package app
 
 import (
-	"errors"
+	"fmt"
 
-	"basics/internal/machines/apple2"
 	"basics/internal/video"
 
 	"github.com/hajimehoshi/ebiten/v2"
@@ -14,6 +13,8 @@ type EbitenApp struct {
 	*BasicEbitenApp
 	started  bool
 	prevKeys map[ebiten.Key]bool
+
+	lastW, lastH int
 }
 
 // NewEbitenApp crée une application Ebiten
@@ -29,14 +30,15 @@ func (a *EbitenApp) Run() error {
 
 	// Vérification que le device supporte Ebiten
 	if _, ok := a.Runtime.Video.(video.EbitenDevice); !ok {
-		return errors.New("video device does not support Ebiten")
+		return fmt.Errorf("video device (%T) does not support Ebiten", a.Runtime.Video)
 	}
 
 	if dev, ok := a.Runtime.Video.(interface {
 		Width() int
 		Height() int
 	}); ok {
-		ebiten.SetWindowSize(dev.Width(), dev.Height())
+		a.lastW, a.lastH = dev.Width(), dev.Height()
+		ebiten.SetWindowSize(a.lastW, a.lastH)
 	}
 
 	ebiten.SetWindowTitle("BASIC – Apple II")
@@ -58,7 +60,19 @@ func (a *EbitenApp) Update() error {
 		go a.Interpreter.Run(a.Program)
 	}
 
-	if t, ok := a.Runtime.Video.(*apple2.Text40); ok {
+	// Détection du changement de mode vidéo (pour resize fenêtre)
+	if dev, ok := a.Runtime.Video.(interface {
+		Width() int
+		Height() int
+	}); ok {
+		w, h := dev.Width(), dev.Height()
+		if w != a.lastW || h != a.lastH {
+			a.lastW, a.lastH = w, h
+			ebiten.SetWindowSize(w, h)
+		}
+	}
+
+	if t, ok := a.Runtime.Video.(interface{ Update() error }); ok {
 		t.Update()
 	}
 
@@ -68,7 +82,15 @@ func (a *EbitenApp) Update() error {
 }
 
 func (a *EbitenApp) handleInput() {
-	t, ok := a.Runtime.Video.(*apple2.Text40)
+	type inputDevice interface {
+		IsGetActive() bool
+		PushGetRune(rune)
+		InputRune(rune)
+		Backspace()
+		Enter()
+	}
+
+	t, ok := a.Runtime.Video.(inputDevice)
 	if !ok {
 		return
 	}

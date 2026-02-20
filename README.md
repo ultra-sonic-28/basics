@@ -164,6 +164,8 @@ An integer or string variable must be followed by a `%` or `$` at each use of th
 ##### System and Utilities
 * `END`
     * Exit the program.
+* `PR#0`
+    * Switch screen to 40 columns mode.
 * `PR#3`
     * Switch screen to 80 columns mode.
 

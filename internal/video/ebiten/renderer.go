@@ -39,8 +39,17 @@ func New(
 	}
 }
 
-func (r *Renderer) Width() int  { return r.width }
-func (r *Renderer) Height() int { return r.height }
+func (r *Renderer) Width() int {
+	return r.width
+}
+
+func (r *Renderer) Height() int {
+	return r.height
+}
+
+func (r *Renderer) Scale() int {
+	return r.scale
+}
 
 func (r *Renderer) Clear() {
 	for y := 0; y < r.height; y++ {

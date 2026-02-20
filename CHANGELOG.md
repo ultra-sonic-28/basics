@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog (https://keepachangelog.com), and this project adheres to Semantic Versioning (https://semver.org).
 
+## [Unreleased] - 2026-02-20
+### Added
+- Add `PR#0` support in Apple II Basic to switch to 40 columns mode.
+- Add dynamic text mode switching.
+
 ## [Unreleased] - 2026-02-19
 ### Added
 - Add `PR#3` support in Apple II Basic to switch to 80 columns mode.

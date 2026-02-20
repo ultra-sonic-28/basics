@@ -6,6 +6,7 @@ type Renderer interface {
 	// Taille logique du framebuffer courant
 	Width() int
 	Height() int
+	Scale() int
 
 	// Nettoyage complet
 	Clear()

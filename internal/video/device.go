@@ -14,6 +14,8 @@ type Device interface {
 	SetCursorX(x int)
 	SetCursorY(y int)
 
+	SwitchMode(slot int)
+
 	Plot(x, y int)
 
 	ReadLine() (string, error)

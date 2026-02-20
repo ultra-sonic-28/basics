@@ -75,6 +75,10 @@ func (rt *Runtime) ExecVTab(y int) {
 	rt.Video.SetCursorY(y - 1)
 }
 
+func (rt *Runtime) ExecPr(slot int) {
+	rt.Video.SwitchMode(slot)
+}
+
 func (rt *Runtime) ExecHome() {
 	rt.Video.Clear()
 	rt.Video.SetCursorX(0)

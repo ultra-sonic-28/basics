@@ -50,6 +50,8 @@ func (t *TTYDevice) SetCursorX(x int) {}
 
 func (t *TTYDevice) SetCursorY(y int) {}
 
+func (t *TTYDevice) SwitchMode(slot int) {}
+
 func (t *TTYDevice) Clear() {
 	t.buffer = nil
 	fmt.Print("\033[2J\033[H")
