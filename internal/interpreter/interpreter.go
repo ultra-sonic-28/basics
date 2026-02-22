@@ -333,9 +333,9 @@ func (i *Interpreter) Run(prog *parser.Program) {
 				str := ""
 				switch val.Type {
 				case runtime.INTEGER:
-					str = formatNumber(float64(val.Int))
+					str = common.FormatNumber(float64(val.Int))
 				case runtime.NUMBER:
-					str = formatNumber(val.Num)
+					str = common.FormatNumber(val.Num)
 				case runtime.STRING:
 					str = val.Str
 				}
@@ -710,7 +710,7 @@ func (i *Interpreter) execInline(line int, stmt parser.Statement, pc int) int {
 			case runtime.STRING:
 				out = val.Str
 			case runtime.NUMBER:
-				out = formatNumber(val.Num)
+				out = common.FormatNumber(val.Num)
 			case runtime.BOOLEAN:
 				if val.Flag {
 					out = "1"
@@ -1039,13 +1039,6 @@ func (i *Interpreter) execGet(s *parser.GetStmt) {
 // =======================
 // Utils
 // =======================
-
-func formatNumber(f float64) string {
-	if f == float64(int64(f)) {
-		return fmt.Sprintf("%d", int64(f))
-	}
-	return fmt.Sprintf("%g", f)
-}
 
 func LogTrace(inst Instruction, pc int, nextPC int, sExpr string) string {
 	return fmt.Sprintf(

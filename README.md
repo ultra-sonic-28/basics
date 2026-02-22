@@ -231,6 +231,11 @@ An integer or string variable must be followed by a `%` or `$` at each use of th
         * This function returns `bexpr` characters from the string `sexpr` starting at `aexpr`.
         * If `aexpr >= len(sexpr)` then `MID$` returns the empty string
         * If `aexpr + bexpr >= len(sexpr)` then `MID$` returns the substring of `sexpr` starting from `axpr` pos. Any extra positions are ignored.
+* `STR$(aexpr)`
+    * This function converts `aexpr` into a string which represents that value.
+    * `aexpr` must be an integer or real number or a standard arithmetic expression. Otherwise the message ?EXPECTED NUMBER is displayed
+    * `aexpr` is evaluated before it is converted to a string. STR$(100 000 000 000) returns lE+11.
+    * If `aexpr` exceeds the limits for reals, then the message ?OVER FLOW ERROR is displayed.
 * `LEN(sexpr)`
     * This function returns the number of characters in `sexpr`.
 

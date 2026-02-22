@@ -1,0 +1,3 @@
+10 REM STR Example
+20 A$ = "APPLESOFT"
+30 PRINT STR$(2*LEN(A$))

@@ -432,6 +432,22 @@ func (l *LenExpr) Pos() (int, int, string) {
 }
 
 // =========================
+// STR$(aexpr)
+// =========================
+type StrExpr struct {
+	Expr   Expression
+	Line   int
+	Column int
+	Token  string
+}
+
+func (*StrExpr) exprNode() {}
+
+func (s *StrExpr) Pos() (int, int, string) {
+	return s.Line, s.Column, s.Token
+}
+
+// =========================
 // Maths functions
 // =========================
 // =========================

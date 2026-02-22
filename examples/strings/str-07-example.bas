@@ -1,0 +1,3 @@
+10 REM STR Example
+20 A = 5: B=2
+30 PRINT STR$(A+B)

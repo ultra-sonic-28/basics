@@ -205,6 +205,35 @@ func TestDumpExpr(t *testing.T) {
 			expected: "LEN\n  Infix +\n    Ident A$\n    Ident B$\n",
 		},
 		{
+			name: "StrExpr",
+			expr: &StrExpr{
+				Expr: &NumberLiteral{
+					Value:  5,
+					Line:   4,
+					Column: 15,
+					Token:  "5",
+				},
+				Line:   1,
+				Column: 1,
+				Token:  "STR$",
+			},
+			expected: "STR$\n  Number 5\n",
+		},
+		{
+			name: "StrExpr with expression",
+			expr: &StrExpr{
+				Expr: &InfixExpr{
+					Left:  &Identifier{Name: "A"},
+					Op:    "+",
+					Right: &Identifier{Name: "B"},
+				},
+				Line:   1,
+				Column: 1,
+				Token:  "STR$",
+			},
+			expected: "STR$\n  Infix +\n    Ident A\n    Ident B\n",
+		},
+		{
 			name: "TabExpr",
 			expr: &TabExpr{
 				Expr: &NumberLiteral{

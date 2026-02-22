@@ -69,6 +69,8 @@
 
 ## Conventions de codage
 
+- Expert développeur Golang v1.25+
+- Respect des bonnes pratiques de développement pour ce langage
 - Le formatage du code doit respecter le standard issu de l'outil officiel `gofmt`.
 - Utiliser le CamelCase pour le nommage des variables, structures, interfaces...
     - Une variable / fonction commençant par une minuscule -> privée

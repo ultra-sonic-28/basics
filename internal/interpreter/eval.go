@@ -199,7 +199,7 @@ func EvalExpr(expr parser.Expression, rt *runtime.Runtime) (runtime.Value, *[]in
 				case runtime.INTEGER:
 					ls = strconv.Itoa(left.Int)
 				default:
-					ls = formatNumber(left.Num)
+					ls = common.FormatNumber(left.Num)
 				}
 
 				switch right.Type {
@@ -208,7 +208,7 @@ func EvalExpr(expr parser.Expression, rt *runtime.Runtime) (runtime.Value, *[]in
 				case runtime.INTEGER:
 					rs = strconv.Itoa(right.Int)
 				default:
-					rs = formatNumber(right.Num)
+					rs = common.FormatNumber(right.Num)
 				}
 
 				return runtime.Value{
@@ -596,6 +596,45 @@ func EvalExpr(expr parser.Expression, rt *runtime.Runtime) (runtime.Value, *[]in
 		return runtime.Value{
 			Type: runtime.STRING,
 			Str:  str[:length],
+		}, nil, nil
+
+	case *parser.StrExpr:
+
+		val, _, err := EvalExpr(e.Expr, rt)
+		if err != nil {
+			return runtime.Value{}, nil, err
+		}
+
+		if val.Type == runtime.STRING {
+			return runtime.Value{}, nil, errors.NewSyntax(
+				line, col, tok,
+				"EXPECTED NUMBER",
+			)
+		}
+
+		var out string
+		switch val.Type {
+		case runtime.NUMBER:
+			out = common.FormatNumber(val.Num)
+		case runtime.INTEGER:
+			out = strconv.Itoa(val.Int)
+		default:
+			return runtime.Value{}, nil, errors.NewSyntax(
+				line, col, tok,
+				"EXPECTED NUMBER",
+			)
+		}
+
+		if out == "OVER FLOW ERROR" {
+			return runtime.Value{}, nil, errors.NewSyntax(
+				line, col, tok,
+				"OVER FLOW ERROR",
+			)
+		}
+
+		return runtime.Value{
+			Type: runtime.STRING,
+			Str:  out,
 		}, nil, nil
 
 	case *parser.RightExpr:

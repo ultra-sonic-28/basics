@@ -1,0 +1,2 @@
+10 REM STR Example
+20 PRINT STR$(3)

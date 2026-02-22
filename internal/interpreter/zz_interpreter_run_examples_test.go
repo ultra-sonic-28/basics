@@ -1315,6 +1315,87 @@ Line 3
 `,
 		},
 		{
+			name:   "Str-01",
+			file:   "strings/str-01-example.bas",
+			errors: 0,
+			expected: `3
+`,
+		},
+		{
+			name:   "Str-02",
+			file:   "strings/str-02-example.bas",
+			errors: 0,
+			expected: `3
+`,
+		},
+		{
+			name:   "Str-03",
+			file:   "strings/str-03-example.bas",
+			errors: 0,
+			expected: `3.5
+`,
+		},
+		{
+			name:   "Str-04",
+			file:   "strings/str-04-example.bas",
+			errors: 0,
+			expected: `⚠️ EXPECTED NUMBER IN 2 (STR$)
+`,
+		},
+		{
+			name:   "Str-05",
+			file:   "strings/str-05-example.bas",
+			errors: 0,
+			expected: `⚠️ EXPECTED NUMBER IN 2 (STR$)
+`,
+		},
+		{
+			name:   "Str-06",
+			file:   "strings/str-06-example.bas",
+			errors: 0,
+			expected: `10
+`,
+		},
+		{
+			name:   "Str-07",
+			file:   "strings/str-07-example.bas",
+			errors: 0,
+			expected: `7
+`,
+		},
+		{
+			name:   "Str-08",
+			file:   "strings/str-08-example.bas",
+			errors: 0,
+			expected: `18
+`,
+		},
+		{
+			name:   "Str-09",
+			file:   "strings/str-09-example.bas",
+			errors: 0,
+			expected: `⚠️ TYPE MISMATCH: FLOAT EXPECTED IN 20 ()
+`,
+		},
+		{
+			name:   "Str-10",
+			file:   "strings/str-10-example.bas",
+			errors: 0,
+			expected: `⚠️ TYPE MISMATCH: INTEGER EXPECTED IN 20 ()
+`,
+		},
+		{
+			name:   "Str-11",
+			file:   "strings/str-11-example.bas",
+			errors: 0,
+			expected: `1.2345678910111213e+30
+1e-29
+-1.2345678910111213e+30
+-1e-29
+1.2345678910111213
+`,
+		},
+		{
 			name:   "Tab-01",
 			file:   "tabs/tab-01-example.bas",
 			errors: 0,
