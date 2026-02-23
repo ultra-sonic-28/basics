@@ -448,6 +448,22 @@ func (s *StrExpr) Pos() (int, int, string) {
 }
 
 // =========================
+// VAL(sexpr)
+// =========================
+type ValExpr struct {
+	Expr   Expression
+	Line   int
+	Column int
+	Token  string
+}
+
+func (*ValExpr) exprNode() {}
+
+func (v *ValExpr) Pos() (int, int, string) {
+	return v.Line, v.Column, v.Token
+}
+
+// =========================
 // Maths functions
 // =========================
 // =========================

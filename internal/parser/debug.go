@@ -230,6 +230,10 @@ func dumpExpr(e Expression, indent string, emit Emitter) {
 		emit(indent + "STR$")
 		dumpExpr(n.Expr, indent+"  ", emit)
 
+	case *ValExpr:
+		emit(indent + "VAL")
+		dumpExpr(n.Expr, indent+"  ", emit)
+
 	default:
 		emit(indent + "UNKNOWN EXPR")
 	}

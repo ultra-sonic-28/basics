@@ -759,17 +759,23 @@ func (i *Interpreter) execLet(s *parser.LetStmt, inst *Instruction) string {
 		switch vType {
 
 		case "int":
-			if val.Type == runtime.STRING || val.Num != float64(int(val.Num)) {
+			if val.Type == runtime.STRING {
 				err := errors.NewSemantic(inst.LineNum, "TYPE MISMATCH: INTEGER EXPECTED")
 				i.rt.ExecError(err)
 				return ""
 			}
 
+			// Coercition : troncature vers entier
+			intValue := int(val.Num)
+			if val.Type == runtime.INTEGER {
+				intValue = val.Int
+			}
+
 			i.rt.Env.Set(s.Name, runtime.Value{
 				Type: runtime.INTEGER,
-				Int:  int(val.Num),
+				Int:  intValue,
 			})
-			sExpr = fmt.Sprintf("%d", int(val.Num))
+			sExpr = fmt.Sprintf("%d", intValue)
 
 		case "string":
 			if val.Type != runtime.STRING {
@@ -840,12 +846,17 @@ func (i *Interpreter) execLet(s *parser.LetStmt, inst *Instruction) string {
 	switch arr.BaseType {
 
 	case runtime.INTEGER:
-		if val.Type == runtime.STRING || val.Num != float64(int(val.Num)) {
+		if val.Type == runtime.STRING {
 			err := errors.NewSemantic(inst.LineNum, "TYPE MISMATCH: INTEGER EXPECTED")
 			i.rt.ExecError(err)
 			return ""
 		}
-		val = runtime.Value{Type: runtime.INTEGER, Int: int(val.Num)}
+
+		intValue := int(val.Num)
+		if val.Type == runtime.INTEGER {
+			intValue = val.Int
+		}
+		val = runtime.Value{Type: runtime.INTEGER, Int: intValue}
 
 	case runtime.STRING:
 		if val.Type != runtime.STRING {

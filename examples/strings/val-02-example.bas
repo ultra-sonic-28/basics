@@ -1,0 +1,11 @@
+10 REM VAL Example
+20 A% = VAL("3")
+30 PRINT A%
+40 B = VAL("3.5")
+50 PRINT B
+60 C% = VAL("3.5")
+70 PRINT C%
+80 A$ = "5": B$="2"
+90 PRINT VAL(A$+B$)
+100 A$ = "APPLE35SOFT"
+110 PRINT VAL(MID$(A$, 6, 2))

@@ -803,6 +803,39 @@ func EvalExpr(expr parser.Expression, rt *runtime.Runtime) (runtime.Value, *[]in
 			Num:  float64(len(val.Str)),
 		}, nil, nil
 
+	case *parser.ValExpr:
+
+		val, _, err := EvalExpr(e.Expr, rt)
+		if err != nil {
+			return runtime.Value{}, nil, err
+		}
+
+		if val.Type != runtime.STRING {
+			return runtime.Value{}, nil, errors.NewSyntax(
+				line, col, tok,
+				"EXPECTED STRING",
+			)
+		}
+
+		f, parseErr := common.ParseFloatApplesoft(val.Str)
+		if parseErr != nil {
+			if parseErr.Error() == "OVER FLOW ERROR" {
+				return runtime.Value{}, nil, errors.NewSyntax(
+					line, col, tok,
+					"OVER FLOW ERROR",
+				)
+			}
+			return runtime.Value{}, nil, errors.NewSyntax(
+				line, col, tok,
+				parseErr.Error(),
+			)
+		}
+
+		return runtime.Value{
+			Type: runtime.NUMBER,
+			Num:  f,
+		}, nil, nil
+
 	}
 
 	// =========================

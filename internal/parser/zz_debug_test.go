@@ -234,6 +234,33 @@ func TestDumpExpr(t *testing.T) {
 			expected: "STR$\n  Infix +\n    Ident A\n    Ident B\n",
 		},
 		{
+			name: "ValExpr",
+			expr: &ValExpr{
+				Expr: &StringLiteral{
+					Value:  "123456",
+					Line:   4,
+					Column: 2,
+					Token:  "123456",
+				},
+				Line:   1,
+				Column: 1,
+				Token:  "VAL",
+			},
+			expected: "VAL\n  String \"123456\"\n",
+		},
+		{
+			name: "ValExpr with expression",
+			expr: &ValExpr{
+				Expr: &InfixExpr{
+					Left:  &Identifier{Name: "A$"},
+					Op:    "+",
+					Right: &Identifier{Name: "B$"},
+				},
+				Token: "VAL",
+			},
+			expected: "VAL\n  Infix +\n    Ident A$\n    Ident B$\n",
+		},
+		{
 			name: "TabExpr",
 			expr: &TabExpr{
 				Expr: &NumberLiteral{

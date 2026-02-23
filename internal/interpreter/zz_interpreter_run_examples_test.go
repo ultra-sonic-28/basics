@@ -1429,6 +1429,33 @@ Line 3
 `,
 		},
 		{
+			name:   "Val-01",
+			file:   "strings/val-01-example.bas",
+			errors: 0,
+			expected: `3
+3.5
+300000
+0.00003
+74
+1
+0
+35
+14274
+3
+`,
+		},
+		{
+			name:   "Val-02",
+			file:   "strings/val-02-example.bas",
+			errors: 0,
+			expected: `3
+3.5
+3
+52
+35
+`,
+		},
+		{
 			name:   "Vars-01",
 			file:   "variables/vars-01-example.bas",
 			errors: 0,

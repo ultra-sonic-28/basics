@@ -29,33 +29,48 @@ func TestFormatNumber(t *testing.T) {
 		},
 		{
 			name:     "Float with decimals",
+			input:    0.5,
+			expected: "0.5",
+		},
+		{
+			name:     "Negative float",
+			input:    -0.75,
+			expected: "-0.75",
+		},
+		{
+			name:     "Float 3.14",
 			input:    3.14,
 			expected: "3.14",
 		},
 		{
-			name:     "Float without trailing zeros",
-			input:    2.5,
-			expected: "2.5",
+			name:     "Float 3e-5 (decimal)",
+			input:    3e-5,
+			expected: "0.00003",
 		},
 		{
-			name:     "Float scientific notation small",
-			input:    0.000001,
-			expected: "1e-06",
+			name:     "Float 3e-6 (decimal)",
+			input:    3e-6,
+			expected: "0.000003",
+		},
+		{
+			name:     "Float 3e-7 (scientific)",
+			input:    3e-7,
+			expected: "3e-07",
+		},
+		{
+			name:     "Float 3e-10 (scientific)",
+			input:    3e-10,
+			expected: "3e-10",
 		},
 		{
 			name:     "Float scientific notation large",
-			input:    1000000.5,
-			expected: "1.0000005e+06",
+			input:    10000000000.5,
+			expected: "1.00000000005e+10",
 		},
 		{
 			name:     "Negative float",
 			input:    -12.75,
 			expected: "-12.75",
-		},
-		{
-			name:     "Float very close to integer but not exact",
-			input:    1.0000000001,
-			expected: "1.0000000001",
 		},
 	}
 

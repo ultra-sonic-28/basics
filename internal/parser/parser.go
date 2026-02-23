@@ -990,6 +990,14 @@ func (p *Parser) initBuiltins() {
 				Token:  tok,
 			}
 		},
+		"VAL": func(expr Expression, line, col int, tok string) Expression {
+			return &ValExpr{
+				Expr:   expr,
+				Line:   line,
+				Column: col,
+				Token:  tok,
+			}
+		},
 	}
 
 	p.multiBuiltins = map[string]multiArgBuiltinFactory{
