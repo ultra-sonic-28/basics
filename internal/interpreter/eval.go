@@ -836,6 +836,38 @@ func EvalExpr(expr parser.Expression, rt *runtime.Runtime) (runtime.Value, *[]in
 			Num:  f,
 		}, nil, nil
 
+	case *parser.ChrExpr:
+
+		val, _, err := EvalExpr(e.Expr, rt)
+		if err != nil {
+			return runtime.Value{}, nil, err
+		}
+
+		if val.Type == runtime.STRING {
+			return runtime.Value{}, nil, errors.NewSyntax(
+				line, col, tok,
+				"EXPECTED NUMBER",
+			)
+		}
+
+		// Coercition en entier
+		intValue := int(val.Num)
+		if val.Type == runtime.INTEGER {
+			intValue = val.Int
+		}
+
+		if intValue < 0 || intValue > 255 {
+			return runtime.Value{}, nil, errors.NewSyntax(
+				line, col, tok,
+				"ILLEGAL QUANTITY ERROR",
+			)
+		}
+
+		return runtime.Value{
+			Type: runtime.STRING,
+			Str:  string(rune(intValue)),
+		}, nil, nil
+
 	}
 
 	// =========================

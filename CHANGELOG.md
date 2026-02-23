@@ -6,6 +6,7 @@ The format is based on Keep a Changelog (https://keepachangelog.com), and this p
 ## [Unreleased] - 2026-02-23
 ### Added
 - Add `VAL()` support in Apple II Basic. Add relevant unit tests.
+- Add `CHR$()` support in Apple II Basic. Add relevant unit tests.
 
 ## [Unreleased] - 2026-02-22
 ### Added

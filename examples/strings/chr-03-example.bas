@@ -1,0 +1,2 @@
+10 REM CHR$ Example
+20 PRINT CHR$(-66)

@@ -177,6 +177,47 @@ AAAAAAAAAA
 `,
 		},
 		{
+			name:   "Chr-01",
+			file:   "strings/chr-01-example.bas",
+			errors: 0,
+			expected: `!
+B
+b
+q
+$
+Z
+#
+`,
+		},
+		{
+			name:   "Chr-02",
+			file:   "strings/chr-02-example.bas",
+			errors: 0,
+			expected: `⚠️ ILLEGAL QUANTITY ERROR IN 2 (CHR$)
+`,
+		},
+		{
+			name:   "Chr-03",
+			file:   "strings/chr-03-example.bas",
+			errors: 0,
+			expected: `⚠️ ILLEGAL QUANTITY ERROR IN 2 (CHR$)
+`,
+		},
+		{
+			name:   "Chr-04",
+			file:   "strings/chr-04-example.bas",
+			errors: 0,
+			expected: `⚠️ TYPE MISMATCH: FLOAT EXPECTED IN 20 ()
+`,
+		},
+		{
+			name:   "Chr-05",
+			file:   "strings/chr-05-example.bas",
+			errors: 0,
+			expected: `⚠️ EXPECTED NUMBER IN 2 (CHR$)
+`,
+		},
+		{
 			name:   "Clear-01",
 			file:   "variables/clear-01-example.bas",
 			errors: 0,

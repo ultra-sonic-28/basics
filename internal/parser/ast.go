@@ -464,6 +464,22 @@ func (v *ValExpr) Pos() (int, int, string) {
 }
 
 // =========================
+// CHR$(aexpr)
+// =========================
+type ChrExpr struct {
+	Expr   Expression
+	Line   int
+	Column int
+	Token  string
+}
+
+func (*ChrExpr) exprNode() {}
+
+func (c *ChrExpr) Pos() (int, int, string) {
+	return c.Line, c.Column, c.Token
+}
+
+// =========================
 // Maths functions
 // =========================
 // =========================

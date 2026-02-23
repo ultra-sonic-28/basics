@@ -236,9 +236,13 @@ An integer or string variable must be followed by a `%` or `$` at each use of th
     * `aexpr` must be an integer or real number or a standard arithmetic expression. Otherwise the message ?EXPECTED NUMBER is displayed
     * `aexpr` is evaluated before it is converted to a string. STR$(100 000 000 000) returns lE+11.
     * If `aexpr` exceeds the limits for reals, then the message `?OVER FLOW ERROR` is displayed.
+* `CHR$(aexpr)`
+    * This function that returns the ASCII character which corresponds to the value `aexpr` must be between `0` and `255`, inclusive, or the message
+`?ILLEGAL QUANTITY ERROR` is displayed.
+    * Reals are converted to integers.
 * `VAL(sexpr)`
     * This function converts the string `sexpr` into an integer or real number representing its value.
-    * The first character of the string must be a digit from 0 to 9 (leading spaces are removed and ignored); otherwise, the value 0 is returned.
+    * The first character of the string must be a digit from `0` to `9` (leading spaces are removed and ignored); otherwise, the value `0` is returned.
     * If `sexpr` exceeds the limits of real numbers, the message `?OVER FLOW ERROR` is displayed.
     * `sexpr` must be a string. Otherwise, the message `?EXPECTED STRING IN LINE` is displayed.
     * If `sexpr` represents a real number and is assigned to an integer variable, then the value returned by `VAL()` is converted to an integer.
