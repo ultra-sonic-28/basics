@@ -1,0 +1,48 @@
+package parser
+
+import (
+	"testing"
+
+	"basics/internal/lexer"
+	"basics/testutils"
+)
+
+func TestParser_Golden_Positioning(t *testing.T) {
+	source := `10 HTAB 10
+20 VTAB 5
+30 HTAB A + 1: VTAB B * 2
+40 PRINT TAB(20); "HELLO"
+`
+	tokens := lexer.Lex(source)
+	p := New(tokens)
+	prog, errs := p.ParseProgram()
+	testutils.Equal(t, "no errors", len(errs), 0)
+
+	got := ASTToMarkdownTable(prog)
+
+	want := `| Path | Type | Value |
+|------|------|-------|
+| Program/Line[10] | Line |  |
+| Program/Line[10]/Stmt[0] | HTabStmt |  |
+| Program/Line[10]/Stmt[0]/Expr | NumberLiteral | 10 |
+| Program/Line[20] | Line |  |
+| Program/Line[20]/Stmt[0] | VTabStmt |  |
+| Program/Line[20]/Stmt[0]/Expr | NumberLiteral | 5 |
+| Program/Line[30] | Line |  |
+| Program/Line[30]/Stmt[0] | HTabStmt |  |
+| Program/Line[30]/Stmt[0]/Expr | InfixExpr | + |
+| Program/Line[30]/Stmt[0]/Expr/Left | Identifier | A |
+| Program/Line[30]/Stmt[0]/Expr/Right | NumberLiteral | 1 |
+| Program/Line[30]/Stmt[1] | VTabStmt |  |
+| Program/Line[30]/Stmt[1]/Expr | InfixExpr | * |
+| Program/Line[30]/Stmt[1]/Expr/Left | Identifier | B |
+| Program/Line[30]/Stmt[1]/Expr/Right | NumberLiteral | 2 |
+| Program/Line[40] | Line |  |
+| Program/Line[40]/Stmt[0] | PrintStmt |  |
+| Program/Line[40]/Stmt[0]/Expr[0] | TabExpr |  |
+| Program/Line[40]/Stmt[0]/Expr[0]/Expr | NumberLiteral | 20 |
+| Program/Line[40]/Stmt[0]/Expr[1] | StringLiteral | HELLO |
+`
+
+	testutils.Equal(t, "AST markdown for positioning statements", got, want)
+}
