@@ -26,7 +26,7 @@ func TestKeywords_ContainsExpectedKeywords(t *testing.T) {
 		"LEFT$", "RIGHT$", "MID$",
 		"STR$",
 		"CHR$",
-		"VAL",
+		"ASC", "VAL",
 		"LEN",
 
 		// Math

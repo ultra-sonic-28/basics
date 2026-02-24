@@ -982,6 +982,14 @@ func (p *Parser) initBuiltins() {
 				Token:  tok,
 			}
 		},
+		"ASC": func(expr Expression, line, col int, tok string) Expression {
+			return &AscExpr{
+				Expr:   expr,
+				Line:   line,
+				Column: col,
+				Token:  tok,
+			}
+		},
 		"STR$": func(expr Expression, line, col int, tok string) Expression {
 			return &StrExpr{
 				Expr:   expr,

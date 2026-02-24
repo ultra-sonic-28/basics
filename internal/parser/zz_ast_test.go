@@ -591,3 +591,18 @@ func TestChrExpr_Pos(t *testing.T) {
 	testutils.Equal(t, "column", col, 8)
 	testutils.Equal(t, "token", tok, "CHR$")
 }
+
+func TestAscExpr_Pos(t *testing.T) {
+	expr := &ValExpr{
+		Expr:   &StringLiteral{Value: "A"},
+		Line:   20,
+		Column: 8,
+		Token:  "ASC",
+	}
+
+	line, col, tok := expr.Pos()
+
+	testutils.Equal(t, "line", line, 20)
+	testutils.Equal(t, "column", col, 8)
+	testutils.Equal(t, "token", tok, "ASC")
+}

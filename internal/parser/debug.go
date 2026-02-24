@@ -226,6 +226,10 @@ func dumpExpr(e Expression, indent string, emit Emitter) {
 		emit(indent + "LEN")
 		dumpExpr(n.Expr, indent+"  ", emit)
 
+	case *AscExpr:
+		emit(indent + "ASC")
+		dumpExpr(n.Expr, indent+"  ", emit)
+
 	case *StrExpr:
 		emit(indent + "STR$")
 		dumpExpr(n.Expr, indent+"  ", emit)

@@ -803,6 +803,33 @@ func EvalExpr(expr parser.Expression, rt *runtime.Runtime) (runtime.Value, *[]in
 			Num:  float64(len(val.Str)),
 		}, nil, nil
 
+	case *parser.AscExpr:
+
+		val, _, err := EvalExpr(e.Expr, rt)
+		if err != nil {
+			return runtime.Value{}, nil, err
+		}
+
+		if val.Type != runtime.STRING {
+			return runtime.Value{}, nil, errors.NewSyntax(
+				line, col, tok,
+				"EXPECTED STRING",
+			)
+		}
+
+		if len(val.Str) == 0 {
+			return runtime.Value{}, nil, errors.NewSyntax(
+				line, col, tok,
+				"ILLEGAL QUANTITY ERROR",
+			)
+		}
+
+		return runtime.Value{
+			Type: runtime.INTEGER,
+			Int:  int(val.Str[0]),
+			Num:  float64(val.Str[0]),
+		}, nil, nil
+
 	case *parser.ValExpr:
 
 		val, _, err := EvalExpr(e.Expr, rt)

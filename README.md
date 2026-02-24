@@ -247,6 +247,10 @@ An integer or string variable must be followed by a `%` or `$` at each use of th
     * `sexpr` must be a string. Otherwise, the message `?EXPECTED STRING IN LINE` is displayed.
     * If `sexpr` represents a real number and is assigned to an integer variable, then the value returned by `VAL()` is converted to an integer.
     * `VAL()` correctly handles strings representing numbers in scientific format (e.g., `3e5` or `17e-3`)
+* `ASC(sexpr)`
+    * This function returns the ASCII code corresponding to the first character of the string `sexpr`.
+    * If `sexpr` is empty, return the message: `?ILLEGAL QUANTITY ERROR`.
+    * `sexpr` must be a string, otherwise it returns the message `EXPECTED STRING IN LINE`.
 * `LEN(sexpr)`
     * This function returns the number of characters in `sexpr`.
 

@@ -84,3 +84,7 @@
 - Les commentaires multilignes sont autorisés.
 - La documentation doit pouvoir être généré directement avec `godoc`.
 - Pour les tests unitaires, utiliser des tests `table-driven`.
+
+## Divers
+
+- Les opérations GIT (push, commit...) sont faites manuellement.

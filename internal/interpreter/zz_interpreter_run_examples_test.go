@@ -116,6 +116,38 @@ AAAAAAAAAA
 `,
 		},
 		{
+			name:   "Asc-01",
+			file:   "strings/asc-01-example.bas",
+			errors: 0,
+			expected: `65
+97
+65
+55
+65
+`,
+		},
+		{
+			name:   "Asc-02",
+			file:   "strings/asc-02-example.bas",
+			errors: 0,
+			expected: `⚠️ EXPECTED STRING IN 2 (ASC)
+`,
+		},
+		{
+			name:   "Asc-03",
+			file:   "strings/asc-03-example.bas",
+			errors: 0,
+			expected: `⚠️ TYPE MISMATCH: STRING EXPECTED IN 20 ()
+`,
+		},
+		{
+			name:   "Asc-04",
+			file:   "strings/asc-04-example.bas",
+			errors: 0,
+			expected: `⚠️ ILLEGAL QUANTITY ERROR IN 2 (ASC)
+`,
+		},
+		{
 			name:   "CubeExample",
 			file:   "programs/maths/cube-example.bas",
 			errors: 0,

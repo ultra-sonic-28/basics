@@ -1,0 +1,9 @@
+10 REM ASC Example
+20 PRINT ASC("A")
+30 PRINT ASC("a")
+40 PRINT ASC("ABCDEF")
+50 A = ASC("7")
+60 PRINT A
+70 A$ = "A": B$="B"
+80 PRINT ASC(A$+B$)
+90 END

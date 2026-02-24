@@ -1,0 +1,2 @@
+10 REM ASC Example
+20 PRINT ASC("")
