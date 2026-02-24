@@ -245,6 +245,10 @@ func collectExpr(path string, e Expression, rows *[]row) {
 	case *TabExpr:
 		*rows = append(*rows, row{path, "TabExpr", ""})
 		collectExpr(path+"/Expr", ex.Expr, rows)
+
+	case *SpcExpr:
+		*rows = append(*rows, row{path, "SpcExpr", ""})
+		collectExpr(path+"/Expr", ex.Expr, rows)
 	}
 }
 

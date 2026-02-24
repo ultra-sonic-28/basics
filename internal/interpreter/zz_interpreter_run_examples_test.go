@@ -105,7 +105,7 @@ AAAAAAAAAA
 			name:   "Array-04",
 			file:   "variables/array-04-example.bas",
 			errors: 0,
-			expected: `111           55555
+			expected: `111             55555
 `,
 		},
 		{
@@ -563,16 +563,16 @@ World
 			file:   "flow_control/gosub-03-example.bas",
 			errors: 0,
 			expected: `TABLE DE 4 :
-1             4
-2             8
-3             12
-4             16
-5             20
-6             24
-7             28
-8             32
-9             36
-10            40
+1               4
+2               8
+3               12
+4               16
+5               20
+6               24
+7               28
+8               32
+9               36
+10              40
 `,
 		},
 		{
@@ -626,7 +626,9 @@ B
 			name:   "HtabVtab-01",
 			file:   "tabs/htab-vtab-01-example.bas",
 			errors: 0,
-			expected: `1
+			expected: `000000000111111111122222222223333333333
+123456789012345678901234567890123456789
+1
 2
 3
 4
@@ -646,7 +648,6 @@ B
 9
 6
 3
-0
 1
 2
 3
@@ -668,7 +669,9 @@ B
 			name:   "HtabVtab-02",
 			file:   "tabs/htab-vtab-02-example.bas",
 			errors: 0,
-			expected: `1
+			expected: `000000000111111111122222222223333333333
+123456789012345678901234567890123456789
+1
 2
 3
 4
@@ -689,16 +692,16 @@ B
 			name:   "If-01",
 			file:   "flow_control/if-01-example.bas",
 			errors: 0,
-			expected: `Count:        0
-Count:        1
-Count:        2
-Count:        3
-Count:        4
-Count:        5
-Count:        6
-Count:        7
-Count:        8
-Count:        9
+			expected: `Count:          0
+Count:          1
+Count:          2
+Count:          3
+Count:          4
+Count:          5
+Count:          6
+Count:          7
+Count:          8
+Count:          9
 All done!
 `,
 		},
@@ -706,16 +709,16 @@ All done!
 			name:   "If-02",
 			file:   "flow_control/if-02-example.bas",
 			errors: 0,
-			expected: `Count:        0
-Count:        1
-Count:        2
-Count:        3
-Count:        4
-Count:        5
-Count:        6
-Count:        7
-Count:        8
-Count:        9
+			expected: `Count:          0
+Count:          1
+Count:          2
+Count:          3
+Count:          4
+Count:          5
+Count:          6
+Count:          7
+Count:          8
+Count:          9
 All done!
 `,
 		},
@@ -723,25 +726,25 @@ All done!
 			name:   "If-03",
 			file:   "flow_control/if-03-example.bas",
 			errors: 0,
-			expected: `Count:        0
+			expected: `Count:          0
 Go to line 20
-Count:        1
+Count:          1
 Go to line 20
-Count:        2
+Count:          2
 Go to line 20
-Count:        3
+Count:          3
 Go to line 20
-Count:        4
+Count:          4
 Go to line 20
-Count:        5
+Count:          5
 Go to line 20
-Count:        6
+Count:          6
 Go to line 20
-Count:        7
+Count:          7
 Go to line 20
-Count:        8
+Count:          8
 Go to line 20
-Count:        9
+Count:          9
 Go to line 60
 All done!
 `,
@@ -750,16 +753,16 @@ All done!
 			name:   "If-04",
 			file:   "flow_control/if-04-example.bas",
 			errors: 0,
-			expected: `Count:        0
-Count:        1
-Count:        2
-Count:        3
-Count:        4
-Count:        5
-Count:        6
-Count:        7
-Count:        8
-Count:        9
+			expected: `Count:          0
+Count:          1
+Count:          2
+Count:          3
+Count:          4
+Count:          5
+Count:          6
+Count:          7
+Count:          8
+Count:          9
 All done!
 `,
 		},
@@ -768,17 +771,17 @@ All done!
 			file:   "flow_control/if-05-example.bas",
 			errors: 0,
 			expected: `Let's count...
-Count:        0
-Count:        1
-Count:        2
-Count:        3
-Count:        4
-Count:        5
-Count:        6
-Count:        7
-Count:        8
-Count:        9
-Count:        10
+Count:          0
+Count:          1
+Count:          2
+Count:          3
+Count:          4
+Count:          5
+Count:          6
+Count:          7
+Count:          8
+Count:          9
+Count:          10
 All done!
 `,
 		},
@@ -787,17 +790,17 @@ All done!
 			file:   "flow_control/if-06-example.bas",
 			errors: 0,
 			expected: `Let's count...
-Count:        0
-Count:        1
-Count:        2
-Count:        3
-Count:        4
-Count:        5
-Count:        6
-Count:        7
-Count:        8
-Count:        9
-Count:        10
+Count:          0
+Count:          1
+Count:          2
+Count:          3
+Count:          4
+Count:          5
+Count:          6
+Count:          7
+Count:          8
+Count:          9
+Count:          10
 And finally...
 All done!
 `,
@@ -1063,16 +1066,16 @@ All done!
 			file:   "programs/maths/multpile-of-4-example.bas",
 			errors: 0,
 			expected: `TABLE DE 4 :
-1             4
-2             8
-3             12
-4             16
-5             20
-6             24
-7             28
-8             32
-9             36
-10            40
+1               4
+2               8
+3               12
+4               16
+5               20
+6               24
+7               28
+8               32
+9               36
+10              40
 `,
 		},
 		{
@@ -1151,7 +1154,9 @@ All done!
 			name:   "Print-02",
 			file:   "display/print-02-example.bas",
 			errors: 0,
-			expected: `7             7             8
+			expected: `000000000111111111122222222223333333333
+123456789012345678901234567890123456789
+7               7               8
 `,
 		},
 		{
@@ -1308,6 +1313,36 @@ Line 3
 			file:   "maths/sgn-03-example.bas",
 			errors: 0,
 			expected: `⚠️ TYPE MISMATCH IN 3 (SGN)
+`,
+		},
+		{
+			name:   "Spc-01",
+			file:   "tabs/spc-01-example.bas",
+			errors: 0,
+			expected: `000000000111111111122222222223333333333
+123456789012345678901234567890123456789
+     |
+.     |
+.          |
+                     |
+.                    |
+.....                |
+...............      |
+................                |
+................                     |
+`,
+		},
+		{
+			name:   "Spc-02",
+			file:   "tabs/spc-02-example.bas",
+			errors: 0,
+			expected: `000000000111111111122222222223333333333
+123456789012345678901234567890123456789
+     |
+|
+                         |
+          |
+          |
 `,
 		},
 		{

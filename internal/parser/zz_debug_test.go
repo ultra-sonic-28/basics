@@ -332,6 +332,33 @@ func TestDumpExpr(t *testing.T) {
 			expected: "TAB\n  Number 16\n",
 		},
 		{
+			name: "SpcExpr",
+			expr: &SpcExpr{
+				Expr: &NumberLiteral{
+					Value:  16,
+					Line:   4,
+					Column: 2,
+					Token:  "16",
+				},
+				Line:   1,
+				Column: 1,
+				Token:  "16",
+			},
+			expected: "SPC\n  Number 16\n",
+		},
+		{
+			name: "SpcExpr with expression",
+			expr: &SpcExpr{
+				Expr: &InfixExpr{
+					Left:  &Identifier{Name: "A"},
+					Op:    "+",
+					Right: &Identifier{Name: "B"},
+				},
+				Token: "SPC",
+			},
+			expected: "SPC\n  Infix +\n    Ident A\n    Ident B\n",
+		},
+		{
 			name: "SqrExpr",
 			expr: &SqrExpr{
 				Expr: &NumberLiteral{

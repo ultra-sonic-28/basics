@@ -47,6 +47,7 @@ func TestKeywords_ContainsExpectedKeywords(t *testing.T) {
 		"POKE", "PEEK", "CALL",
 		"PR",
 		"TAB", "VTAB", "HTAB",
+		"SPC",
 		"INVERSE", "NORMAL", "FLASH",
 
 		// Extension

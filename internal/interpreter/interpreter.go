@@ -283,6 +283,21 @@ func (i *Interpreter) Run(prog *parser.Program) {
 			cursor := 0
 
 			for iExpr, expr := range s.Exprs {
+
+				// 1. Gérer le séparateur venant de l'expression PRÉCÉDENTE
+				if iExpr > 0 {
+					sep := s.Separators[iExpr-1]
+					if sep == ',' {
+						spaces := 16 - (cursor % 16)
+						if spaces == 0 {
+							spaces = 16
+						}
+						padding := strings.Repeat(" ", spaces)
+						i.rt.ExecPrint(padding)
+						cursor += spaces
+					}
+				}
+
 				// ==========================
 				// GESTION DE TAB
 				// ==========================
@@ -324,6 +339,43 @@ func (i *Interpreter) Run(prog *parser.Program) {
 					continue
 				}
 
+				// ==========================
+				// GESTION DE SPC
+				// ==========================
+				if spcExpr, ok := expr.(*parser.SpcExpr); ok {
+
+					val, _, err := EvalExpr(spcExpr.Expr, i.rt)
+					if err != nil {
+						fmt.Println(err)
+						return
+					}
+
+					if val.Type == runtime.STRING {
+						i.rt.ExecError(errors.NewSemantic(
+							spcExpr.Line,
+							"EXPECTED NUMBER",
+						))
+						return
+					}
+
+					var count int
+
+					switch val.Type {
+					case runtime.INTEGER:
+						count = val.Int
+					case runtime.NUMBER:
+						count = int(val.Num)
+					}
+
+					if count > 0 {
+						spaces := strings.Repeat(" ", count)
+						i.rt.ExecPrint(spaces)
+						cursor += count
+					}
+
+					continue
+				}
+
 				val, _, err := EvalExpr(expr, i.rt)
 				if err != nil {
 					i.rt.ExecError(err)
@@ -338,14 +390,6 @@ func (i *Interpreter) Run(prog *parser.Program) {
 					str = common.FormatNumber(val.Num)
 				case runtime.STRING:
 					str = val.Str
-				}
-
-				if iExpr > 0 {
-					sep := s.Separators[iExpr-1]
-					if sep == ',' {
-						spaces := 14 - (cursor % 14)
-						str = strings.Repeat(" ", spaces) + str
-					}
 				}
 
 				/* if indices != nil {
@@ -625,6 +669,8 @@ func (i *Interpreter) Run(prog *parser.Program) {
 		logger.Debug(LogTrace(inst, pc, nextPC, sExpr))
 		pc = nextPC
 	}
+
+	i.rt.Video.Render()
 }
 
 // =======================
@@ -698,7 +744,50 @@ func (i *Interpreter) execInline(line int, stmt parser.Statement, pc int) int {
 	case *parser.PrintStmt:
 		//i.rt.ExecPrint(s.Exprs[0].(*parser.StringLiteral).Value)
 		//i.rt.ExecPrint("\n")
+		cursor := 0
 		for iExpr, expr := range s.Exprs {
+
+			if iExpr > 0 {
+				sep := s.Separators[iExpr-1]
+				if sep == ',' {
+					spaces := 16 - (cursor % 16)
+					if spaces == 0 {
+						spaces = 16
+					}
+					padding := strings.Repeat(" ", spaces)
+					i.rt.ExecPrint(padding)
+					cursor += spaces
+				}
+			}
+
+			// GESTION DE TAB/SPC DANS INLINE
+			if tabExpr, ok := expr.(*parser.TabExpr); ok {
+				val, _, _ := EvalExpr(tabExpr.Expr, i.rt)
+				target := int(val.Num)
+				if val.Type == runtime.INTEGER {
+					target = val.Int
+				}
+				if target > cursor {
+					spaces := target - cursor
+					i.rt.ExecPrint(strings.Repeat(" ", spaces))
+					cursor += spaces
+				}
+				continue
+			}
+
+			if spcExpr, ok := expr.(*parser.SpcExpr); ok {
+				val, _, _ := EvalExpr(spcExpr.Expr, i.rt)
+				count := int(val.Num)
+				if val.Type == runtime.INTEGER {
+					count = val.Int
+				}
+				if count > 0 {
+					i.rt.ExecPrint(strings.Repeat(" ", count))
+					cursor += count
+				}
+				continue
+			}
+
 			val, _, err := EvalExpr(expr, i.rt)
 			if err != nil {
 				i.rt.ExecError(err)
@@ -717,24 +806,19 @@ func (i *Interpreter) execInline(line int, stmt parser.Statement, pc int) int {
 				} else {
 					out = "0"
 				}
+			case runtime.INTEGER:
+				out = strconv.Itoa(val.Int)
 			default:
 				out = ""
 			}
 
-			// séparateurs ; et ,
-			if iExpr > 0 {
-				sep := s.Separators[iExpr-1]
-				switch sep {
-				case ',':
-					out = " " + out
-				case ';':
-					// rien
-				}
-			}
-
 			i.rt.ExecPrint(out)
+			cursor += len(out)
 		}
-		i.rt.ExecPrint("\n")
+
+		if len(s.Separators) < len(s.Exprs) {
+			i.rt.ExecPrint("\n")
+		}
 
 	}
 

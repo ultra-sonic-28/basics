@@ -12,6 +12,8 @@ func TestParser_Golden_Positioning(t *testing.T) {
 20 VTAB 5
 30 HTAB A + 1: VTAB B * 2
 40 PRINT TAB(20); "HELLO"
+50 PRINT SPC(10); "A"
+60 PRINT SPC(2 * A); "A"
 `
 	tokens := lexer.Lex(source)
 	p := New(tokens)
@@ -42,6 +44,18 @@ func TestParser_Golden_Positioning(t *testing.T) {
 | Program/Line[40]/Stmt[0]/Expr[0] | TabExpr |  |
 | Program/Line[40]/Stmt[0]/Expr[0]/Expr | NumberLiteral | 20 |
 | Program/Line[40]/Stmt[0]/Expr[1] | StringLiteral | HELLO |
+| Program/Line[50] | Line |  |
+| Program/Line[50]/Stmt[0] | PrintStmt |  |
+| Program/Line[50]/Stmt[0]/Expr[0] | SpcExpr |  |
+| Program/Line[50]/Stmt[0]/Expr[0]/Expr | NumberLiteral | 10 |
+| Program/Line[50]/Stmt[0]/Expr[1] | StringLiteral | A |
+| Program/Line[60] | Line |  |
+| Program/Line[60]/Stmt[0] | PrintStmt |  |
+| Program/Line[60]/Stmt[0]/Expr[0] | SpcExpr |  |
+| Program/Line[60]/Stmt[0]/Expr[0]/Expr | InfixExpr | * |
+| Program/Line[60]/Stmt[0]/Expr[0]/Expr/Left | NumberLiteral | 2 |
+| Program/Line[60]/Stmt[0]/Expr[0]/Expr/Right | Identifier | A |
+| Program/Line[60]/Stmt[0]/Expr[1] | StringLiteral | A |
 `
 
 	testutils.Equal(t, "AST markdown for positioning statements", got, want)

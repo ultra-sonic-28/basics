@@ -974,6 +974,15 @@ func (p *Parser) initBuiltins() {
 			}
 		},
 
+		"SPC": func(expr Expression, line, col int, tok string) Expression {
+			return &SpcExpr{
+				Expr:   expr,
+				Line:   line,
+				Column: col,
+				Token:  tok,
+			}
+		},
+
 		"LEN": func(expr Expression, line, col int, tok string) Expression {
 			return &LenExpr{
 				Expr:   expr,

@@ -3,6 +3,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog (https://keepachangelog.com), and this project adheres to Semantic Versioning (https://semver.org).
 
+## [Unreleased] - 2026-02-25
+### Added
+- Add `SPC()` support in Apple II Basic. Add relevant unit tests.
+
+### Fixed
+- Fix comma separator in print statements.
+- Fix tab field spacing from 14 to 16.
+
 ## [Unreleased] - 2026-02-24
 ### Added
 - Add `ASC()` support in Apple II Basic. Add relevant unit tests.

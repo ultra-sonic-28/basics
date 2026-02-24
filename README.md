@@ -123,6 +123,15 @@ An integer or string variable must be followed by a `%` or `$` at each use of th
     * If `aexpr` is less than the value of the current cursor position, then the cursor is not moved.
     * TAB never moves the cursor to the left (use HTAB for this).
     * If `aexpr` is a real, it is converted to an integer.
+* `SPC(aexpr)`
+    * Must be used in a PRINT statement, and `aexpr` must be enclosed in parentheses.
+    * Introduces `aexpr` spaces between the item previously printed (or, by default, the left margin of the text window), and the next item to be printed, if the `SPC` command concatenated with the items preceeding and following, by juxtaposition or by intervening semi-colons.
+    * SPC(0) does not introduce any space.
+    * If `aexpr` is a real, it is converted to an integer.
+    * Note that while `HTAB` moves the cursor to an absolute screen position relative to the left margin of the text window, `SPC(aexpr)` moves the cursor a given number of spaces away from the previously printed item.
+    * This new position may be anywhere in the text window, depending on the location of the previously printed item.
+    * Spacing beyond the rightmost limit of the text window causes spacing or printing to resume at the left edge of the next lower line in the text window.
+
 * `NORMAL`
     * Sets the mode to the usual white letters on a black background.
 * `INVERSE`
@@ -139,7 +148,7 @@ An integer or string variable must be followed by a `%` or `$` at each use of th
     * Multiple arguments may be separated by commas (`,`) and/or semicolons (`;`).
     * If an item on the list is followed by a semicolon, then the first character of the next item to be printed will appear immediatly after the current item.
     * If an item on the list is followed by a comma, then the first character of the next item to be printed will appear in the first position of the next available tab field.
-    * Tab fields are 14 positions wide
+    * Tab fields are 16 positions wide
     * If neither a comma nor a semi-colon ends the list, a line feed and return are executed following the last item printed.
 * `INPUT`
     * If the optional string is left out, `INPUT` prints a question mark and waits for the user to type a number (if var is an arithmetic variable) or characters (if var is a string variable). The value of this number or string is put into var.

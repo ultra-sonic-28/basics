@@ -364,6 +364,22 @@ func (t *TabExpr) Pos() (int, int, string) {
 }
 
 // =========================
+// SPC(expr)
+// =========================
+type SpcExpr struct {
+	Expr   Expression
+	Line   int
+	Column int
+	Token  string
+}
+
+func (*SpcExpr) exprNode() {}
+
+func (s *SpcExpr) Pos() (int, int, string) {
+	return s.Line, s.Column, s.Token
+}
+
+// =========================
 // LEFT$(sexpr, aexpr)
 // =========================
 type LeftExpr struct {

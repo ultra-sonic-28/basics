@@ -467,6 +467,20 @@ func TestTabExpr_Pos(t *testing.T) {
 	testutils.Equal(t, "token", tok, "TAB")
 }
 
+func TestSpcExpr_Pos(t *testing.T) {
+	expr := &SpcExpr{
+		Expr:   &NumberLiteral{Value: 10},
+		Line:   12,
+		Column: 4,
+		Token:  "SPC",
+	}
+
+	line, col, tok := expr.Pos()
+	testutils.Equal(t, "line", line, 12)
+	testutils.Equal(t, "column", col, 4)
+	testutils.Equal(t, "token", tok, "SPC")
+}
+
 func TestLeftExpr_Pos(t *testing.T) {
 	expr := &LeftExpr{
 		StrExpr: &StringLiteral{Value: "HELLO"},
