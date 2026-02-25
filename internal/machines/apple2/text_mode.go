@@ -70,7 +70,7 @@ func NewAppleText(
 		renderer,
 		cols, rows,
 		7, 8, // font 7x8
-		1, 0, // blanc sur noir
+		15, 0, // blanc sur noir
 	)
 	return &AppleText{
 		Mode:        mode,
@@ -219,6 +219,10 @@ func (t *AppleText) SwitchMode(slot int) {
 
 func (t *AppleText) Plot(x, y int) {
 	// non utilisé en mode texte
+}
+
+func (t *AppleText) SetColor(c int) {
+	// non utilisé en mode texte pour l'instant (utilisé pour PLOT)
 }
 
 func (t *AppleText) ReadLine() (string, error) {

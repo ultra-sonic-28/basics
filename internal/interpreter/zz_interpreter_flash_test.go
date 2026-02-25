@@ -33,8 +33,9 @@ func (f *FakeVideoDeviceFlash) SetCursorX(x int)     {}
 func (f *FakeVideoDeviceFlash) SetCursorY(y int)     {}
 func (f *FakeVideoDeviceFlash) CursorX() int         { return 0 }
 func (f *FakeVideoDeviceFlash) CursorY() int         { return 0 }
-func (f *FakeVideoDeviceFlash) SwitchMode(slot int)  {}
 func (f *FakeVideoDeviceFlash) Plot(x, y int)        {}
+func (f *FakeVideoDeviceFlash) SetColor(c int)       {}
+func (f *FakeVideoDeviceFlash) SwitchMode(slot int)  {}
 func (f *FakeVideoDeviceFlash) ReadLine() (string, error) {
 	return "", nil
 }

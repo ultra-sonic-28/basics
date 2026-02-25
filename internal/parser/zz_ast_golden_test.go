@@ -1,9 +1,12 @@
 package parser
 
 import (
+	"basics/internal/lexer"
+	"basics/testutils"
 	"fmt"
 	"strconv"
 	"strings"
+	"testing"
 )
 
 type row struct {
@@ -142,6 +145,21 @@ func collectStmt(path string, s Statement, rows *[]row) {
 	case *PrStmt:
 		*rows = append(*rows, row{path, "PrStmt", ""})
 		collectExpr(path+"/Slot", stmt.Slot, rows)
+
+	case *TextStmt:
+		*rows = append(*rows, row{path, "TextStmt", ""})
+
+	case *GrStmt:
+		*rows = append(*rows, row{path, "GrStmt", ""})
+
+	case *ColorStmt:
+		*rows = append(*rows, row{path, "ColorStmt", ""})
+		collectExpr(path+"/Expr", stmt.Expr, rows)
+
+	case *PlotStmt:
+		*rows = append(*rows, row{path, "PlotStmt", ""})
+		collectExpr(path+"/X", stmt.X, rows)
+		collectExpr(path+"/Y", stmt.Y, rows)
 
 	case nil:
 		*rows = append(*rows, row{path, "Empty", ""})
@@ -323,4 +341,44 @@ func trimFloat(f float64) string {
 
 func itoa(n int) string {
 	return strconv.Itoa(n)
+}
+
+func TestParser_Golden_Graphics(t *testing.T) {
+	source := `10 GR
+20 COLOR = 15
+30 PLOT 10, 20
+40 COLOR = A + 1: PLOT X, Y
+50 TEXT
+`
+	tokens := lexer.Lex(source)
+	p := New(tokens)
+	prog, errs := p.ParseProgram()
+	testutils.Equal(t, "no errors", len(errs), 0)
+
+	got := ASTToMarkdownTable(prog)
+
+	want := `| Path | Type | Value |
+|------|------|-------|
+| Program/Line[10] | Line |  |
+| Program/Line[10]/Stmt[0] | GrStmt |  |
+| Program/Line[20] | Line |  |
+| Program/Line[20]/Stmt[0] | ColorStmt |  |
+| Program/Line[20]/Stmt[0]/Expr | NumberLiteral | 15 |
+| Program/Line[30] | Line |  |
+| Program/Line[30]/Stmt[0] | PlotStmt |  |
+| Program/Line[30]/Stmt[0]/X | NumberLiteral | 10 |
+| Program/Line[30]/Stmt[0]/Y | NumberLiteral | 20 |
+| Program/Line[40] | Line |  |
+| Program/Line[40]/Stmt[0] | ColorStmt |  |
+| Program/Line[40]/Stmt[0]/Expr | InfixExpr | + |
+| Program/Line[40]/Stmt[0]/Expr/Left | Identifier | A |
+| Program/Line[40]/Stmt[0]/Expr/Right | NumberLiteral | 1 |
+| Program/Line[40]/Stmt[1] | PlotStmt |  |
+| Program/Line[40]/Stmt[1]/X | Identifier | X |
+| Program/Line[40]/Stmt[1]/Y | Identifier | Y |
+| Program/Line[50] | Line |  |
+| Program/Line[50]/Stmt[0] | TextStmt |  |
+`
+
+	testutils.Equal(t, "AST markdown for graphics statements", got, want)
 }

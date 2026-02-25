@@ -1,0 +1,5 @@
+10 REM TEXT mode test
+20 HOME
+30 GR
+40 TEXT
+50 PRINT ">"

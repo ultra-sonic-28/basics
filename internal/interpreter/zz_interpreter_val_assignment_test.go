@@ -19,8 +19,9 @@ func (m *MockVideo) SetCursorX(x int)     {}
 func (m *MockVideo) SetCursorY(y int)     {}
 func (m *MockVideo) CursorX() int         { return 0 }
 func (m *MockVideo) CursorY() int         { return 0 }
-func (m *MockVideo) SwitchMode(slot int)  {}
 func (m *MockVideo) Plot(x, y int)        {}
+func (m *MockVideo) SetColor(c int)       {}
+func (m *MockVideo) SwitchMode(slot int)  {}
 func (m *MockVideo) ReadLine() (string, error) {
 	return "", nil
 }

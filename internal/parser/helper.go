@@ -11,6 +11,14 @@ func StmtName(s Statement) string {
 		return "REM"
 	case *HomeStmt:
 		return "HOME"
+	case *GrStmt:
+		return "GR"
+	case *TextStmt:
+		return "TEXT"
+	case *ColorStmt:
+		return "COLOR"
+	case *PlotStmt:
+		return "PLOT"
 	case *InputStmt:
 		return "INPUT"
 	case *GetStmt:
@@ -104,6 +112,10 @@ func StmtArgs(s Statement) string {
 			allVars.WriteRune(')')
 		}
 		return fmt.Sprintf(" -> %s", allVars.String())
+	case *ColorStmt:
+		return " -> " + StmtExprValue(stmt.Expr)
+	case *PlotStmt:
+		return " -> " + StmtExprValue(stmt.X) + ", " + StmtExprValue(stmt.Y)
 	default:
 		return ""
 	}

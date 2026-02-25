@@ -52,9 +52,37 @@ func NewAppleDisplay(
 		ModeAppleText80,
 	)
 
+	// Low-Res GR (Mixed) = 280x192
+	rGR := ebitenrenderer.New(
+		scale*280, scale*192,
+		scale,
+		Palette(),
+		font.DefaultFontForMode(basicType),
+	)
+	grMixed := NewAppleGR(
+		rGR,
+		ModeAppleGR,
+		false,
+	)
+
+	// Low-Res GR (Full) = 280x192
+	rGRFull := ebitenrenderer.New(
+		scale*280, scale*192,
+		scale,
+		Palette(),
+		font.DefaultFontForMode(basicType),
+	)
+	grFull := NewAppleGR(
+		rGRFull,
+		ModeAppleGRFull,
+		true,
+	)
+
 	modes := map[video.ModeID]video.Mode{
 		ModeAppleText40: text40,
 		ModeAppleText80: text80,
+		ModeAppleGR:     grMixed,
+		ModeAppleGRFull: grFull,
 	}
 
 	current, ok := modes[defaultMode]
@@ -75,10 +103,20 @@ func (d *DisplayManager) Switch(id video.ModeID) {
 	if m, ok := d.modes[id]; ok {
 		if d.current != m {
 			// Copier le contenu de l'ancien buffer vers le nouveau
-			oldMode, okOld := d.current.(*AppleText)
-			newMode, okNew := m.(*AppleText)
-			if okOld && okNew {
-				newMode.CopyFrom(oldMode)
+			// Case 1: Text -> Text
+			oldText, okOldText := d.current.(*AppleText)
+			newText, okNewText := m.(*AppleText)
+			if okOldText && okNewText {
+				newText.CopyFrom(oldText)
+			}
+
+			// Case 2: Text -> GR (Mixed)
+			newGR, okNewGR := m.(*AppleGR)
+			if okOldText && okNewGR && !newGR.isFull {
+				// Copy text from text mode to GR bottom part
+				// We can reuse AppleText.CopyFrom logic if we expose it or similar
+				// For now, let's just clear and reset cursor
+				newGR.Clear()
 			}
 
 			d.current = m
@@ -174,12 +212,19 @@ func (d *DisplayManager) SwitchMode(slot int) {
 	switch slot {
 	case 0:
 		d.Switch(ModeAppleText40)
+	case 1:
+		d.Switch(ModeAppleGR)
+	case 2:
+		d.Switch(ModeAppleGRFull)
 	case 3:
 		d.Switch(ModeAppleText80)
+	case 4:
+		d.Switch(ModeAppleText40)
 	}
 }
 
 func (d *DisplayManager) Plot(x, y int)             { d.device().Plot(x, y) }
+func (d *DisplayManager) SetColor(c int)            { d.device().SetColor(c) }
 func (d *DisplayManager) ReadLine() (string, error) { return d.device().ReadLine() }
 func (d *DisplayManager) GetChar() (rune, error)    { return d.device().GetChar() }
 func (d *DisplayManager) SetOutput(w io.Writer)     { d.device().SetOutput(w) }

@@ -46,6 +46,14 @@ func (d *Device) Plot(x, y int) {
 	// Apple II text mode: no-op
 }
 
+func (d *Device) SetColor(c int) {
+	// Apple II text mode: no-op
+}
+
+func (d *Device) SwitchMode(slot int) {
+	// Apple II text mode: no-op
+}
+
 func (d *Device) ReadLine() (string, error) {
 	return "", nil
 }

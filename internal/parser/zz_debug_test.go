@@ -548,6 +548,58 @@ func TestDumpStatement(t *testing.T) {
 			expected: "CLEAR\n",
 		},
 		{
+			name:     "GrStmt",
+			stmt:     &GrStmt{},
+			expected: "GR\n",
+		},
+		{
+			name:     "TextStmt",
+			stmt:     &TextStmt{},
+			expected: "TEXT\n",
+		},
+		{
+			name: "ColorStmt with literal",
+			stmt: &ColorStmt{
+				Expr: &NumberLiteral{Value: 15},
+			},
+			expected: "COLOR\n  Number 15\n",
+		},
+		{
+			name: "ColorStmt with expression",
+			stmt: &ColorStmt{
+				Expr: &InfixExpr{
+					Left:  &Identifier{Name: "C"},
+					Op:    "+",
+					Right: &NumberLiteral{Value: 1},
+				},
+			},
+			expected: "COLOR\n  Infix +\n    Ident C\n    Number 1\n",
+		},
+		{
+			name: "PlotStmt with literals",
+			stmt: &PlotStmt{
+				X: &NumberLiteral{Value: 10},
+				Y: &NumberLiteral{Value: 20},
+			},
+			expected: "PLOT\n  Number 10\n  Number 20\n",
+		},
+		{
+			name: "PlotStmt with expressions",
+			stmt: &PlotStmt{
+				X: &InfixExpr{
+					Left:  &Identifier{Name: "X"},
+					Op:    "+",
+					Right: &NumberLiteral{Value: 1},
+				},
+				Y: &InfixExpr{
+					Left:  &Identifier{Name: "Y"},
+					Op:    "*",
+					Right: &NumberLiteral{Value: 2},
+				},
+			},
+			expected: "PLOT\n  Infix +\n    Ident X\n    Number 1\n  Infix *\n    Ident Y\n    Number 2\n",
+		},
+		{
 			name: "ForStmt without Step",
 			stmt: &ForStmt{
 				Var:     "I",

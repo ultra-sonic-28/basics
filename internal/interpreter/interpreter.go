@@ -464,6 +464,68 @@ func (i *Interpreter) Run(prog *parser.Program) {
 			i.rt.ExecVTab(int(val.Num))
 
 		// -----------------------
+		// GR
+		// -----------------------
+		case *parser.GrStmt:
+			i.rt.Video.SwitchMode(1) // Mixed GR
+			i.rt.Video.Clear()
+			i.rt.Video.SetColor(0)
+
+		// -----------------------
+		// TEXT
+		// -----------------------
+		case *parser.TextStmt:
+			i.rt.Video.SwitchMode(4) // Text 40
+			i.rt.ExecVTab(24)
+
+		// -----------------------
+		// COLOR
+		// -----------------------
+		case *parser.ColorStmt:
+			val, _, err := EvalExpr(s.Expr, i.rt)
+			if err != nil {
+				i.rt.ExecError(err)
+				return
+			}
+
+			c := int(val.Num)
+			if val.Type == runtime.INTEGER {
+				c = val.Int
+			}
+
+			if c < 0 || c > 255 {
+				i.rt.ExecError(errors.NewSemantic(s.Line, "ILLEGAL QUANTITY"))
+				return
+			}
+
+			i.rt.Video.SetColor(c % 16)
+
+		// -----------------------
+		// PLOT
+		// -----------------------
+		case *parser.PlotStmt:
+			valX, _, err := EvalExpr(s.X, i.rt)
+			if err != nil {
+				i.rt.ExecError(err)
+				return
+			}
+			valY, _, err := EvalExpr(s.Y, i.rt)
+			if err != nil {
+				i.rt.ExecError(err)
+				return
+			}
+
+			x := int(valX.Num)
+			y := int(valY.Num)
+
+			if x < 0 || x > 39 || y < 0 || y > 47 {
+				i.rt.ExecError(errors.NewSemantic(s.Line, "ILLEGAL QUANTITY"))
+				return
+			}
+
+			i.rt.ExecPlot(x, y)
+
+		// -----------------------
 		// FOR (Applesoft semantics)
 		// -----------------------
 		case *parser.ForStmt:
@@ -689,6 +751,60 @@ func (i *Interpreter) execInline(line int, stmt parser.Statement, pc int) int {
 
 	case *parser.HomeStmt:
 		i.rt.ExecHome()
+		return pc + 1
+
+	case *parser.GrStmt:
+		i.rt.Video.SwitchMode(1)
+		i.rt.Video.Clear()
+		i.rt.Video.SetColor(0)
+		return pc + 1
+
+	case *parser.TextStmt:
+		i.rt.Video.SwitchMode(4)
+		i.rt.ExecVTab(24)
+		return pc + 1
+
+	case *parser.ColorStmt:
+		val, _, err := EvalExpr(s.Expr, i.rt)
+		if err != nil {
+			i.rt.ExecError(err)
+			return pc + 1
+		}
+
+		c := int(val.Num)
+		if val.Type == runtime.INTEGER {
+			c = val.Int
+		}
+
+		if c < 0 || c > 255 {
+			i.rt.ExecError(errors.NewSemantic(s.Line, "ILLEGAL QUANTITY"))
+			return pc + 1
+		}
+
+		i.rt.Video.SetColor(c % 16)
+		return pc + 1
+
+	case *parser.PlotStmt:
+		valX, _, err := EvalExpr(s.X, i.rt)
+		if err != nil {
+			i.rt.ExecError(err)
+			return pc + 1
+		}
+		valY, _, err := EvalExpr(s.Y, i.rt)
+		if err != nil {
+			i.rt.ExecError(err)
+			return pc + 1
+		}
+
+		x := int(valX.Num)
+		y := int(valY.Num)
+
+		if x < 0 || x > 39 || y < 0 || y > 47 {
+			i.rt.ExecError(errors.NewSemantic(s.Line, "ILLEGAL QUANTITY"))
+			return pc + 1
+		}
+
+		i.rt.ExecPlot(x, y)
 		return pc + 1
 
 	case *parser.GotoStmt:

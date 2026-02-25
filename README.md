@@ -170,6 +170,42 @@ An integer or string variable must be followed by a `%` or `$` at each use of th
 * `GOSUB ... RETURN`
     * Used to call the subroutines at the specified line.
 
+##### Graphics
+* `GR`
+    * This command sets low-resolution GRaphics mode (40 by 40) for the screen, leaving four lines for text at the bottom. The screen is
+cleared to black, and the cursor is moved to the text window.
+* `TEXT`
+    * Sets the screen to the usual full-screen text mode (40 characters per line, 24 lines) from low-resolution graphics mode or either of the two high-resolution graphics modes.
+    * The prompt and cursor are moved to the last line of the screen.
+    * If issued in text mode, `TEXT` is equivalent to `VTAB 24`.
+* `COLOR=aexpr`
+    * Sets the color for plotting in low resolution graphics mode. 
+    * If `aexpr` is a real, it is converted to an integer.
+    * The range of values for `aexpr` is from `0` through `255`; these are treated modulo 16.
+    * If used while in High-resolution GRaphics mode, `COLOR` is ignored.
+    * `COLOR` is set to zero by the GR command.
+    * Color names and their associated numbers are:
+        * 0 - black
+        * 1 - magenta (violet)
+        * 2 - brown
+        * 3 - red
+        * 4 - dark green
+        * 5 - dark gray
+        * 6 - blue
+        * 7 - light blue
+        * 8 - gray
+        * 9 - pink
+        * 10 - green
+        * 11 - yellow
+        * 12 - cyan (blue-green)
+        * 13 - orange
+        * 14 - light gray
+        * 15 - white
+* `PLOT aexpr1, aexpr2`
+    * In low-resolution graphics mode, this command places a dot with x-coordinate `aexprl` and y-coordinate `aexpr2`.
+    * The color of the dot is determined by the most recently executed `COLOR` statement (`COLOR=0` if not previously specified).
+    * `aexprl` must be in the range `0` through `39`, and `aexpr2` must be in the range `0` through `47` or the message `ILLEGAL QUANTITY ERROR` appears.
+
 ##### System and Utilities
 * `END`
     * Exit the program.

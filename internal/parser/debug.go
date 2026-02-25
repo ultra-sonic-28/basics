@@ -128,6 +128,21 @@ func dumpStatement(s Statement, indent string, emit Emitter) {
 	case *HomeStmt:
 		emit(indent + "HOME")
 
+	case *GrStmt:
+		emit(indent + "GR")
+
+	case *TextStmt:
+		emit(indent + "TEXT")
+
+	case *ColorStmt:
+		emit(indent + "COLOR")
+		dumpExpr(stmt.Expr, indent+"  ", emit)
+
+	case *PlotStmt:
+		emit(indent + "PLOT")
+		dumpExpr(stmt.X, indent+"  ", emit)
+		dumpExpr(stmt.Y, indent+"  ", emit)
+
 	case *HTabStmt:
 		emit(indent + "HTAB")
 		dumpExpr(stmt.Expr, indent+"  ", emit)

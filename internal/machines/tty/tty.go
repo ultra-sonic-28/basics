@@ -56,6 +56,8 @@ func (t *TTYDevice) PrintChar(r rune) {
 
 func (t *TTYDevice) Plot(x, y int) {}
 
+func (t *TTYDevice) SetColor(c int) {}
+
 func (t *TTYDevice) SetCursorX(x int) {
 	// Utilisation de l'escape code ANSI pour le positionnement horizontal absolu (1-based)
 	t.buffer = append(t.buffer, []rune(fmt.Sprintf("\033[%dG", x+1))...)

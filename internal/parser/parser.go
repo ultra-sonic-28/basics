@@ -259,6 +259,56 @@ func (p *Parser) parseStatement(lineNum int) Statement {
 				Expr: expr,
 			}
 
+		case "GR":
+			stmt := &GrStmt{
+				Line:   p.curr.Line,
+				Column: p.curr.Column,
+			}
+			p.next()
+			return stmt
+
+		case "TEXT":
+			stmt := &TextStmt{
+				Line:   p.curr.Line,
+				Column: p.curr.Column,
+			}
+			p.next()
+			return stmt
+
+		case "COLOR":
+			line := p.curr.Line
+			col := p.curr.Column
+			p.next()
+			if p.curr.Type != token.EQUAL {
+				p.syntaxError("EXPECTED = AFTER COLOR")
+				return nil
+			}
+			p.next()
+			expr := p.parseExpression(LOWEST)
+			return &ColorStmt{
+				Expr:   expr,
+				Line:   line,
+				Column: col,
+			}
+
+		case "PLOT":
+			line := p.curr.Line
+			col := p.curr.Column
+			p.next()
+			x := p.parseExpression(LOWEST)
+			if p.curr.Type != token.COMMA {
+				p.syntaxError("EXPECTED , AFTER PLOT X")
+				return nil
+			}
+			p.next()
+			y := p.parseExpression(LOWEST)
+			return &PlotStmt{
+				X:      x,
+				Y:      y,
+				Line:   line,
+				Column: col,
+			}
+
 		case "END":
 			p.next()
 			return &EndStmt{}

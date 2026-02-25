@@ -2,6 +2,7 @@ package video
 
 import (
 	"basics/testutils"
+	"io"
 	"testing"
 
 	"github.com/hajimehoshi/ebiten/v2"
@@ -34,6 +35,18 @@ func (m *MockEbitenDevice) CursorY() int                               { return 
 func (m *MockEbitenDevice) SetCursorX(x int)                           {}
 func (m *MockEbitenDevice) SetCursorY(y int)                           {}
 func (m *MockEbitenDevice) Clear()                                     {}
+func (m *MockEbitenDevice) SetInverse(v bool)                          {}
+func (m *MockEbitenDevice) SetFlash(v bool)                            {}
+func (m *MockEbitenDevice) PrintChar(r rune)                           {}
+func (m *MockEbitenDevice) PrintString(s string)                       {}
+func (m *MockEbitenDevice) SwitchMode(slot int)                        {}
+func (m *MockEbitenDevice) Plot(x, y int)                              {}
+func (m *MockEbitenDevice) SetColor(c int)                             {}
+func (m *MockEbitenDevice) ReadLine() (string, error)                  { return "", nil }
+func (m *MockEbitenDevice) GetChar() (rune, error)                     { return 0, nil }
+func (m *MockEbitenDevice) SetOutput(w io.Writer)                      {}
+func (m *MockEbitenDevice) DisableKeyboard()                           {}
+func (m *MockEbitenDevice) Render()                                    {}
 func (m *MockEbitenDevice) DrawPixel(x, y int, color int)              {}
 func (m *MockEbitenDevice) DrawGlyph(x, y int, glyph rune, fg, bg int) {}
 

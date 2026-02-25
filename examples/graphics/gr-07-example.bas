@@ -1,0 +1,6 @@
+10 REM GR mode test
+20 GR
+30 PLOT 39, 47
+40 REM Should be OK
+50 PLOT 0, 48
+60 REM Should throw ILLEGAL QUANTITY

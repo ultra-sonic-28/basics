@@ -126,6 +126,57 @@ type VTabStmt struct {
 
 func (*VTabStmt) stmtNode() {}
 
+// GR
+type GrStmt struct {
+	Line   int
+	Column int
+}
+
+func (*GrStmt) stmtNode() {}
+
+func (s *GrStmt) Pos() (int, int, string) {
+	return s.Line, s.Column, "GR"
+}
+
+// COLOR
+type ColorStmt struct {
+	Expr   Expression
+	Line   int
+	Column int
+}
+
+func (*ColorStmt) stmtNode() {}
+
+func (s *ColorStmt) Pos() (int, int, string) {
+	return s.Line, s.Column, "COLOR"
+}
+
+// PLOT
+type PlotStmt struct {
+	X      Expression
+	Y      Expression
+	Line   int
+	Column int
+}
+
+func (*PlotStmt) stmtNode() {}
+
+func (s *PlotStmt) Pos() (int, int, string) {
+	return s.Line, s.Column, "PLOT"
+}
+
+// TEXT
+type TextStmt struct {
+	Line   int
+	Column int
+}
+
+func (*TextStmt) stmtNode() {}
+
+func (s *TextStmt) Pos() (int, int, string) {
+	return s.Line, s.Column, "TEXT"
+}
+
 // END
 type EndStmt struct {
 }

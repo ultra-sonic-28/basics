@@ -36,6 +36,8 @@ func (m *MockDevice) SetCursorY(y int)          { m.CurY = y }
 func (m *MockDevice) CursorX() int              { return m.CurX }
 func (m *MockDevice) CursorY() int              { return m.CurY }
 func (m *MockDevice) Plot(x, y int)             { m.PlottedPoints = append(m.PlottedPoints, [2]int{x, y}) }
+func (m *MockDevice) SetColor(c int)            {}
+func (m *MockDevice) SwitchMode(slot int)       {}
 func (m *MockDevice) ReadLine() (string, error) { return m.ReadLineOutput, m.ReadLineErr }
 func (m *MockDevice) GetChar() (rune, error)    { return m.GetCharOutput, m.GetCharErr }
 func (m *MockDevice) SetOutput(w io.Writer)     { m.Output = w.(*bytes.Buffer) }

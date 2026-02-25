@@ -620,3 +620,62 @@ func TestAscExpr_Pos(t *testing.T) {
 	testutils.Equal(t, "column", col, 8)
 	testutils.Equal(t, "token", tok, "ASC")
 }
+
+// ////////////////////////////////////
+// Graphics
+// ////////////////////////////////////
+
+func TestGrStmt_Pos(t *testing.T) {
+	stmt := &GrStmt{
+		Line:   10,
+		Column: 1,
+	}
+
+	line, col, tok := stmt.Pos()
+	testutils.Equal(t, "line", line, 10)
+	testutils.Equal(t, "column", col, 1)
+	testutils.Equal(t, "token", tok, "GR")
+}
+
+func TestTextStmt_Pos(t *testing.T) {
+	stmt := &TextStmt{
+		Line:   20,
+		Column: 5,
+	}
+
+	line, col, tok := stmt.Pos()
+	testutils.Equal(t, "line", line, 20)
+	testutils.Equal(t, "column", col, 5)
+	testutils.Equal(t, "token", tok, "TEXT")
+}
+
+func TestColorStmt_Pos(t *testing.T) {
+	stmt := &ColorStmt{
+		Expr:   &NumberLiteral{Value: 15},
+		Line:   30,
+		Column: 1,
+	}
+
+	line, col, tok := stmt.Pos()
+	testutils.Equal(t, "line", line, 30)
+	testutils.Equal(t, "column", col, 1)
+	testutils.Equal(t, "token", tok, "COLOR")
+	testutils.Equal(t, "expr value", stmt.Expr.(*NumberLiteral).Value, 15.0)
+}
+
+func TestPlotStmt_Pos(t *testing.T) {
+	stmt := &PlotStmt{
+		X:      &NumberLiteral{Value: 10},
+		Y:      &NumberLiteral{Value: 20},
+		Line:   40,
+		Column: 1,
+	}
+
+	line, col, tok := stmt.Pos()
+	testutils.Equal(t, "line", line, 40)
+	testutils.Equal(t, "column", col, 1)
+	testutils.Equal(t, "token", tok, "PLOT")
+	testutils.Equal(t, "X value", stmt.X.(*NumberLiteral).Value, 10.0)
+	testutils.Equal(t, "Y value", stmt.Y.(*NumberLiteral).Value, 20.0)
+}
+

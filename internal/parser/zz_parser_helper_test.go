@@ -33,6 +33,10 @@ func TestStmtName(t *testing.T) {
 		{"FLASH", &FlashStmt{}, "FLASH"},
 		{"CLEAR", &ClearStmt{}, "CLEAR"},
 		{"DIM", &DimStmt{}, "DIM"},
+		{"GR", &GrStmt{}, "GR"},
+		{"TEXT", &TextStmt{}, "TEXT"},
+		{"PLOT", &PlotStmt{}, "PLOT"},
+		{"COLOR", &ColorStmt{}, "COLOR"},
 		{"UNKNOWN", nil, "UNKNOWN"},
 	}
 
@@ -331,6 +335,48 @@ func TestStmtArgs(t *testing.T) {
 			},
 			expected: " -> A(10)B$(SIZE, 5)",
 		},
+		{
+			name: "COLOR",
+			stmt: &ColorStmt{
+				Expr: &NumberLiteral{Value: 15, Token: "15"},
+			},
+			expected: " -> 15",
+		},
+		{
+			name: "COLOR with expression",
+			stmt: &ColorStmt{
+				Expr: &InfixExpr{
+					Left:  &Identifier{Name: "C"},
+					Op:    "+",
+					Right: &NumberLiteral{Value: 1},
+				},
+			},
+			expected: " -> C + 1",
+		},
+		{
+			name: "PLOT",
+			stmt: &PlotStmt{
+				X: &NumberLiteral{Value: 10, Token: "10"},
+				Y: &NumberLiteral{Value: 20, Token: "20"},
+			},
+			expected: " -> 10, 20",
+		},
+		{
+			name: "PLOT with expressions",
+			stmt: &PlotStmt{
+				X: &InfixExpr{
+					Left:  &Identifier{Name: "X"},
+					Op:    "+",
+					Right: &NumberLiteral{Value: 1},
+				},
+				Y: &InfixExpr{
+					Left:  &Identifier{Name: "Y"},
+					Op:    "*",
+					Right: &NumberLiteral{Value: 2},
+				},
+			},
+			expected: " -> X + 1, Y * 2",
+		},
 
 		// Statements without args
 		{
@@ -366,6 +412,16 @@ func TestStmtArgs(t *testing.T) {
 		{
 			name:     "NO_ARGS_CLEAR",
 			stmt:     &ClearStmt{},
+			expected: "",
+		},
+		{
+			name:     "NO_ARGS_GR",
+			stmt:     &GrStmt{},
+			expected: "",
+		},
+		{
+			name:     "NO_ARGS_TEXT",
+			stmt:     &TextStmt{},
 			expected: "",
 		},
 		{

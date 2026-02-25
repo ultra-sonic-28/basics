@@ -19,6 +19,7 @@ type Device interface {
 	SwitchMode(slot int)
 
 	Plot(x, y int)
+	SetColor(c int)
 
 	ReadLine() (string, error)
 	GetChar() (rune, error)

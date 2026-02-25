@@ -7,6 +7,13 @@ The format is based on Keep a Changelog (https://keepachangelog.com), and this p
 ### Added
 - Add `SPC()` support in Apple II Basic. Add relevant unit tests.
 - Add a small basic game `hanoi-towers.bas`.
+- Add `GR` support in Apple II Basic. Add relevant unit tests.
+- Add `TEXT` support in Apple II Basic. Add relevant unit tests.
+- Add `COLOR` support in Apple II Basic. Add relevant unit tests.
+- Add `PLOT` support in Apple II Basic. Add relevant unit tests.
+
+### Changed
+- You can now dynamically switch between text mode and graphics mode.
 
 ### Fixed
 - Fix comma separator in print statements.

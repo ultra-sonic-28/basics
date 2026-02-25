@@ -33,8 +33,9 @@ func (f *FakeVideoDevice) SetCursorX(x int)     {}
 func (f *FakeVideoDevice) SetCursorY(y int)     {}
 func (f *FakeVideoDevice) CursorX() int         { return 0 }
 func (f *FakeVideoDevice) CursorY() int         { return 0 }
-func (f *FakeVideoDevice) SwitchMode(slot int)  {}
 func (f *FakeVideoDevice) Plot(x, y int)        {}
+func (f *FakeVideoDevice) SetColor(c int)       {}
+func (f *FakeVideoDevice) SwitchMode(slot int)  {}
 func (f *FakeVideoDevice) ReadLine() (string, error) {
 	return "", nil
 }
