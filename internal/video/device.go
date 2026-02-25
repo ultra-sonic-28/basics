@@ -13,6 +13,8 @@ type Device interface {
 
 	SetCursorX(x int)
 	SetCursorY(y int)
+	CursorX() int
+	CursorY() int
 
 	SwitchMode(slot int)
 

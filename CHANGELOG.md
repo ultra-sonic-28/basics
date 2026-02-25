@@ -10,6 +10,7 @@ The format is based on Keep a Changelog (https://keepachangelog.com), and this p
 ### Fixed
 - Fix comma separator in print statements.
 - Fix tab field spacing from 14 to 16.
+- Fix cursor positionning in TTY mode.
 
 ## [Unreleased] - 2026-02-24
 ### Added

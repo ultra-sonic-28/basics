@@ -167,6 +167,8 @@ func (d *DisplayManager) PrintChar(r rune)     { d.device().PrintChar(r) }
 func (d *DisplayManager) PrintString(s string) { d.device().PrintString(s) }
 func (d *DisplayManager) SetCursorX(x int)     { d.device().SetCursorX(x) }
 func (d *DisplayManager) SetCursorY(y int)     { d.device().SetCursorY(y) }
+func (d *DisplayManager) CursorX() int         { return d.device().CursorX() }
+func (d *DisplayManager) CursorY() int         { return d.device().CursorY() }
 
 func (d *DisplayManager) SwitchMode(slot int) {
 	switch slot {

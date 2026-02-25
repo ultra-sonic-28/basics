@@ -280,7 +280,7 @@ func (i *Interpreter) Run(prog *parser.Program) {
 				break
 			}
 
-			cursor := 0
+			cursor := i.rt.Video.CursorX()
 
 			for iExpr, expr := range s.Exprs {
 
@@ -294,7 +294,7 @@ func (i *Interpreter) Run(prog *parser.Program) {
 						}
 						padding := strings.Repeat(" ", spaces)
 						i.rt.ExecPrint(padding)
-						cursor += spaces
+						cursor = i.rt.Video.CursorX()
 					}
 				}
 
@@ -326,14 +326,19 @@ func (i *Interpreter) Run(prog *parser.Program) {
 						target = int(val.Num)
 					}
 
-					// BASIC est 1-based
+					// BASIC TAB is 1-based: TAB(1) is the first column (index 0)
+					targetColumn := target - 1
+					if targetColumn < 0 {
+						targetColumn = 0
+					}
+
 					currentX := cursor
 
-					if target > currentX {
-						spaces := target - currentX
+					if targetColumn > currentX {
+						spaces := targetColumn - currentX
 						padding := strings.Repeat(" ", spaces)
 						i.rt.ExecPrint(padding)
-						cursor += spaces
+						cursor = i.rt.Video.CursorX()
 					}
 
 					continue
@@ -370,7 +375,7 @@ func (i *Interpreter) Run(prog *parser.Program) {
 					if count > 0 {
 						spaces := strings.Repeat(" ", count)
 						i.rt.ExecPrint(spaces)
-						cursor += count
+						cursor = i.rt.Video.CursorX()
 					}
 
 					continue
@@ -398,7 +403,7 @@ func (i *Interpreter) Run(prog *parser.Program) {
 				sExpr += str
 
 				i.rt.ExecPrint(str)
-				cursor += len(str)
+				cursor = i.rt.Video.CursorX()
 			}
 
 			if len(s.Separators) < len(s.Exprs) {
@@ -744,7 +749,7 @@ func (i *Interpreter) execInline(line int, stmt parser.Statement, pc int) int {
 	case *parser.PrintStmt:
 		//i.rt.ExecPrint(s.Exprs[0].(*parser.StringLiteral).Value)
 		//i.rt.ExecPrint("\n")
-		cursor := 0
+		cursor := i.rt.Video.CursorX()
 		for iExpr, expr := range s.Exprs {
 
 			if iExpr > 0 {
@@ -756,34 +761,51 @@ func (i *Interpreter) execInline(line int, stmt parser.Statement, pc int) int {
 					}
 					padding := strings.Repeat(" ", spaces)
 					i.rt.ExecPrint(padding)
-					cursor += spaces
+					cursor = i.rt.Video.CursorX()
 				}
 			}
 
 			// GESTION DE TAB/SPC DANS INLINE
 			if tabExpr, ok := expr.(*parser.TabExpr); ok {
 				val, _, _ := EvalExpr(tabExpr.Expr, i.rt)
-				target := int(val.Num)
-				if val.Type == runtime.INTEGER {
+
+				var target int
+				switch val.Type {
+				case runtime.INTEGER:
 					target = val.Int
+				case runtime.NUMBER:
+					target = int(val.Num)
 				}
-				if target > cursor {
-					spaces := target - cursor
+
+				// BASIC TAB is 1-based: TAB(1) is the first column (index 0)
+				targetColumn := target - 1
+				if targetColumn < 0 {
+					targetColumn = 0
+				}
+
+				currentX := cursor
+				if targetColumn > currentX {
+					spaces := targetColumn - currentX
 					i.rt.ExecPrint(strings.Repeat(" ", spaces))
-					cursor += spaces
+					cursor = i.rt.Video.CursorX()
 				}
 				continue
 			}
 
 			if spcExpr, ok := expr.(*parser.SpcExpr); ok {
 				val, _, _ := EvalExpr(spcExpr.Expr, i.rt)
-				count := int(val.Num)
-				if val.Type == runtime.INTEGER {
+
+				var count int
+				switch val.Type {
+				case runtime.INTEGER:
 					count = val.Int
+				case runtime.NUMBER:
+					count = int(val.Num)
 				}
+
 				if count > 0 {
 					i.rt.ExecPrint(strings.Repeat(" ", count))
-					cursor += count
+					cursor = i.rt.Video.CursorX()
 				}
 				continue
 			}
@@ -813,7 +835,7 @@ func (i *Interpreter) execInline(line int, stmt parser.Statement, pc int) int {
 			}
 
 			i.rt.ExecPrint(out)
-			cursor += len(out)
+			cursor = i.rt.Video.CursorX()
 		}
 
 		if len(s.Separators) < len(s.Exprs) {

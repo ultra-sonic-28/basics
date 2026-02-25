@@ -204,6 +204,14 @@ func (t *AppleText) SetCursorY(y int) {
 	t.Mode.SetCursor(t.Mode.CursorX(), y)
 }
 
+func (t *AppleText) CursorX() int {
+	return t.Mode.CursorX()
+}
+
+func (t *AppleText) CursorY() int {
+	return t.Mode.CursorY()
+}
+
 func (t *AppleText) SwitchMode(slot int) {
 	// Le switch de mode est géré par le DisplayManager qui contient les instances AppleText.
 	// Cette méthode est ici pour satisfaire l'interface video.Device.

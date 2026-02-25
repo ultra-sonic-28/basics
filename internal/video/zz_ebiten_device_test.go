@@ -29,6 +29,10 @@ func (m *MockEbitenDevice) Layout(w, h int) (int, int) {
 // Implémentation minimale de Device (interface parent) pour le mock
 func (m *MockEbitenDevice) Width() int                                 { return m.DeviceWidth }
 func (m *MockEbitenDevice) Height() int                                { return m.DeviceHeight }
+func (m *MockEbitenDevice) CursorX() int                               { return 0 }
+func (m *MockEbitenDevice) CursorY() int                               { return 0 }
+func (m *MockEbitenDevice) SetCursorX(x int)                           {}
+func (m *MockEbitenDevice) SetCursorY(y int)                           {}
 func (m *MockEbitenDevice) Clear()                                     {}
 func (m *MockEbitenDevice) DrawPixel(x, y int, color int)              {}
 func (m *MockEbitenDevice) DrawGlyph(x, y int, glyph rune, fg, bg int) {}

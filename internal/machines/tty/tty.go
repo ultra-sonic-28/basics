@@ -15,6 +15,7 @@ type TTYDevice struct {
 	out     io.Writer
 	inverse bool
 	flash   bool
+	cursorX int
 }
 
 func New(in io.Reader, out io.Writer) video.Device {
@@ -23,6 +24,7 @@ func New(in io.Reader, out io.Writer) video.Device {
 		out:     out,
 		inverse: false,
 		flash:   false,
+		cursorX: 0,
 	}
 }
 
@@ -42,13 +44,27 @@ func (t *TTYDevice) PrintString(s string) {
 
 func (t *TTYDevice) PrintChar(r rune) {
 	t.buffer = append(t.buffer, r)
+	if r == '\n' {
+		t.cursorX = 0
+	} else {
+		t.cursorX++
+	}
 }
 
 func (t *TTYDevice) Plot(x, y int) {}
 
-func (t *TTYDevice) SetCursorX(x int) {}
+func (t *TTYDevice) SetCursorX(x int) {
+	if x > t.cursorX {
+		padding := strings.Repeat(" ", x-t.cursorX)
+		t.buffer = append(t.buffer, []rune(padding)...)
+	}
+	t.cursorX = x
+}
 
 func (t *TTYDevice) SetCursorY(y int) {}
+
+func (t *TTYDevice) CursorX() int { return t.cursorX }
+func (t *TTYDevice) CursorY() int { return 0 }
 
 func (t *TTYDevice) SwitchMode(slot int) {}
 

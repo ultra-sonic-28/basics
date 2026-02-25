@@ -31,6 +31,8 @@ func (f *FakeVideoDevice) PrintChar(r rune)     {}
 func (f *FakeVideoDevice) PrintString(s string) {}
 func (f *FakeVideoDevice) SetCursorX(x int)     {}
 func (f *FakeVideoDevice) SetCursorY(y int)     {}
+func (f *FakeVideoDevice) CursorX() int         { return 0 }
+func (f *FakeVideoDevice) CursorY() int         { return 0 }
 func (f *FakeVideoDevice) SwitchMode(slot int)  {}
 func (f *FakeVideoDevice) Plot(x, y int)        {}
 func (f *FakeVideoDevice) ReadLine() (string, error) {

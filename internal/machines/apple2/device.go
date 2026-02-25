@@ -34,6 +34,14 @@ func (d *Device) SetCursorY(y int) {
 	d.Text.VTab(y)
 }
 
+func (d *Device) CursorX() int {
+	return d.Text.CursorX()
+}
+
+func (d *Device) CursorY() int {
+	return d.Text.CursorY()
+}
+
 func (d *Device) Plot(x, y int) {
 	// Apple II text mode: no-op
 }

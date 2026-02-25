@@ -15,7 +15,7 @@ type MockDevice struct {
 	FlashSet         bool
 	PrintedChars     []rune
 	PrintedStrings   []string
-	CursorX, CursorY int
+	CurX, CurY       int
 	PlottedPoints    [][2]int
 	ReadLineOutput   string
 	ReadLineErr      error
@@ -31,8 +31,10 @@ func (m *MockDevice) SetInverse(v bool)         { m.InverseSet = v }
 func (m *MockDevice) SetFlash(v bool)           { m.FlashSet = v }
 func (m *MockDevice) PrintChar(r rune)          { m.PrintedChars = append(m.PrintedChars, r) }
 func (m *MockDevice) PrintString(s string)      { m.PrintedStrings = append(m.PrintedStrings, s) }
-func (m *MockDevice) SetCursorX(x int)          { m.CursorX = x }
-func (m *MockDevice) SetCursorY(y int)          { m.CursorY = y }
+func (m *MockDevice) SetCursorX(x int)          { m.CurX = x }
+func (m *MockDevice) SetCursorY(y int)          { m.CurY = y }
+func (m *MockDevice) CursorX() int              { return m.CurX }
+func (m *MockDevice) CursorY() int              { return m.CurY }
 func (m *MockDevice) Plot(x, y int)             { m.PlottedPoints = append(m.PlottedPoints, [2]int{x, y}) }
 func (m *MockDevice) ReadLine() (string, error) { return m.ReadLineOutput, m.ReadLineErr }
 func (m *MockDevice) GetChar() (rune, error)    { return m.GetCharOutput, m.GetCharErr }
@@ -70,8 +72,8 @@ func TestMockDevice_CursorAndPlot(t *testing.T) {
 
 	dev.SetCursorX(5)
 	dev.SetCursorY(10)
-	testutils.Equal(t, "CursorX", dev.CursorX, 5)
-	testutils.Equal(t, "CursorY", dev.CursorY, 10)
+	testutils.Equal(t, "CursorX", dev.CurX, 5)
+	testutils.Equal(t, "CursorY", dev.CurY, 10)
 
 	dev.Plot(1, 2)
 	dev.Plot(3, 4)
