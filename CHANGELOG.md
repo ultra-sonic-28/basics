@@ -6,6 +6,7 @@ The format is based on Keep a Changelog (https://keepachangelog.com), and this p
 ## [Unreleased] - 2026-02-25
 ### Added
 - Add `SPC()` support in Apple II Basic. Add relevant unit tests.
+- Add a small basic game `hanoi-towers.bas`.
 
 ### Fixed
 - Fix comma separator in print statements.
