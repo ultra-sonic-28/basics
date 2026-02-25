@@ -20,6 +20,7 @@ The format is based on Keep a Changelog (https://keepachangelog.com), and this p
 - Fix tab field spacing from 14 to 16.
 - Fix cursor positionning in TTY mode.
 - Uses the ANSI sequence for absolute horizontal positioning in TTY mode.
+- Add missing unit tests for formatting numbers functions.
 
 ## [Unreleased] - 2026-02-24
 ### Added
