@@ -11,6 +11,7 @@ The format is based on Keep a Changelog (https://keepachangelog.com), and this p
 - Fix comma separator in print statements.
 - Fix tab field spacing from 14 to 16.
 - Fix cursor positionning in TTY mode.
+- Uses the ANSI sequence for absolute horizontal positioning in TTY mode.
 
 ## [Unreleased] - 2026-02-24
 ### Added

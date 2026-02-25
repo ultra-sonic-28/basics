@@ -16,6 +16,7 @@ type TTYDevice struct {
 	inverse bool
 	flash   bool
 	cursorX int
+	cursorY int
 }
 
 func New(in io.Reader, out io.Writer) video.Device {
@@ -25,6 +26,7 @@ func New(in io.Reader, out io.Writer) video.Device {
 		inverse: false,
 		flash:   false,
 		cursorX: 0,
+		cursorY: 0,
 	}
 }
 
@@ -46,6 +48,7 @@ func (t *TTYDevice) PrintChar(r rune) {
 	t.buffer = append(t.buffer, r)
 	if r == '\n' {
 		t.cursorX = 0
+		t.cursorY++
 	} else {
 		t.cursorX++
 	}
@@ -54,23 +57,28 @@ func (t *TTYDevice) PrintChar(r rune) {
 func (t *TTYDevice) Plot(x, y int) {}
 
 func (t *TTYDevice) SetCursorX(x int) {
-	if x > t.cursorX {
-		padding := strings.Repeat(" ", x-t.cursorX)
-		t.buffer = append(t.buffer, []rune(padding)...)
-	}
+	// Utilisation de l'escape code ANSI pour le positionnement horizontal absolu (1-based)
+	t.buffer = append(t.buffer, []rune(fmt.Sprintf("\033[%dG", x+1))...)
 	t.cursorX = x
 }
 
-func (t *TTYDevice) SetCursorY(y int) {}
+func (t *TTYDevice) SetCursorY(y int) {
+	// CUP (Cursor Position) positionne à la fois la ligne et la colonne (1-based)
+	// On conserve la colonne actuelle pour ne changer que la ligne (comportement VTAB)
+	t.buffer = append(t.buffer, []rune(fmt.Sprintf("\033[%d;%dH", y+1, t.cursorX+1))...)
+	t.cursorY = y
+}
 
 func (t *TTYDevice) CursorX() int { return t.cursorX }
-func (t *TTYDevice) CursorY() int { return 0 }
+func (t *TTYDevice) CursorY() int { return t.cursorY }
 
 func (t *TTYDevice) SwitchMode(slot int) {}
 
 func (t *TTYDevice) Clear() {
 	t.buffer = nil
-	fmt.Print("\033[2J\033[H")
+	fmt.Fprintf(t.out, "\033[2J\033[H")
+	t.cursorX = 0
+	t.cursorY = 0
 }
 
 func (t *TTYDevice) Render() {
