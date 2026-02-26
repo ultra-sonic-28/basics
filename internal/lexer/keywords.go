@@ -9,7 +9,7 @@ var Keywords = map[string]bool{
 
 	// Variables & logique
 	"LET": true, "DIM": true,
-	"AND": true,
+	"AND": true, "OR": true,
 	"REM": true, "CLEAR": true,
 
 	// I/O
@@ -41,7 +41,7 @@ var Keywords = map[string]bool{
 	"POKE": true, "PEEK": true, "CALL": true,
 	"PR":  true,
 	"TAB": true, "VTAB": true, "HTAB": true,
-	"SPC": true,
+	"SPC":     true,
 	"INVERSE": true, "NORMAL": true, "FLASH": true,
 
 	// Extension

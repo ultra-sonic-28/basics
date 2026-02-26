@@ -228,6 +228,8 @@ cleared to black, and the cursor is moved to the text window.
 * `^`
 * `AND`
     * `AND` is an operator that allows you to perform a "Binary AND" between two numeric values ​​or a "Logical AND" in the case of a comparison between two expressions.
+* `OR`
+    * `OR` is an operator that allows you to perform a "Binary OR" between two numeric values ​​or a "Logical OR" in the case of a comparison between two expressions.
 
 #### Supported functions
 ##### Maths functions
@@ -335,6 +337,22 @@ cleared to black, and the cursor is moved to the text window.
     | `13`       | `00001101` |
     | `4`        | `00000100` |
     | `13 AND 4` | `00000100` |
+* `OR` supports bitwise OR between two numbers.
+    * `8 OR 4` is evaluated to `12`
+
+    | Decimal   | Binary     |
+    | --------- | ---------- |
+    | `8`       | `00001000` |
+    | `4`       | `00000100` |
+    | `8 OR 4`  | `00001100` |
+
+    * `13` OR `4` is evaluated to `4`
+
+    | Decimal    | Binary     |
+    | ---------- | ---------- |
+    | `13`       | `00001101` |
+    | `4`        | `00000100` |
+    | `13 OR 4`  | `00001101` |
 
 ##### Extended instructions set
 * GOTO support use of identifier and complex expressions. You can write:

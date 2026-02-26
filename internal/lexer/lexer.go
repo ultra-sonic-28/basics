@@ -170,6 +170,10 @@ func (l *Lexer) NextToken() token.Token {
 					tok.Type = token.AND
 				}
 
+				if lit == "OR" {
+					tok.Type = token.OR
+				}
+
 				if lit == "REM" {
 					// Retourner REM d'abord
 					// Le parser lira ensuite un token COMMENT

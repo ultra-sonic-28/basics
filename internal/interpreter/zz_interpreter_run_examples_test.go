@@ -1126,6 +1126,31 @@ WORLD
 `,
 		},
 		{
+			name:   "Or-01",
+			file:   "operators/or-operator-01-example.bas",
+			errors: 0,
+			expected: `A>0 OR B>15 : OK
+A%>0 OR B%>15 : OK
+A$=5 OR B$=10 : OK
+Et logique 8 OR 4 : 12
+Et logique 13 OR 4 : 13
+`,
+		},
+		{
+			name:   "Or-02",
+			file:   "operators/or-operator-02-example.bas",
+			errors: 0,
+			expected: `⚠️ ILLEGAL QUANTITY IN 3 (OR)
+`,
+		},
+		{
+			name:   "Or-03",
+			file:   "operators/or-operator-03-example.bas",
+			errors: 0,
+			expected: `⚠️ TYPE MISMATCH IN 3 (OR)
+`,
+		},
+		{
 			name:   "Primes-01",
 			file:   "programs/maths/primes-01-example.bas",
 			errors: 0,

@@ -1,0 +1,3 @@
+10 REM OR Operator
+20 A = 40000
+100 PRINT A OR 4

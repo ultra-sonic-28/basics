@@ -6,6 +6,7 @@ The format is based on Keep a Changelog (https://keepachangelog.com), and this p
 ## [Unreleased] - 2026-02-26
 ### Added
 - Add `AND` operator support. Add relevant unit tests.
+- Add `OR` operator support. Add relevant unit tests.
 
 ## [Unreleased] - 2026-02-25
 ### Added
