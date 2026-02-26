@@ -1,0 +1,3 @@
+10 REM AND Operator
+20 A$ = "400"
+100 PRINT A$ AND 4

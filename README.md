@@ -226,6 +226,8 @@ cleared to black, and the cursor is moved to the text window.
 * `*`
 * `/`
 * `^`
+* `AND`
+    * `AND` is an operator that allows you to perform a "Binary AND" between two numeric values ​​or a "Logical AND" in the case of a comparison between two expressions.
 
 #### Supported functions
 ##### Maths functions
@@ -315,6 +317,24 @@ cleared to black, and the cursor is moved to the text window.
 1. In Applesoft BASIC, string length are limited to 255 characters.
 
     > With BASICS, there isn't any size limitation of strings. Strings may contains as many characters as you like.
+
+##### Extended binary operators support
+* `AND` supports bitwise AND between two numbers.
+    * `8 AND 4` is evaluated to `0`
+
+    | Decimal   | Binary     |
+    | --------- | ---------- |
+    | `8`       | `00001000` |
+    | `4`       | `00000100` |
+    | `8 AND 4` | `00000000` |
+
+    * `13` AND `4` is evaluated to `4`
+
+    | Decimal    | Binary     |
+    | ---------- | ---------- |
+    | `13`       | `00001101` |
+    | `4`        | `00000100` |
+    | `13 AND 4` | `00000100` |
 
 ##### Extended instructions set
 * GOTO support use of identifier and complex expressions. You can write:

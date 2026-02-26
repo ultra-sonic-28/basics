@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog (https://keepachangelog.com), and this project adheres to Semantic Versioning (https://semver.org).
 
+## [Unreleased] - 2026-02-26
+### Added
+- Add `AND` operator support. Add relevant unit tests.
+
 ## [Unreleased] - 2026-02-25
 ### Added
 - Add `SPC()` support in Apple II Basic. Add relevant unit tests.

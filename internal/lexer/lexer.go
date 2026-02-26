@@ -166,6 +166,10 @@ func (l *Lexer) NextToken() token.Token {
 			if Keywords[lit] {
 				tok.Type = token.KEYWORD
 
+				if lit == "AND" {
+					tok.Type = token.AND
+				}
+
 				if lit == "REM" {
 					// Retourner REM d'abord
 					// Le parser lira ensuite un token COMMENT

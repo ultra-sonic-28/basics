@@ -286,6 +286,11 @@ func EvalExpr(expr parser.Expression, rt *runtime.Runtime) (runtime.Value, *[]in
 					return runtime.Value{Type: runtime.NUMBER, Num: 1}, nil, nil
 				}
 				return runtime.Value{Type: runtime.NUMBER, Num: 0}, nil, nil
+			case "AND":
+				if left.Int < -32768 || left.Int > 32767 || right.Int < -32768 || right.Int > 32767 {
+					return runtime.Value{}, nil, errors.NewSyntax(line, col, tok, "ILLEGAL QUANTITY")
+				}
+				return runtime.Value{Type: runtime.INTEGER, Int: int(int16(left.Int) & int16(right.Int))}, nil, nil
 			}
 
 			err = errors.NewSyntax(
@@ -364,6 +369,14 @@ func EvalExpr(expr parser.Expression, rt *runtime.Runtime) (runtime.Value, *[]in
 				return runtime.Value{Type: runtime.NUMBER, Num: 1}, nil, nil
 			}
 			return runtime.Value{Type: runtime.NUMBER, Num: 0}, nil, nil
+		case "AND":
+			// Applesoft logic: truncate to integer and bitwise &
+			li := int(lf)
+			ri := int(rf)
+			if li < -32768 || li > 32767 || ri < -32768 || ri > 32767 {
+				return runtime.Value{}, nil, errors.NewSyntax(line, col, tok, "ILLEGAL QUANTITY")
+			}
+			return runtime.Value{Type: runtime.INTEGER, Int: int(int16(li) & int16(ri))}, nil, nil
 		default:
 			return runtime.Value{}, nil, errors.NewSyntax(
 				line, col, e.Op,

@@ -54,6 +54,31 @@ func TestExamplesExecution(t *testing.T) {
 `,
 		},
 		{
+			name:   "And-01",
+			file:   "operators/and-operator-01-example.bas",
+			errors: 0,
+			expected: `A>0 AND B>5 : OK
+A%>0 AND B%>5 : OK
+A$=5 AND B$=10 : OK
+Et logique 8 AND 4 : 0
+Et logique 13 AND 4 : 4
+`,
+		},
+		{
+			name:   "And-02",
+			file:   "operators/and-operator-02-example.bas",
+			errors: 0,
+			expected: `⚠️ ILLEGAL QUANTITY IN 3 (AND)
+`,
+		},
+		{
+			name:   "And-03",
+			file:   "operators/and-operator-03-example.bas",
+			errors: 0,
+			expected: `⚠️ TYPE MISMATCH IN 3 (AND)
+`,
+		},
+		{
 			name:   "Array-01",
 			file:   "variables/array-01-example.bas",
 			errors: 0,

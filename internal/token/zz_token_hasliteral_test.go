@@ -38,6 +38,7 @@ func TestToken_HasLiteral(t *testing.T) {
 		{Token{Type: GT}, true},
 		{Token{Type: GTE}, true},
 		{Token{Type: NEQ}, true},
+		{Token{Type: AND}, true},
 
 		// Délimiteurs
 		{Token{Type: LPAREN}, true},

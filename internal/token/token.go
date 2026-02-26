@@ -30,6 +30,7 @@ const (
 	LTE
 	GTE
 	NEQ
+	AND
 
 	// Délimiteurs
 	LPAREN
@@ -77,6 +78,7 @@ var TokenTypeNames = map[TokenType]string{
 	LTE:      "<=",
 	GTE:      ">=",
 	NEQ:      "<>",
+	AND:      "AND",
 
 	// Délimiteurs
 	LPAREN:    "(",

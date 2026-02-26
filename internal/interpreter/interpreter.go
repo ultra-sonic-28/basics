@@ -682,6 +682,8 @@ func (i *Interpreter) Run(prog *parser.Program) {
 				exec = cond.Flag
 			case runtime.NUMBER:
 				exec = cond.Num != 0
+			case runtime.INTEGER:
+				exec = cond.Int != 0
 			}
 
 			if exec {
@@ -723,6 +725,8 @@ func (i *Interpreter) Run(prog *parser.Program) {
 				exec = cond.Flag
 			case runtime.NUMBER:
 				exec = cond.Num != 0
+			case runtime.INTEGER:
+				exec = cond.Int != 0
 			}
 
 			sExpr = "THEN"

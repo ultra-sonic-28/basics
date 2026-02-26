@@ -3,6 +3,7 @@ package parser
 const (
 	_ int = iota
 	LOWEST
+	LOGICAL_AND // AND
 	EQUALS      // = <> < >
 	LESSGREATER // < >
 	SUM         // + -
@@ -12,8 +13,9 @@ const (
 )
 
 var precedences = map[string]int{
-	"=":  EQUALS,
-	"<>": EQUALS,
+	"AND": LOGICAL_AND,
+	"=":   EQUALS,
+	"<>":  EQUALS,
 	"<":  LESSGREATER,
 	">":  LESSGREATER,
 	"<=": LESSGREATER,

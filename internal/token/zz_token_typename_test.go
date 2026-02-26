@@ -38,6 +38,7 @@ func TestToken_TypeName(t *testing.T) {
 		{Token{Type: GT}, ">"},
 		{Token{Type: GTE}, ">="},
 		{Token{Type: NEQ}, "<>"},
+		{Token{Type: AND}, "AND"},
 
 		// Délimiteurs
 		{Token{Type: LPAREN}, "("},
