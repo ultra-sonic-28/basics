@@ -99,10 +99,11 @@ func (r *Renderer) DrawGlyph(x, y int, glyph rune, fg, bg int) {
 	}
 }
 
-func (r *Renderer) BlitTo(screen *ebiten.Image) {
+func (r *Renderer) BlitTo(screen *ebiten.Image, x, y float64) {
 	img := ebiten.NewImageFromImage(r.framebuffer)
 	op := &ebiten.DrawImageOptions{}
 	op.GeoM.Scale(float64(r.scale), float64(r.scale))
+	op.GeoM.Translate(x, y)
 	screen.DrawImage(img, op)
 }
 

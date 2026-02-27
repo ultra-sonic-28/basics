@@ -9,6 +9,9 @@ The format is based on Keep a Changelog (https://keepachangelog.com), and this p
 - Add `NOT` operator support. Add relevant unit tests.
 - Add `WAIT` support in Apple II Basic. Add relevant unit tests.
 
+### Changed
+- Ebiten rendering will now draw a monitor frame and a green led in the bottom right corner.
+
 ## [Unreleased] - 2026-02-26
 ### Added
 - Add `AND` operator support. Add relevant unit tests.

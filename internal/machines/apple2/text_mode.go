@@ -131,6 +131,12 @@ func (t *AppleText) Update() error {
 }
 
 func (t *AppleText) Draw(screen *ebiten.Image) {
+	scale := t.Scale()
+	offset := float64(GetMonitorOffset(scale))
+
+	// 1. Draw Monitor Frame
+	DrawMonitorFrame(screen, t.Width(), t.Height(), scale)
+
 	// Gestion du curseur clignotant
 	if t.inInput && t.cursorVisible {
 		t.Mode.PutChar('░')
@@ -147,23 +153,24 @@ func (t *AppleText) Draw(screen *ebiten.Image) {
 	// Demande au TextMode de rasteriser le buffer
 	t.Mode.Render()
 
+	// 2. Render content with offset
 	if r, ok := t.renderer.(interface {
-		BlitTo(screen *ebiten.Image)
+		BlitTo(screen *ebiten.Image, x, y float64)
 	}); ok {
-		r.BlitTo(screen)
+		r.BlitTo(screen, offset, offset)
 	}
 }
 
 func (t *AppleText) Layout(w, h int) (int, int) {
-	return t.renderer.Width(), t.renderer.Height()
+	return t.Width(), t.Height()
 }
 
 func (t *AppleText) Width() int {
-	return t.renderer.Width()
+	return t.renderer.Width() + 2*GetMonitorOffset(t.Scale())
 }
 
 func (t *AppleText) Height() int {
-	return t.renderer.Height()
+	return t.renderer.Height() + 2*GetMonitorOffset(t.Scale())
 }
 
 func (t *AppleText) Scale() int {

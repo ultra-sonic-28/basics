@@ -104,11 +104,17 @@ func (g *AppleGR) Update() error {
 }
 
 func (g *AppleGR) Draw(screen *ebiten.Image) {
+	scale := g.Scale()
+	offset := float64(GetMonitorOffset(scale))
+
+	// 1. Draw Monitor Frame
+	DrawMonitorFrame(screen, g.Width(), g.Height(), scale)
+
 	if r, ok := g.renderer.(*ebitenrenderer.Renderer); ok {
 		r.NextFrame()
 	}
 
-	// 1. Draw Blocks
+	// 2. Draw Blocks
 	// Blocks are 7x4 pixels
 	rows := 48
 	if !g.isFull {
@@ -127,7 +133,7 @@ func (g *AppleGR) Draw(screen *ebiten.Image) {
 		}
 	}
 
-	// 2. Draw Text (if mixed)
+	// 3. Draw Text (if mixed)
 	if !g.isFull {
 		// Draw only bottom 4 lines (rows 20 to 23 of the 24-row buffer)
 		for ty := 20; ty < 24; ty++ {
@@ -147,19 +153,20 @@ func (g *AppleGR) Draw(screen *ebiten.Image) {
 		}
 	}
 
+	// 4. Render content with offset
 	if r, ok := g.renderer.(interface {
-		BlitTo(screen *ebiten.Image)
+		BlitTo(screen *ebiten.Image, x, y float64)
 	}); ok {
-		r.BlitTo(screen)
+		r.BlitTo(screen, offset, offset)
 	}
 }
 
 func (g *AppleGR) Layout(w, h int) (int, int) {
-	return g.renderer.Width(), g.renderer.Height()
+	return g.Width(), g.Height()
 }
 
-func (g *AppleGR) Width() int  { return g.renderer.Width() }
-func (g *AppleGR) Height() int { return g.renderer.Height() }
+func (g *AppleGR) Width() int  { return g.renderer.Width() + 2*GetMonitorOffset(g.Scale()) }
+func (g *AppleGR) Height() int { return g.renderer.Height() + 2*GetMonitorOffset(g.Scale()) }
 func (g *AppleGR) Scale() int  { return g.renderer.Scale() }
 
 // Device API
