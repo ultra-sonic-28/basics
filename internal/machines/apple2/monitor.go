@@ -1,11 +1,37 @@
 package apple2
 
 import (
+	"bytes"
+	_ "embed"
+	"image"
 	"image/color"
+	_ "image/png"
+	"log"
+	"sync"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/vector"
 )
+
+//go:embed assets/logo.png
+var logoData []byte
+
+var (
+	logoImage     *ebiten.Image
+	loadLogoOnce  sync.Once
+)
+
+func getLogoImage() *ebiten.Image {
+	loadLogoOnce.Do(func() {
+		img, _, err := image.Decode(bytes.NewReader(logoData))
+		if err != nil {
+			log.Printf("failed to decode logo: %v", err)
+			return
+		}
+		logoImage = ebiten.NewImageFromImage(img)
+	})
+	return logoImage
+}
 
 const (
 	// MonitorPaddingBase is the base space between the BASIC screen and the monitor bezel
@@ -53,4 +79,21 @@ func DrawMonitorFrame(screen *ebiten.Image, width, height int, scale int) {
 
 	vector.DrawFilledRect(screen, ledX, ledY, ledSize, ledSize, color.RGBA{0x00, 0x80, 0x00, 0xFF}, true)         // Dim green
 	vector.DrawFilledRect(screen, ledX+ledSize/4, ledY+ledSize/4, ledSize/2, ledSize/2, color.RGBA{0x00, 0xFF, 0x00, 0xFF}, true) // Bright green center
+
+	// Apple II Logo (bottom left)
+	// Symmetrical to the LED
+	logoImg := getLogoImage()
+	if logoImg != nil {
+		logoSize := float32(8 * scale)
+		logoX := bezel/2 + float32(3*scale)
+		logoY := float32(height) - bezel/2 - float32(3*scale) - logoSize
+
+		op := &ebiten.DrawImageOptions{}
+		// Scale to fit the target logo size
+		sw, sh := logoImg.Bounds().Dx(), logoImg.Bounds().Dy()
+		op.GeoM.Scale(float64(logoSize)/float64(sw), float64(logoSize)/float64(sh))
+		op.GeoM.Translate(float64(logoX), float64(logoY))
+		op.Filter = ebiten.FilterLinear // Smoother scaling for the logo
+		screen.DrawImage(logoImg, op)
+	}
 }

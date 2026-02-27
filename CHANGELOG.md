@@ -11,6 +11,7 @@ The format is based on Keep a Changelog (https://keepachangelog.com), and this p
 
 ### Changed
 - Ebiten rendering will now draw a monitor frame and a green led in the bottom right corner.
+- Add Apple II logo in the bottom left corner of the monitor frame.
 
 ## [Unreleased] - 2026-02-26
 ### Added
