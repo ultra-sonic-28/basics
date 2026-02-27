@@ -649,6 +649,19 @@ func TestTextStmt_Pos(t *testing.T) {
 	testutils.Equal(t, "token", tok, "TEXT")
 }
 
+func TestWaitStmt_Pos(t *testing.T) {
+	stmt := &WaitStmt{
+		Expr:   &NumberLiteral{Value: 1000},
+		Line:   30,
+		Column: 1,
+	}
+
+	line, col, tok := stmt.Pos()
+	testutils.Equal(t, "line", line, 30)
+	testutils.Equal(t, "column", col, 1)
+	testutils.Equal(t, "token", tok, "WAIT")
+}
+
 func TestColorStmt_Pos(t *testing.T) {
 	stmt := &ColorStmt{
 		Expr:   &NumberLiteral{Value: 15},

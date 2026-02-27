@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+	"time"
 
 	"basics/internal/common"
 	"basics/internal/errors"
@@ -479,6 +480,25 @@ func (i *Interpreter) Run(prog *parser.Program) {
 			i.rt.ExecVTab(24)
 
 		// -----------------------
+		// WAIT
+		// -----------------------
+		case *parser.WaitStmt:
+			val, _, err := EvalExpr(s.Expr, i.rt)
+			if err != nil {
+				i.rt.ExecError(err)
+				return
+			}
+
+			ms := int(val.Num)
+			if val.Type == runtime.INTEGER {
+				ms = val.Int
+			}
+
+			if ms > 0 {
+				time.Sleep(time.Duration(ms) * time.Millisecond)
+			}
+
+		// -----------------------
 		// COLOR
 		// -----------------------
 		case *parser.ColorStmt:
@@ -766,6 +786,23 @@ func (i *Interpreter) execInline(line int, stmt parser.Statement, pc int) int {
 	case *parser.TextStmt:
 		i.rt.Video.SwitchMode(4)
 		i.rt.ExecVTab(24)
+		return pc + 1
+
+	case *parser.WaitStmt:
+		val, _, err := EvalExpr(s.Expr, i.rt)
+		if err != nil {
+			i.rt.ExecError(err)
+			return pc + 1
+		}
+
+		ms := int(val.Num)
+		if val.Type == runtime.INTEGER {
+			ms = val.Int
+		}
+
+		if ms > 0 {
+			time.Sleep(time.Duration(ms) * time.Millisecond)
+		}
 		return pc + 1
 
 	case *parser.ColorStmt:

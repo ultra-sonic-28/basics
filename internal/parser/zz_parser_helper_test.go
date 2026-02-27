@@ -354,6 +354,13 @@ func TestStmtArgs(t *testing.T) {
 			expected: " -> C + 1",
 		},
 		{
+			name: "WAIT",
+			stmt: &WaitStmt{
+				Expr: &NumberLiteral{Value: 1000, Token: "1000"},
+			},
+			expected: " -> 1000",
+		},
+		{
 			name: "PLOT",
 			stmt: &PlotStmt{
 				X: &NumberLiteral{Value: 10, Token: "10"},

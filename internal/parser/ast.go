@@ -177,6 +177,19 @@ func (s *TextStmt) Pos() (int, int, string) {
 	return s.Line, s.Column, "TEXT"
 }
 
+// WAIT
+type WaitStmt struct {
+	Expr   Expression
+	Line   int
+	Column int
+}
+
+func (*WaitStmt) stmtNode() {}
+
+func (s *WaitStmt) Pos() (int, int, string) {
+	return s.Line, s.Column, "WAIT"
+}
+
 // END
 type EndStmt struct {
 }

@@ -275,6 +275,21 @@ func (p *Parser) parseStatement(lineNum int) Statement {
 			p.next()
 			return stmt
 
+		case "WAIT":
+			line := p.curr.Line
+			col := p.curr.Column
+			p.next()
+			expr := p.parseExpression(LOWEST)
+			if expr == nil {
+				p.syntaxError("EXPECTED EXPRESSION AFTER WAIT")
+				return nil
+			}
+			return &WaitStmt{
+				Expr:   expr,
+				Line:   line,
+				Column: col,
+			}
+
 		case "COLOR":
 			line := p.curr.Line
 			col := p.curr.Column

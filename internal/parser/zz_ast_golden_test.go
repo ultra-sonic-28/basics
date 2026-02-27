@@ -149,6 +149,10 @@ func collectStmt(path string, s Statement, rows *[]row) {
 	case *TextStmt:
 		*rows = append(*rows, row{path, "TextStmt", ""})
 
+	case *WaitStmt:
+		*rows = append(*rows, row{path, "WaitStmt", ""})
+		collectExpr(path+"/Expr", stmt.Expr, rows)
+
 	case *GrStmt:
 		*rows = append(*rows, row{path, "GrStmt", ""})
 

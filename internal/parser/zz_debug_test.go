@@ -558,6 +558,13 @@ func TestDumpStatement(t *testing.T) {
 			expected: "TEXT\n",
 		},
 		{
+			name: "WaitStmt",
+			stmt: &WaitStmt{
+				Expr: &NumberLiteral{Value: 1000},
+			},
+			expected: "WAIT\n  Number 1000\n",
+		},
+		{
 			name: "ColorStmt with literal",
 			stmt: &ColorStmt{
 				Expr: &NumberLiteral{Value: 15},

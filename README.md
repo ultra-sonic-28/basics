@@ -389,6 +389,9 @@ cleared to black, and the cursor is moved to the text window.
 130 NEXT A
 ```
 
+* `WAIT aexpr`
+    * Suspend program execution for `aexpr` milliseconds.
+
 ### Differences with old computers
 #### Extended charset
 * Bitmap fonts are handcoded using `MakeBitmapFont.xlsx`. File is located under `./.bintools`.

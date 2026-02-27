@@ -134,6 +134,10 @@ func dumpStatement(s Statement, indent string, emit Emitter) {
 	case *TextStmt:
 		emit(indent + "TEXT")
 
+	case *WaitStmt:
+		emit(indent + "WAIT")
+		dumpExpr(stmt.Expr, indent+"  ", emit)
+
 	case *ColorStmt:
 		emit(indent + "COLOR")
 		dumpExpr(stmt.Expr, indent+"  ", emit)

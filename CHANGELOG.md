@@ -7,6 +7,7 @@ The format is based on Keep a Changelog (https://keepachangelog.com), and this p
 ### Added
 - Add a small basic demo `bounce.bas`.
 - Add `NOT` operator support. Add relevant unit tests.
+- Add `WAIT` support in Apple II Basic. Add relevant unit tests.
 
 ## [Unreleased] - 2026-02-26
 ### Added

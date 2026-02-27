@@ -15,6 +15,8 @@ func StmtName(s Statement) string {
 		return "GR"
 	case *TextStmt:
 		return "TEXT"
+	case *WaitStmt:
+		return "WAIT"
 	case *ColorStmt:
 		return "COLOR"
 	case *PlotStmt:
@@ -113,6 +115,8 @@ func StmtArgs(s Statement) string {
 		}
 		return fmt.Sprintf(" -> %s", allVars.String())
 	case *ColorStmt:
+		return " -> " + StmtExprValue(stmt.Expr)
+	case *WaitStmt:
 		return " -> " + StmtExprValue(stmt.Expr)
 	case *PlotStmt:
 		return " -> " + StmtExprValue(stmt.X) + ", " + StmtExprValue(stmt.Y)

@@ -52,7 +52,7 @@ func TestKeywords_ContainsExpectedKeywords(t *testing.T) {
 		"INVERSE", "NORMAL", "FLASH",
 
 		// Extension
-		"SLEEP",
+		"WAIT",
 	}
 
 	for _, kw := range expected {
@@ -100,7 +100,7 @@ func TestKeywords_ContainAllExpected(t *testing.T) {
 		"GOTO",
 		"HTAB", "VTAB",
 		"PRINT", "INPUT",
-		"SLEEP",
+		"WAIT",
 	}
 
 	testutils.AssertMapContainsKeys(
