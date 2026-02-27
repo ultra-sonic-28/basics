@@ -40,6 +40,7 @@ func TestToken_TypeName(t *testing.T) {
 		{Token{Type: NEQ}, "<>"},
 		{Token{Type: AND}, "AND"},
 		{Token{Type: OR}, "OR"},
+		{Token{Type: NOT}, "NOT"},
 
 		// Délimiteurs
 		{Token{Type: LPAREN}, "("},

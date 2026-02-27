@@ -1,0 +1,16 @@
+10 REM NOT Operator
+20 A = 5
+30 B = 10
+40 C = 0
+50 IF NOT (A > 0 AND B > 15) THEN PRINT "OK 1"
+60 IF NOT (A > 10) OR NOT (B > 5) THEN PRINT "OK 2"
+70 IF NOT (A = 6) THEN PRINT "A is not equal to 6"
+80 IF NOT C THEN PRINT "C is 0"
+90 A$ = "5"
+100 IF NOT (A$ = "10") THEN PRINT "STRING OK"
+110 A$ = "BPPLE"
+120 IF NOT (LEFT$(A$, 1) = "A") THEN PRINT "A$ ne commence pas par un A"
+130 PRINT NOT 4
+140 PRINT NOT 0
+150 PRINT NOT (4-4)
+160 PRINT NOT 4-4

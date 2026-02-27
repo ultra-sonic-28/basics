@@ -32,6 +32,7 @@ const (
 	NEQ
 	AND
 	OR
+	NOT
 
 	// Délimiteurs
 	LPAREN
@@ -81,6 +82,7 @@ var TokenTypeNames = map[TokenType]string{
 	NEQ:      "<>",
 	AND:      "AND",
 	OR:       "OR",
+	NOT:      "NOT",
 
 	// Délimiteurs
 	LPAREN:    "(",

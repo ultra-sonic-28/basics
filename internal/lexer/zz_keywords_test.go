@@ -16,7 +16,7 @@ func TestKeywords_ContainsExpectedKeywords(t *testing.T) {
 
 		// Variables & logique
 		"LET", "DIM",
-		"AND", "OR",
+		"AND", "OR", "NOT",
 		"REM", "CLEAR",
 
 		// I/O

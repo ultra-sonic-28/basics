@@ -1126,6 +1126,22 @@ WORLD
 `,
 		},
 		{
+			name:   "Not-01",
+			file:   "operators/not-operator-01-example.bas",
+			errors: 0,
+			expected: `OK 1
+OK 2
+A is not equal to 6
+C is 0
+STRING OK
+A$ ne commence pas par un A
+0
+1
+1
+-4
+`,
+		},
+		{
 			name:   "Or-01",
 			file:   "operators/or-operator-01-example.bas",
 			errors: 0,

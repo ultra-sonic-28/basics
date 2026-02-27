@@ -806,7 +806,7 @@ func (p *Parser) parseExpression(precedence int) Expression {
 			left = ident
 		}
 
-	case token.EQUAL, token.MINUS:
+	case token.EQUAL, token.MINUS, token.NOT:
 		opTok := p.curr
 		p.next()
 		right := p.parseExpression(PREFIX)

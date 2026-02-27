@@ -127,6 +127,15 @@ func EvalExpr(expr parser.Expression, rt *runtime.Runtime) (runtime.Value, *[]in
 					Type: runtime.INTEGER,
 					Int:  -right.Int,
 				}, nil, nil
+			case "NOT":
+				val := 0
+				if right.Int == 0 {
+					val = 1
+				}
+				return runtime.Value{
+					Type: runtime.INTEGER,
+					Int:  val,
+				}, nil, nil
 			default:
 				return runtime.Value{}, nil, errors.NewSyntax(
 					line, col, e.Op,
@@ -142,6 +151,15 @@ func EvalExpr(expr parser.Expression, rt *runtime.Runtime) (runtime.Value, *[]in
 				return runtime.Value{
 					Type: runtime.NUMBER,
 					Num:  -right.Num,
+				}, nil, nil
+			case "NOT":
+				val := 0
+				if right.Num == 0 {
+					val = 1
+				}
+				return runtime.Value{
+					Type: runtime.INTEGER,
+					Int:  val,
 				}, nil, nil
 			default:
 				return runtime.Value{}, nil, errors.NewSyntax(

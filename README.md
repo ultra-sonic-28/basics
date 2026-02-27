@@ -230,6 +230,8 @@ cleared to black, and the cursor is moved to the text window.
     * `AND` is an operator that allows you to perform a "Binary AND" between two numeric values ​​or a "Logical AND" in the case of a comparison between two expressions.
 * `OR`
     * `OR` is an operator that allows you to perform a "Binary OR" between two numeric values ​​or a "Logical OR" in the case of a comparison between two expressions.
+* `NOT`
+    * `NOT` is an operator that allows you to perform a "Logical NOT" of an expression. Expression can be a number (integer or real) or a complex expression.
 
 #### Supported functions
 ##### Maths functions
