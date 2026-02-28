@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog (https://keepachangelog.com), and this project adheres to Semantic Versioning (https://semver.org).
 
+## [Unreleased] - 2026-02-28
+### Added
+- Add `RND()` support in Apple II Basic. Add relevant unit tests.
+- Add a small basic game `guess-letter.bas`.
+- Add a small low resolution graphic demo `random-lowres.bas`.
+
 ## [Unreleased] - 2026-02-27
 ### Added
 - Add a small basic demo `bounce.bas`.

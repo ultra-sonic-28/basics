@@ -541,6 +541,41 @@ func EvalExpr(expr parser.Expression, rt *runtime.Runtime) (runtime.Value, *[]in
 			"INVALID SQR OPERAND",
 		)
 
+	case *parser.RndExpr:
+		val, _, err := EvalExpr(e.Expr, rt)
+		if err != nil {
+			return runtime.Value{}, nil, err
+		}
+
+		if val.Type == runtime.STRING {
+			return runtime.Value{}, nil, errors.NewSyntax(
+				line, col, tok,
+				"TYPE MISMATCH",
+			)
+		}
+
+		var num float64
+		if val.Type == runtime.INTEGER {
+			num = float64(val.Int)
+		} else {
+			num = val.Num
+		}
+
+		if num > 0 {
+			// Generate new random number
+			rt.LastRnd = rt.Rng.Float64()
+		} else if num < 0 {
+			// Seed the generator and return the same number
+			rt.Rng.Seed(int64(num))
+			rt.LastRnd = rt.Rng.Float64()
+		}
+		// If num == 0, return LastRnd (no change)
+
+		return runtime.Value{
+			Type: runtime.NUMBER,
+			Num:  rt.LastRnd,
+		}, nil, nil
+
 	case *parser.SgnExpr:
 		val, _, err := EvalExpr(e.Expr, rt)
 		if err != nil {

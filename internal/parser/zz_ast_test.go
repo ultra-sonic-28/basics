@@ -607,7 +607,7 @@ func TestChrExpr_Pos(t *testing.T) {
 }
 
 func TestAscExpr_Pos(t *testing.T) {
-	expr := &ValExpr{
+	expr := &AscExpr{
 		Expr:   &StringLiteral{Value: "A"},
 		Line:   20,
 		Column: 8,
@@ -619,6 +619,21 @@ func TestAscExpr_Pos(t *testing.T) {
 	testutils.Equal(t, "line", line, 20)
 	testutils.Equal(t, "column", col, 8)
 	testutils.Equal(t, "token", tok, "ASC")
+}
+
+func TestRndExpr_Pos(t *testing.T) {
+	expr := &RndExpr{
+		Expr:   &NumberLiteral{Value: 1},
+		Line:   20,
+		Column: 8,
+		Token:  "RND",
+	}
+
+	line, col, tok := expr.Pos()
+
+	testutils.Equal(t, "line", line, 20)
+	testutils.Equal(t, "column", col, 8)
+	testutils.Equal(t, "token", tok, "RND")
 }
 
 // ////////////////////////////////////
@@ -691,4 +706,3 @@ func TestPlotStmt_Pos(t *testing.T) {
 	testutils.Equal(t, "X value", stmt.X.(*NumberLiteral).Value, 10.0)
 	testutils.Equal(t, "Y value", stmt.Y.(*NumberLiteral).Value, 20.0)
 }
-

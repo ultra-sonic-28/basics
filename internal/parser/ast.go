@@ -642,3 +642,19 @@ func (*SqrExpr) exprNode() {}
 func (s *SqrExpr) Pos() (int, int, string) {
 	return s.Line, s.Column, s.Token
 }
+
+// =========================
+// RND(expr)
+// =========================
+type RndExpr struct {
+	Expr   Expression
+	Line   int
+	Column int
+	Token  string
+}
+
+func (*RndExpr) exprNode() {}
+
+func (r *RndExpr) Pos() (int, int, string) {
+	return r.Line, r.Column, r.Token
+}

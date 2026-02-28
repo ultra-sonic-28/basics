@@ -14,6 +14,7 @@ func TestParser_Golden_Positioning(t *testing.T) {
 40 PRINT TAB(20); "HELLO"
 50 PRINT SPC(10); "A"
 60 PRINT SPC(2 * A); "A"
+70 PRINT RND(1)
 `
 	tokens := lexer.Lex(source)
 	p := New(tokens)
@@ -56,6 +57,10 @@ func TestParser_Golden_Positioning(t *testing.T) {
 | Program/Line[60]/Stmt[0]/Expr[0]/Expr/Left | NumberLiteral | 2 |
 | Program/Line[60]/Stmt[0]/Expr[0]/Expr/Right | Identifier | A |
 | Program/Line[60]/Stmt[0]/Expr[1] | StringLiteral | A |
+| Program/Line[70] | Line |  |
+| Program/Line[70]/Stmt[0] | PrintStmt |  |
+| Program/Line[70]/Stmt[0]/Expr[0] | RndExpr |  |
+| Program/Line[70]/Stmt[0]/Expr[0]/Expr | NumberLiteral | 1 |
 `
 
 	testutils.Equal(t, "AST markdown for positioning statements", got, want)

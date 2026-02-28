@@ -258,6 +258,13 @@ cleared to black, and the cursor is moved to the text window.
 * `SQR`
     * Returns the square root of `aexpr`.
     * `aexpr` must be positive or null.
+* `RND(aexpr)`
+    * Returns a random real number greater than or equal to `0` and less than `1`.
+    * If `aexpr` is greater than zero, `RND(aexpr)` generates a new random number each time it is used.
+    * If `aexpr` is zero, `RND(aexpr)` returns the most recent previous random number generated (`CLEAR` and `NEW` do not affect this).
+    * If `aexpr` is less than zero, `RND(aexpr)` generates the same random number each time it is used with the same `aexpr`, as if from a permanent random number table built into the APPLE.
+    * If a particular negative argument is used to generate a random number, then subsequent random numbers generated with positive arguments will follow the same sequence each time.
+    * A different random sequence is initialized by each different negative argument. The primary reason for using a negative argument for `RND` is to initialize (or "seed") a repeatable sequence of random numbers.
 
 ##### String functions
 * `LEFT$(sexpr, aexpr)`

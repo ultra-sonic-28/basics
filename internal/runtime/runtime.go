@@ -4,6 +4,8 @@ import (
 	"basics/internal/input"
 	"basics/internal/video"
 	"io"
+	"math/rand"
+	"time"
 )
 
 type InputDevice interface {
@@ -11,16 +13,20 @@ type InputDevice interface {
 }
 
 type Runtime struct {
-	Video  video.Device
-	Input  input.Device
-	Env    *Environment
-	halted bool
+	Video   video.Device
+	Input   input.Device
+	Env     *Environment
+	halted  bool
+	Rng     *rand.Rand
+	LastRnd float64
 }
 
 func New(video video.Device) *Runtime {
 	return &Runtime{
-		Video: video,
-		Env:   NewEnvironment(),
+		Video:   video,
+		Env:     NewEnvironment(),
+		Rng:     rand.New(rand.NewSource(time.Now().UnixNano())),
+		LastRnd: 0,
 	}
 }
 
