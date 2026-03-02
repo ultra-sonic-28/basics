@@ -268,7 +268,9 @@ cleared to black, and the cursor is moved to the text window.
 * `SIN(aexpr)`
     * Returns the sine of `aexpr` radians.
 * `COS(aexpr)`
-    * Returns the cosinus of `aexpr` radians.
+    * Returns the cosine of `aexpr` radians.
+* `TAN(aexpr)`
+    * Returns the tangent of `aexpr` radians.
 
 ##### String functions
 * `LEFT$(sexpr, aexpr)`

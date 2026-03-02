@@ -1661,6 +1661,33 @@ TAB(3) mais curseur en 10!!
 `,
 		},
 		{
+			name:   "Tan-01",
+			file:   "maths/tan-01-example.bas",
+			errors: 0,
+			expected: `0
+-1.2246467991473515e-16
+1.6331239353195392e+16
+1.557407724654902
+-1.2246467991473515e-16
+0
+0
+`,
+		},
+		{
+			name:   "Tan-02",
+			file:   "maths/tan-02-example.bas",
+			errors: 0,
+			expected: `⚠️ TYPE MISMATCH IN 2 (TAN)
+`,
+		},
+		{
+			name:   "Tan-03",
+			file:   "maths/tan-03-example.bas",
+			errors: 0,
+			expected: `⚠️ TYPE MISMATCH IN 3 (TAN)
+`,
+		},
+		{
 			name:   "Val-01",
 			file:   "strings/val-01-example.bas",
 			errors: 0,

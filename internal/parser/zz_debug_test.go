@@ -433,6 +433,26 @@ func TestDumpExpr(t *testing.T) {
 			expected: "COS\n  Infix +\n    Ident A\n    Ident B\n",
 		},
 		{
+			name: "TanExpr",
+			expr: &TanExpr{
+				Expr:  &NumberLiteral{Value: 16},
+				Token: "TAN",
+			},
+			expected: "TAN\n  Number 16\n",
+		},
+		{
+			name: "TanExpr with expression",
+			expr: &TanExpr{
+				Expr: &InfixExpr{
+					Left:  &Identifier{Name: "A"},
+					Op:    "+",
+					Right: &Identifier{Name: "B"},
+				},
+				Token: "TAN",
+			},
+			expected: "TAN\n  Infix +\n    Ident A\n    Ident B\n",
+		},
+		{
 			name: "SqrExpr",
 			expr: &SqrExpr{
 				Expr: &NumberLiteral{

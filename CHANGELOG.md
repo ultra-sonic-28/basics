@@ -7,6 +7,7 @@ The format is based on Keep a Changelog (https://keepachangelog.com), and this p
 ### Added
 - Add `SIN()` support in Apple II Basic. Add relevant unit tests.
 - Add `COS()` support in Apple II Basic. Add relevant unit tests.
+- Add `TAN()` support in Apple II Basic. Add relevant unit tests.
 
 ### Fixed
 - Add more parser unit tests for `ABS()`, `INT()`, `SGN()`, `SQR()`.

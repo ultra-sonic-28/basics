@@ -223,6 +223,10 @@ func dumpExpr(e Expression, indent string, emit Emitter) {
 		emit(indent + "COS")
 		dumpExpr(n.Expr, indent+"  ", emit)
 
+	case *TanExpr:
+		emit(indent + "TAN")
+		dumpExpr(n.Expr, indent+"  ", emit)
+
 
 	case *SgnExpr:
 		emit(indent + "SGN")

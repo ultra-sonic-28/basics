@@ -1,0 +1,2 @@
+10 REM TAN Function
+20 PRINT TAN("1.75")

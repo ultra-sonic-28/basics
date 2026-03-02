@@ -690,3 +690,19 @@ func (*CosExpr) exprNode() {}
 func (c *CosExpr) Pos() (int, int, string) {
 	return c.Line, c.Column, c.Token
 }
+
+// =========================
+// TAN(expr)
+// =========================
+type TanExpr struct {
+	Expr   Expression
+	Line   int
+	Column int
+	Token  string
+}
+
+func (*TanExpr) exprNode() {}
+
+func (t *TanExpr) Pos() (int, int, string) {
+	return t.Line, t.Column, t.Token
+}

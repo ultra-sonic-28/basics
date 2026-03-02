@@ -666,6 +666,21 @@ func TestCosExpr_Pos(t *testing.T) {
 	testutils.Equal(t, "token", tok, "COS")
 }
 
+func TestTanExpr_Pos(t *testing.T) {
+	expr := &TanExpr{
+		Expr:   &NumberLiteral{Value: 1},
+		Line:   20,
+		Column: 8,
+		Token:  "TAN",
+	}
+
+	line, col, tok := expr.Pos()
+
+	testutils.Equal(t, "line", line, 20)
+	testutils.Equal(t, "column", col, 8)
+	testutils.Equal(t, "token", tok, "TAN")
+}
+
 // ////////////////////////////////////
 // Graphics
 // ////////////////////////////////////
