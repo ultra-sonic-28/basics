@@ -1039,6 +1039,15 @@ func (p *Parser) initBuiltins() {
 			}
 		},
 
+		"COS": func(expr Expression, line, col int, tok string) Expression {
+			return &CosExpr{
+				Expr:   expr,
+				Line:   line,
+				Column: col,
+				Token:  tok,
+			}
+		},
+
 		"SGN": func(expr Expression, line, col int, tok string) Expression {
 			return &SgnExpr{
 				Expr:   expr,

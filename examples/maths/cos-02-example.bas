@@ -1,0 +1,2 @@
+10 REM COS Function
+20 PRINT COS("1.75")

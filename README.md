@@ -267,6 +267,8 @@ cleared to black, and the cursor is moved to the text window.
     * A different random sequence is initialized by each different negative argument. The primary reason for using a negative argument for `RND` is to initialize (or "seed") a repeatable sequence of random numbers.
 * `SIN(aexpr)`
     * Returns the sine of `aexpr` radians.
+* `COS(aexpr)`
+    * Returns the cosinus of `aexpr` radians.
 
 ##### String functions
 * `LEFT$(sexpr, aexpr)`

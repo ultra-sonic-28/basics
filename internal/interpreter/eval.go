@@ -601,6 +601,31 @@ func EvalExpr(expr parser.Expression, rt *runtime.Runtime) (runtime.Value, *[]in
 			Num:  math.Sin(num),
 		}, nil, nil
 
+	case *parser.CosExpr:
+		val, _, err := EvalExpr(e.Expr, rt)
+		if err != nil {
+			return runtime.Value{}, nil, err
+		}
+
+		if val.Type == runtime.STRING {
+			return runtime.Value{}, nil, errors.NewSyntax(
+				line, col, tok,
+				"TYPE MISMATCH",
+			)
+		}
+
+		var num float64
+		if val.Type == runtime.INTEGER {
+			num = float64(val.Int)
+		} else {
+			num = val.Num
+		}
+
+		return runtime.Value{
+			Type: runtime.NUMBER,
+			Num:  math.Cos(num),
+		}, nil, nil
+
 	case *parser.SgnExpr:
 		val, _, err := EvalExpr(e.Expr, rt)
 		if err != nil {

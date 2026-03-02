@@ -365,6 +365,33 @@ A$(1)=
 `,
 		},
 		{
+			name:   "Cos-01",
+			file:   "maths/cos-01-example.bas",
+			errors: 0,
+			expected: `1
+-1
+6.123233995736757e-17
+0.5403023058681398
+-1
+1
+1
+`,
+		},
+		{
+			name:   "Cos-02",
+			file:   "maths/cos-02-example.bas",
+			errors: 0,
+			expected: `⚠️ TYPE MISMATCH IN 2 (COS)
+`,
+		},
+		{
+			name:   "Cos-03",
+			file:   "maths/cos-03-example.bas",
+			errors: 0,
+			expected: `⚠️ TYPE MISMATCH IN 3 (COS)
+`,
+		},
+		{
 			name:   "End-01",
 			file:   "flow_control/end-01-example.bas",
 			errors: 0,

@@ -674,3 +674,19 @@ func (*SinExpr) exprNode() {}
 func (s *SinExpr) Pos() (int, int, string) {
 	return s.Line, s.Column, s.Token
 }
+
+// =========================
+// COS(expr)
+// =========================
+type CosExpr struct {
+	Expr   Expression
+	Line   int
+	Column int
+	Token  string
+}
+
+func (*CosExpr) exprNode() {}
+
+func (c *CosExpr) Pos() (int, int, string) {
+	return c.Line, c.Column, c.Token
+}

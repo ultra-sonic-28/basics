@@ -413,6 +413,26 @@ func TestDumpExpr(t *testing.T) {
 			expected: "SIN\n  Infix +\n    Ident A\n    Ident B\n",
 		},
 		{
+			name: "CosExpr",
+			expr: &CosExpr{
+				Expr:  &NumberLiteral{Value: 16},
+				Token: "COS",
+			},
+			expected: "COS\n  Number 16\n",
+		},
+		{
+			name: "CosExpr with expression",
+			expr: &CosExpr{
+				Expr: &InfixExpr{
+					Left:  &Identifier{Name: "A"},
+					Op:    "+",
+					Right: &Identifier{Name: "B"},
+				},
+				Token: "COS",
+			},
+			expected: "COS\n  Infix +\n    Ident A\n    Ident B\n",
+		},
+		{
 			name: "SqrExpr",
 			expr: &SqrExpr{
 				Expr: &NumberLiteral{

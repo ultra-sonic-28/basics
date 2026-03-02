@@ -651,6 +651,21 @@ func TestSinExpr_Pos(t *testing.T) {
 	testutils.Equal(t, "token", tok, "SIN")
 }
 
+func TestCosExpr_Pos(t *testing.T) {
+	expr := &CosExpr{
+		Expr:   &NumberLiteral{Value: 1},
+		Line:   20,
+		Column: 8,
+		Token:  "COS",
+	}
+
+	line, col, tok := expr.Pos()
+
+	testutils.Equal(t, "line", line, 20)
+	testutils.Equal(t, "column", col, 8)
+	testutils.Equal(t, "token", tok, "COS")
+}
+
 // ////////////////////////////////////
 // Graphics
 // ////////////////////////////////////
