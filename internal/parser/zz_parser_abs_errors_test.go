@@ -29,6 +29,18 @@ func TestParse_ABS_Errors(t *testing.T) {
 			name:   "ABS with only opening paren",
 			source: `10 PRINT ABS(`,
 		},
+		{
+			name:   "ABS without parentheses",
+			source: `10 PRINT ABS 10`,
+		},
+		{
+			name:   "ABS with multiple arguments",
+			source: `10 PRINT ABS(10,20)`,
+		},
+		{
+			name:   "ABS nested missing paren",
+			source: `10 PRINT ABS((A+2)`,
+		},
 	}
 
 	for i, tt := range tests {

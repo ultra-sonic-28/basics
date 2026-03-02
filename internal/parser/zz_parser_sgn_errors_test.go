@@ -29,6 +29,18 @@ func TestParse_SGN_Errors(t *testing.T) {
 			name:   "SGN with only opening paren",
 			source: `10 PRINT SGN(`,
 		},
+		{
+			name:   "SGN without parentheses",
+			source: `10 PRINT SGN 10`,
+		},
+		{
+			name:   "SGN with multiple arguments",
+			source: `10 PRINT SGN(10,20)`,
+		},
+		{
+			name:   "SGN nested missing paren",
+			source: `10 PRINT SGN((A+2)`,
+		},
 	}
 
 	for i, tt := range tests {

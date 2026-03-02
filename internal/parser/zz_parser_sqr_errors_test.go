@@ -29,6 +29,18 @@ func TestParse_SQR_Errors(t *testing.T) {
 			name:   "SQR with only opening paren",
 			source: `10 PRINT SQR(`,
 		},
+		{
+			name:   "SQR without parentheses",
+			source: `10 PRINT SQR 10`,
+		},
+		{
+			name:   "SQR with multiple arguments",
+			source: `10 PRINT SQR(10,20)`,
+		},
+		{
+			name:   "SQR nested missing paren",
+			source: `10 PRINT SQR((A+2)`,
+		},
 	}
 
 	for i, tt := range tests {

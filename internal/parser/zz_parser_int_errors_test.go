@@ -29,6 +29,18 @@ func TestParse_INT_Errors(t *testing.T) {
 			name:   "INT with only opening paren",
 			source: `10 PRINT INT(`,
 		},
+		{
+			name:   "INT without parentheses",
+			source: `10 PRINT INT 10`,
+		},
+		{
+			name:   "INT with multiple arguments",
+			source: `10 PRINT INT(10,20)`,
+		},
+		{
+			name:   "INT nested missing paren",
+			source: `10 PRINT INT((A+2)`,
+		},
 	}
 
 	for i, tt := range tests {
