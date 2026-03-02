@@ -658,3 +658,19 @@ func (*RndExpr) exprNode() {}
 func (r *RndExpr) Pos() (int, int, string) {
 	return r.Line, r.Column, r.Token
 }
+
+// =========================
+// SIN(expr)
+// =========================
+type SinExpr struct {
+	Expr   Expression
+	Line   int
+	Column int
+	Token  string
+}
+
+func (*SinExpr) exprNode() {}
+
+func (s *SinExpr) Pos() (int, int, string) {
+	return s.Line, s.Column, s.Token
+}

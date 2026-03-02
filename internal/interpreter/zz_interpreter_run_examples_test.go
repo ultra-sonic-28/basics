@@ -1382,6 +1382,33 @@ Line 3
 `,
 		},
 		{
+			name:   "Sin-01",
+			file:   "maths/sin-01-example.bas",
+			errors: 0,
+			expected: `0
+1.2246467991473515e-16
+1
+0.8414709848078965
+1.2246467991473515e-16
+0
+0
+`,
+		},
+		{
+			name:   "Sin-02",
+			file:   "maths/sin-02-example.bas",
+			errors: 0,
+			expected: `⚠️ TYPE MISMATCH IN 2 (SIN)
+`,
+		},
+		{
+			name:   "Sin-03",
+			file:   "maths/sin-03-example.bas",
+			errors: 0,
+			expected: `⚠️ TYPE MISMATCH IN 3 (SIN)
+`,
+		},
+		{
 			name:   "Spc-01",
 			file:   "tabs/spc-01-example.bas",
 			errors: 0,

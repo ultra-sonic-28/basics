@@ -265,6 +265,8 @@ cleared to black, and the cursor is moved to the text window.
     * If `aexpr` is less than zero, `RND(aexpr)` generates the same random number each time it is used with the same `aexpr`, as if from a permanent random number table built into the APPLE.
     * If a particular negative argument is used to generate a random number, then subsequent random numbers generated with positive arguments will follow the same sequence each time.
     * A different random sequence is initialized by each different negative argument. The primary reason for using a negative argument for `RND` is to initialize (or "seed") a repeatable sequence of random numbers.
+* `SIN(aexpr)`
+    * Returns the sine of `aexpr` radians.
 
 ##### String functions
 * `LEFT$(sexpr, aexpr)`

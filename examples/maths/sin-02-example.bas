@@ -1,0 +1,2 @@
+10 REM SIN Function
+20 PRINT SIN("1.75")

@@ -636,6 +636,21 @@ func TestRndExpr_Pos(t *testing.T) {
 	testutils.Equal(t, "token", tok, "RND")
 }
 
+func TestSinExpr_Pos(t *testing.T) {
+	expr := &SinExpr{
+		Expr:   &NumberLiteral{Value: 1},
+		Line:   20,
+		Column: 8,
+		Token:  "SIN",
+	}
+
+	line, col, tok := expr.Pos()
+
+	testutils.Equal(t, "line", line, 20)
+	testutils.Equal(t, "column", col, 8)
+	testutils.Equal(t, "token", tok, "SIN")
+}
+
 // ////////////////////////////////////
 // Graphics
 // ////////////////////////////////////

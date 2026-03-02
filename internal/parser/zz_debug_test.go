@@ -386,6 +386,33 @@ func TestDumpExpr(t *testing.T) {
 			expected: "RND\n  Infix +\n    Ident A\n    Ident B\n",
 		},
 		{
+			name: "SinExpr",
+			expr: &SinExpr{
+				Expr: &NumberLiteral{
+					Value:  16,
+					Line:   4,
+					Column: 2,
+					Token:  "16",
+				},
+				Line:   1,
+				Column: 1,
+				Token:  "16",
+			},
+			expected: "SIN\n  Number 16\n",
+		},
+		{
+			name: "SinExpr with expression",
+			expr: &SinExpr{
+				Expr: &InfixExpr{
+					Left:  &Identifier{Name: "A"},
+					Op:    "+",
+					Right: &Identifier{Name: "B"},
+				},
+				Token: "SIN",
+			},
+			expected: "SIN\n  Infix +\n    Ident A\n    Ident B\n",
+		},
+		{
 			name: "SqrExpr",
 			expr: &SqrExpr{
 				Expr: &NumberLiteral{
