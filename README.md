@@ -274,7 +274,9 @@ cleared to black, and the cursor is moved to the text window.
 * `ATN(aexpr)`
     * Returns the arctangent radians of `aexpr`.
     * The angle returned is in the range -pi/2 through +pi/2 radians.
-
+* `LOG(aexpr)`
+    * Returns the natural logarithm of `aexpr`.
+    * Please note that `LOG(0)` will returns `OVER FLOW ERROR` with BASICS.
 
 ##### String functions
 * `LEFT$(sexpr, aexpr)`

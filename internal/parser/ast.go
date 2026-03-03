@@ -722,3 +722,19 @@ func (*AtnExpr) exprNode() {}
 func (a *AtnExpr) Pos() (int, int, string) {
 	return a.Line, a.Column, a.Token
 }
+
+// =========================
+// LOG(expr)
+// =========================
+type LogExpr struct {
+	Expr   Expression
+	Line   int
+	Column int
+	Token  string
+}
+
+func (*LogExpr) exprNode() {}
+
+func (l *LogExpr) Pos() (int, int, string) {
+	return l.Line, l.Column, l.Token
+}

@@ -1,0 +1,2 @@
+10 REM LOG Function
+20 PRINT LOG("1.75")

@@ -1051,6 +1051,33 @@ All done!
 `,
 		},
 		{
+			name:   "Log-01",
+			file:   "maths/log-01-example.bas",
+			errors: 0,
+			expected: `OVER FLOW ERROR
+1.1447298858494002
+0.4515827052894548
+0
+1.1447298858494002
+OVER FLOW ERROR
+OVER FLOW ERROR
+`,
+		},
+		{
+			name:   "Log-02",
+			file:   "maths/log-02-example.bas",
+			errors: 0,
+			expected: `⚠️ TYPE MISMATCH IN 2 (LOG)
+`,
+		},
+		{
+			name:   "Log-03",
+			file:   "maths/log-03-example.bas",
+			errors: 0,
+			expected: `⚠️ TYPE MISMATCH IN 3 (LOG)
+`,
+		},
+		{
 			name:   "Mid-01",
 			file:   "strings/mid-01-example.bas",
 			errors: 0,

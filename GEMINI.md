@@ -88,3 +88,4 @@
 ## Divers
 
 - Les opérations GIT (push, commit...) sont faites manuellement.
+- Ne mets jamais à jour le fichier README.md

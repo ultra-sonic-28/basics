@@ -27,6 +27,7 @@ var Keywords = map[string]bool{
 
 	// Math
 	"SIN": true, "COS": true, "TAN": true, "ATN": true,
+	"LOG": true,
 	"INT": true, "ABS": true, "RND": true,
 	"SGN": true, "SQR": true,
 
