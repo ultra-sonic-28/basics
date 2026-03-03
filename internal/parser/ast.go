@@ -706,3 +706,19 @@ func (*TanExpr) exprNode() {}
 func (t *TanExpr) Pos() (int, int, string) {
 	return t.Line, t.Column, t.Token
 }
+
+// =========================
+// ATN(expr)
+// =========================
+type AtnExpr struct {
+	Expr   Expression
+	Line   int
+	Column int
+	Token  string
+}
+
+func (*AtnExpr) exprNode() {}
+
+func (a *AtnExpr) Pos() (int, int, string) {
+	return a.Line, a.Column, a.Token
+}

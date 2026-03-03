@@ -173,6 +173,34 @@ AAAAAAAAAA
 `,
 		},
 		{
+			name:   "Atn-01",
+			file:   "maths/atn-01-example.bas",
+			errors: 0,
+			expected: `0
+1.2626272556789115
+1.0038848218538872
+0.6657737500283538
+0.7853981633974483
+1.2626272556789115
+0
+0
+`,
+		},
+		{
+			name:   "Atn-02",
+			file:   "maths/atn-02-example.bas",
+			errors: 0,
+			expected: `⚠️ TYPE MISMATCH IN 2 (ATN)
+`,
+		},
+		{
+			name:   "Atn-03",
+			file:   "maths/atn-03-example.bas",
+			errors: 0,
+			expected: `⚠️ TYPE MISMATCH IN 3 (ATN)
+`,
+		},
+		{
 			name:   "CubeExample",
 			file:   "programs/maths/cube-example.bas",
 			errors: 0,

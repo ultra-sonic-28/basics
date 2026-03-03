@@ -1,0 +1,2 @@
+10 REM ATN Function
+20 PRINT ATN("1.75")

@@ -271,6 +271,10 @@ cleared to black, and the cursor is moved to the text window.
     * Returns the cosine of `aexpr` radians.
 * `TAN(aexpr)`
     * Returns the tangent of `aexpr` radians.
+* `ATN(aexpr)`
+    * Returns the arctangent radians of `aexpr`.
+    * The angle returned is in the range -pi/2 through +pi/2 radians.
+
 
 ##### String functions
 * `LEFT$(sexpr, aexpr)`

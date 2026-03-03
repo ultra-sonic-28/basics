@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog (https://keepachangelog.com), and this project adheres to Semantic Versioning (https://semver.org).
 
+## [Unreleased] - 2026-03-03
+### Added
+- Add `ATN()` support in Apple II Basic. Add relevant unit tests.
+
 ## [Unreleased] - 2026-03-02
 ### Added
 - Add `SIN()` support in Apple II Basic. Add relevant unit tests.

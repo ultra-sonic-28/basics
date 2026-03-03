@@ -453,6 +453,26 @@ func TestDumpExpr(t *testing.T) {
 			expected: "TAN\n  Infix +\n    Ident A\n    Ident B\n",
 		},
 		{
+			name: "AtnExpr",
+			expr: &AtnExpr{
+				Expr:  &NumberLiteral{Value: 1},
+				Token: "ATN",
+			},
+			expected: "ATN\n  Number 1\n",
+		},
+		{
+			name: "AtnExpr with expression",
+			expr: &AtnExpr{
+				Expr: &InfixExpr{
+					Left:  &Identifier{Name: "A"},
+					Op:    "+",
+					Right: &Identifier{Name: "B"},
+				},
+				Token: "ATN",
+			},
+			expected: "ATN\n  Infix +\n    Ident A\n    Ident B\n",
+		},
+		{
 			name: "SqrExpr",
 			expr: &SqrExpr{
 				Expr: &NumberLiteral{

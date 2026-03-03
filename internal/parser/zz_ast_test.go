@@ -681,6 +681,21 @@ func TestTanExpr_Pos(t *testing.T) {
 	testutils.Equal(t, "token", tok, "TAN")
 }
 
+func TestAtnExpr_Pos(t *testing.T) {
+	expr := &AtnExpr{
+		Expr:   &NumberLiteral{Value: 1},
+		Line:   20,
+		Column: 8,
+		Token:  "ATN",
+	}
+
+	line, col, tok := expr.Pos()
+
+	testutils.Equal(t, "line", line, 20)
+	testutils.Equal(t, "column", col, 8)
+	testutils.Equal(t, "token", tok, "ATN")
+}
+
 // ////////////////////////////////////
 // Graphics
 // ////////////////////////////////////

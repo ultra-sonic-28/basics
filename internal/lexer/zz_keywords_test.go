@@ -31,7 +31,7 @@ func TestKeywords_ContainsExpectedKeywords(t *testing.T) {
 		"LEN",
 
 		// Math
-		"SIN", "COS", "TAN",
+		"SIN", "COS", "TAN", "ATN",
 		"INT", "ABS", "RND",
 		"SGN", "SQR",
 
