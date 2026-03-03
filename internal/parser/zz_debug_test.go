@@ -493,6 +493,26 @@ func TestDumpExpr(t *testing.T) {
 			expected: "LOG\n  Infix +\n    Ident A\n    Ident B\n",
 		},
 		{
+			name: "ExpExpr",
+			expr: &ExpExpr{
+				Expr:  &NumberLiteral{Value: 1},
+				Token: "EXP",
+			},
+			expected: "EXP\n  Number 1\n",
+		},
+		{
+			name: "ExpExpr with expression",
+			expr: &ExpExpr{
+				Expr: &InfixExpr{
+					Left:  &Identifier{Name: "A"},
+					Op:    "+",
+					Right: &Identifier{Name: "B"},
+				},
+				Token: "EXP",
+			},
+			expected: "EXP\n  Infix +\n    Ident A\n    Ident B\n",
+		},
+		{
 			name: "SqrExpr",
 			expr: &SqrExpr{
 				Expr: &NumberLiteral{

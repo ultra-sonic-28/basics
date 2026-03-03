@@ -277,6 +277,8 @@ cleared to black, and the cursor is moved to the text window.
 * `LOG(aexpr)`
     * Returns the natural logarithm of `aexpr`.
     * Please note that `LOG(0)` will returns `OVER FLOW ERROR` with BASICS.
+* `EXP(aexpr)`
+    * Returns e raised to the power of `aexpr`.
 
 ##### String functions
 * `LEFT$(sexpr, aexpr)`

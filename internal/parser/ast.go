@@ -738,3 +738,19 @@ func (*LogExpr) exprNode() {}
 func (l *LogExpr) Pos() (int, int, string) {
 	return l.Line, l.Column, l.Token
 }
+
+// =========================
+// EXP(expr)
+// =========================
+type ExpExpr struct {
+	Expr   Expression
+	Line   int
+	Column int
+	Token  string
+}
+
+func (*ExpExpr) exprNode() {}
+
+func (e *ExpExpr) Pos() (int, int, string) {
+	return e.Line, e.Column, e.Token
+}

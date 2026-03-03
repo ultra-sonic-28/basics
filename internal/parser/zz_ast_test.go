@@ -711,6 +711,21 @@ func TestLogExpr_Pos(t *testing.T) {
 	testutils.Equal(t, "token", tok, "LOG")
 }
 
+func TestExpExpr_Pos(t *testing.T) {
+	expr := &ExpExpr{
+		Expr:   &NumberLiteral{Value: 1},
+		Line:   20,
+		Column: 8,
+		Token:  "EXP",
+	}
+
+	line, col, tok := expr.Pos()
+
+	testutils.Equal(t, "line", line, 20)
+	testutils.Equal(t, "column", col, 8)
+	testutils.Equal(t, "token", tok, "EXP")
+}
+
 // ////////////////////////////////////
 // Graphics
 // ////////////////////////////////////

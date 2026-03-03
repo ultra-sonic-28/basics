@@ -32,7 +32,7 @@ func TestKeywords_ContainsExpectedKeywords(t *testing.T) {
 
 		// Math
 		"SIN", "COS", "TAN", "ATN",
-		"LOG",
+		"LOG", "EXP",
 		"INT", "ABS", "RND",
 		"SGN", "SQR",
 

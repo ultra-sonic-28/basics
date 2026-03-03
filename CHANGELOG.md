@@ -7,6 +7,7 @@ The format is based on Keep a Changelog (https://keepachangelog.com), and this p
 ### Added
 - Add `ATN()` support in Apple II Basic. Add relevant unit tests.
 - Add `LOG()` support in Apple II Basic. Add relevant unit tests.
+- Add `EXP()` support in Apple II Basic. Add relevant unit tests.
 
 ## [Unreleased] - 2026-03-02
 ### Added

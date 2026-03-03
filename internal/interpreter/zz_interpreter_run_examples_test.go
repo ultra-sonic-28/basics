@@ -427,6 +427,33 @@ A$(1)=
 `,
 		},
 		{
+			name:   "Exp-01",
+			file:   "maths/exp-01-example.bas",
+			errors: 0,
+			expected: `1
+23.140692632779267
+4.810477380965351
+2.718281828459045
+23.140692632779267
+1
+1
+`,
+		},
+		{
+			name:   "Exp-02",
+			file:   "maths/exp-02-example.bas",
+			errors: 0,
+			expected: `⚠️ TYPE MISMATCH IN 2 (EXP)
+`,
+		},
+		{
+			name:   "Exp-03",
+			file:   "maths/exp-03-example.bas",
+			errors: 0,
+			expected: `⚠️ TYPE MISMATCH IN 3 (EXP)
+`,
+		},
+		{
 			name:   "Factorial",
 			file:   "programs/maths/factorial.bas",
 			errors: 0,

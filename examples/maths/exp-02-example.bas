@@ -1,0 +1,2 @@
+10 REM EXP Function
+20 PRINT EXP("1.75")
